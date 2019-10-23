@@ -1,0 +1,6 @@
+.card:hover, card:visited, card:link, card:active{
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #1b1e21;
+}
+

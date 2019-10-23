@@ -1,0 +1,6 @@
+django
+djangorestframework
+django-location-field
+Pillow
+django-allauth
+django-geoposition
