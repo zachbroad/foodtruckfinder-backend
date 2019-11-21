@@ -1,38 +1,41 @@
-"""grubtrucks URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from grubtrucks import settings
-from rest_framework import routers
+from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework import routers
 from .views import index
 from trucks.views import TruckViewSet, MenuItemViewSet
+from users.views import AccountViewSet
+from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
 router.register(r'trucks', TruckViewSet)
 router.register(r'menu-items', MenuItemViewSet)
+router.register(r'users', AccountViewSet)
 
 urlpatterns = [
+
+    # Test site
     path(r'', index, name='index'),
     path(r'trucks/', include('trucks.urls'), name='trucks-index'),
+
+    # Account
+    path(r'accounts/', include('allauth.urls',)),
+    path('users/', include('users.urls')),
+    path('users/', include('django.contrib.auth.urls')),
+
+    # Admin
     path(r'admin/', admin.site.urls),
+
+    # Api
     path(r'api/', include((router.urls, '<int:pk>'), namespace='api-trucks')),
+
+    # Auth
     path(r'api-auth/', include('rest_framework.urls')),
     path(r'rest-auth/', include('rest_auth.urls')),
     path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
-    path(r'accounts/', include('allauth.urls')),
+    path('login-token/', CustomAuthToken.as_view(), name='login-token'),
+    path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

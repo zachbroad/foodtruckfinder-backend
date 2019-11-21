@@ -15,6 +15,12 @@ def detail(request, truck_id):
     return render(request, 'trucks/detail.html', {'truck': truck})
 
 
+def menu(request, truck_id):
+
+    full_menu = MenuItem.objects.filter(truck=truck_id)
+    return render(request, 'trucks/menu.html', {'full_menu': full_menu})
+
+
 class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()

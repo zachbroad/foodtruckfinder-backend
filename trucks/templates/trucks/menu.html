@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+{% if full_menu %}
+    <h3 style="text-align:center;">Full Menu:</h3>
+    <ul>
+        {% for menu_item in full_menu %}
+        <div class="card text-white bg-dark mb-3" style="max-width: 18rem; text-decoration: none;">
+            <div class="card-attr" style="text-decoration: none; color:white;">
+            <div class="card-header">{{ menu_item.name }}</div>
+            <div class="card-body">
+                <p class="card-text">{{ menu_item.description }}<p>
+                <img class="card-img-bottom" src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}'s image not found.">
+            </div>
+            </div>
+        </a>
+        </div>
+    </ul>
+    
+{% endfor %}
+
+{% else %}
+    <h3> Sorry, we dont have any trucks!</h3>
+{% endif %}
+
+{% endblock %}

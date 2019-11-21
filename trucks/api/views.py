@@ -1,4 +1,3 @@
-# Generic --> Convienence
 
 from rest_framework import generics
 from trucks.models import Truck, MenuItem

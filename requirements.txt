@@ -2,5 +2,7 @@ django
 djangorestframework
 django-location-field
 Pillow
+django-rest-auth
 django-allauth
 django-geoposition
+
