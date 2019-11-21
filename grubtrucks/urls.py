@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from rest_framework import routers
-from .views import index
+from grubtrucks.views import index
 from trucks.api.views import TruckViewSet
 from users.views import AccountViewSet
 from users.api.views import CustomAuthToken, ValidateToken

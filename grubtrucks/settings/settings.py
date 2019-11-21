@@ -59,7 +59,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
 
-PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..')
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../..')
 SITE_ROOT = PROJECT_ROOT
 
 
@@ -135,7 +135,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
     }
 }
 
