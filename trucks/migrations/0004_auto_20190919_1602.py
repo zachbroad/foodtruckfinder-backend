@@ -14,11 +14,6 @@ class Migration(migrations.Migration):
             model_name='truck',
             name='menu',
         ),
-        migrations.AddField(
-            model_name='truck',
-            name='description',
-            field=models.CharField(blank=True, max_length=500, null=True),
-        ),
         migrations.AlterField(
             model_name='menuitem',
             name='name',
