@@ -18,7 +18,7 @@ from .views import TruckDetailView, TruckListView, MenuItemDetailView
 from django.urls import path
 from rest_framework import routers
 
-from trucks.views import TruckViewSet, MenuItemViewSet
+from trucks.api.views import TruckViewSet
 
 router = routers.DefaultRouter()
 router.register(r'trucks', TruckViewSet)
