@@ -6,5 +6,6 @@ django-rest-auth
 django-allauth
 django-geoposition
 django-heroku
+psycopg2-binary
 dj-database-url
 gunicorn
