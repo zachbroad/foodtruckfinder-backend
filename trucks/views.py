@@ -1,4 +1,3 @@
-from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import render, get_object_or_404
 
 from trucks.api.serializers import TruckSerializer, MenuItemSerializer
@@ -21,11 +20,3 @@ def menu(request, truck_id):
     return render(request, 'trucks/menu.html', {'full_menu': full_menu})
 
 
-class TruckViewSet(ModelViewSet):
-    serializer_class = TruckSerializer
-    queryset = Truck.objects.all()
-
-
-class MenuItemViewSet(ModelViewSet):
-    serializer_class = MenuItemSerializer
-    queryset = MenuItem.objects.all()

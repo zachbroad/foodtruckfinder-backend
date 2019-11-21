@@ -16,6 +16,10 @@ class Truck(models.Model):
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
+    @property
+    def menu(self):
+        return self.menuitem_set.all()
+
     def __str__(self):
         return self.title
 
@@ -29,6 +33,7 @@ class MenuItem(models.Model):
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
+
 
     def __str__(self):
         return self.name

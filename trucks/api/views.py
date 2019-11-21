@@ -1,10 +1,11 @@
+from rest_framework import generics, filters, pagination
+from rest_framework.viewsets import ModelViewSet
 
-from rest_framework import generics
 from trucks.models import Truck, MenuItem
 from .serializers import TruckSerializer, MenuItemSerializer
 
 
-class TruckAPIView(generics.CreateAPIView): # DetailView CreateView FormView
+class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
     serializer_class = TruckSerializer
 
@@ -15,7 +16,7 @@ class TruckAPIView(generics.CreateAPIView): # DetailView CreateView FormView
         serializer.save(user=self.request.user)
 
 
-class TruckRudView(generics.RetrieveUpdateDestroyAPIView): # DetailView CreateView FormView
+class TruckDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
     serializer_class = TruckSerializer
 
@@ -23,9 +24,20 @@ class TruckRudView(generics.RetrieveUpdateDestroyAPIView): # DetailView CreateVi
         return Truck.objects.all()
 
 
-class MenuItemRudView(generics.RetrieveUpdateDestroyAPIView): # DetailView CreateView FormView
+class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
     serializer_class = MenuItemSerializer
 
     def get_queryset(self):
         return MenuItem.objects.all()
+
+
+class TruckViewSet(ModelViewSet):
+    serializer_class = TruckSerializer
+    queryset = Truck.objects.all()
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    pagination_class = pagination.LimitOffsetPagination
+
+
