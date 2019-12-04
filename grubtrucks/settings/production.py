@@ -3,7 +3,7 @@ from .settings import *
 import django_heroku
 import dj_database_url
 
-DEBUG = False
+DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ["SECRET_KEY"]
 
@@ -17,9 +17,9 @@ DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True
 
 # ROOT_URLCONF = 'streamifye.urls'
 
-MIDDLEWARE += [
+# MIDDLEWARE += [
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
-]
+# ]
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
