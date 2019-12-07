@@ -17,12 +17,13 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 class TruckSerializer(serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True)
+    owner = serializers.CurrentUserDefault()
 
     class Meta:
         model = Truck
         fields = [
             'pk',
-            'title',
+            'owner',
             'title',
             'image',
             'description',
