@@ -44,8 +44,10 @@ AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'us-east-2'
 # AWS_QUERYSTRING_AUTH = False
 # AWS_S3_FILE_OVERWRITE = True
-AWS_DEFAULT_ACL = None
-AWS_BUCKET_ACL = None
+AWS_DEFAULT_ACL = 'public-read'
+AWS_BUCKET_ACL = 'public-read'
+# AWS_DEFAULT_ACL = None
+# AWS_BUCKET_ACL = None
 
 # ASSETS
 MEDIA_URL = 'https://%s/%s/' % ('grubtrucks-app.s3.amazonaws.com', 'media')
