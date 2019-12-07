@@ -9,7 +9,7 @@ class Truck(models.Model):
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     location = PlainLocationField(based_fields=['city'], zoom=7)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True, null=True, blank=True)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def get_short_description(self):
         return self.description[0:255] + "..."
