@@ -16,7 +16,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 
 class TruckSerializer(serializers.ModelSerializer):
-    menu = MenuItemSerializer(many=True)
+    menu = MenuItemSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
 
     class Meta:
