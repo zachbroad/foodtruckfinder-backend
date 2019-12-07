@@ -43,8 +43,8 @@ STATICFILES_STORAGE = 'grubtrucks.settings.production.WhiteNoiseStaticFilesStora
 # AWS_BUCKET_ACL = None
 
 # ASSETS
-MEDIA_URL = 'https://%s/%s/' % ('grubtrucks.s3.amazonaws.com', 'media')
-STATIC_URL = 'https://%s/%s/' % ('grubtrucks.s3.amazonaws.com', 'static')
+# MEDIA_URL = 'https://%s/%s/' % ('grubtrucks.s3.amazonaws.com', 'media')
+# STATIC_URL = 'https://%s/%s/' % ('grubtrucks.s3.amazonaws.com', 'static')
 
 # EMAIL
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
