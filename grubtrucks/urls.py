@@ -15,26 +15,28 @@ router.register(r'users', AccountViewSet)
 
 urlpatterns = [
 
-    # Test site
-    path(r'', index, name='index'),
-    path(r'trucks/', include('trucks.urls'), name='trucks-index'),
+                  # Test site
+                  path(r'', index, name='index'),
+                  path(r'trucks/', include('trucks.urls'), name='trucks-index'),
 
-    # Account
-    path(r'accounts/', include('allauth.urls',)),
-    path('users/', include('users.urls')),
-    path('users/', include('django.contrib.auth.urls')),
+                  # Account
+                  path(r'accounts/', include('allauth.urls', )),
+                  path('users/', include('users.urls')),
+                  path('users/', include('django.contrib.auth.urls')),
 
-    # Admin
-    path(r'admin/', admin.site.urls),
+                  # Admin
+                  path(r'admin/', admin.site.urls),
 
-    # Api
-    path(r'api/', include((router.urls, '<int:pk>'), namespace='api-trucks')),
+                  # Api
+                  path(r'api/', include((router.urls, '<int:pk>'), namespace='api-trucks')),
 
-    # Auth
-    path(r'api-auth/', include('rest_framework.urls')),
-    path(r'rest-auth/', include('rest_auth.urls')),
-    path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('login-token/', CustomAuthToken.as_view(), name='login-token'),
-    path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+                  # Auth
+                  path(r'api-auth/', include('rest_framework.urls')),
+                  path(r'rest-auth/', include('rest_auth.urls')),
+                  path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
+                  path('login-token/', CustomAuthToken.as_view(), name='login-token'),
+                  path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+                  re_path(r'^static/(?P<path>.*)$', serve,
+                          {'document_root': settings.STATIC_ROOT}),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
