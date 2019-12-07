@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
+
+
+    'storages',
 ]
 
 LOGIN_REDIRECT_URL = 'index'

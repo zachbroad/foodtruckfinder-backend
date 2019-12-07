@@ -23,8 +23,6 @@ ROOT_URLCONF = 'grubtrucks.urls'
 
 # MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE
 
-INSTALLED_APPS += 'storages'
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
