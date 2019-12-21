@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
-from grubtrucks.settings.production import DEFAULT_TO_EMAIL, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
+from grubtrucks.settings.production import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
 
 
 def registration(request, email):
