@@ -6,7 +6,7 @@ from location_field.forms.plain import PlainLocationField
 
 class Truck(models.Model):
     title = models.CharField(max_length=120, null=True)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True)
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True, default='../media/uploads/trucks')
     description = models.CharField(max_length=500, null=True, blank=True)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
