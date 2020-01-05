@@ -20,8 +20,11 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-# Application definition
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
+}   
 
+ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
