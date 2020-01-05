@@ -7,7 +7,8 @@ from rest_auth.registration.serializers import RegisterSerializer
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    name = serializers.CharField(required=True, max_length=50)
+    first_name = serializers.CharField(required=True, max_length=50)
+    last_name = serializers.CharField(required=True, max_length=50)
 
     def get_cleaned_data(self):
             return {
