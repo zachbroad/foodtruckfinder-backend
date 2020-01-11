@@ -21,15 +21,19 @@
 
     <div>
       <strong>Menu:</strong>
+      
+      {% if user.is_authenticated %}
       <ul>
-        {% if user.is_authenticated %}
         <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
         <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-        {% else %}
+      </ul>
+      {% else %}
+      <ul>
         <li><a href="{% url 'account_login' %}">Sign In</a></li>
         <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-        {% endif %}
       </ul>
+      {% endif %}
+
     </div>
     {% block content %}
     {% endblock %}
