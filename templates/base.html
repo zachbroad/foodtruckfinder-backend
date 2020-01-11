@@ -21,18 +21,35 @@
 
     <div>
       <strong>Menu:</strong>
-      
-      {% if user.is_authenticated %}
       <ul>
-        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+        {% if user.is_authenticated %}
+        <script>
+        document.createElement('li')
+        var changeEmail = document.createElement('a')
+        changeEmail.id = "changeEmail"
+        changeEmail.href = "{% url 'account_email' %}"
+        changeEmail.innerText = "Change-Email"
+        document.createElement('li')
+        var signOut = document.createElement('a') 
+        signOut.id = "signOut"
+        signOut.href = "{% url 'account_logout' %}"
+        signOut.innerText = "Sign Out"
+        </script>
+        {% else %}
+        <script>
+        document.createElement('li')
+        var signOut = document.createElement('a')
+        signOut.id = "signIn"
+        sigOut.href = "{% url 'account_login' %}"
+        signOut.innerText = "Sign in"
+        document.createElement('li')
+        var signUp = document.createElement('a')
+        signUp.id = "signUp"
+        sigUp.href = "{% url 'account_signup' %}"
+        signUp.innerText = "Sign up"
+        </script>
+        {% endif %}
       </ul>
-      {% else %}
-      <ul>
-        <li><a href="{% url 'account_login' %}">Sign In</a></li>
-        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-      </ul>
-      {% endif %}
 
     </div>
     {% block content %}
