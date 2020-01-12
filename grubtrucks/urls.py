@@ -8,7 +8,7 @@ from allauth.account.views import PasswordResetView
 from rest_framework import routers
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet
-from users.views import AccountViewSet
+from users.api.views import AccountViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()

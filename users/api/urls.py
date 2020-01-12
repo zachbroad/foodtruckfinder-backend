@@ -2,10 +2,10 @@ from django.urls import path
 
 from .views import AccountAPIView, AccountRUDView
 from rest_framework import routers
-from users.views import AccountViewSet
+from users.api.views import AccountViewSet
 
 router = routers.DefaultRouter()
-router.register(r'trucks', AccountViewSet)
+router.register(r'users', AccountViewSet)
 
 
 urlpatterns = [
