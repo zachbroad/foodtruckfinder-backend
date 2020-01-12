@@ -15,6 +15,9 @@ from .serializers import AccountSerializer
 class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormView
     lookup_field = 'pk'
     serializer_class = AccountSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('username', 'email')
+    pagination_class = pagination.LimitOffsetPagination
 
     def get_queryset(self):
         return Account.objects.all()
