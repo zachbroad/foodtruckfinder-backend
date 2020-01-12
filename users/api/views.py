@@ -1,12 +1,13 @@
 # Generic --> Convienence
-from rest_framework import serializers, status
-from rest_framework import mixins, viewsets, permissions, filters, pagination
+from rest_framework import status
+from rest_framework import mixins, viewsets, permissions, filters, pagination, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
+
 from users.models import Account
 from .serializers import AccountSerializer
 
@@ -75,3 +76,13 @@ class ValidateToken(APIView):
             return Response("Valid token", status=status.HTTP_200_OK)
 
         return Response("Invalid token", status=status.HTTP_403_FORBIDDEN)
+
+
+class AccountViewSet(ModelViewSet):
+    serializer_class = AccountSerializer
+    queryset = Account.objects.all()
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    pagination_class = pagination.LimitOffsetPagination
+
