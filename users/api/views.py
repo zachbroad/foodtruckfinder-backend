@@ -66,12 +66,3 @@ class ValidateToken(APIView):
             return Response("Valid token", status=status.HTTP_200_OK)
 
         return Response("Invalid token", status=status.HTTP_403_FORBIDDEN)
-
-
-class UserViewSet(ModelViewSet):
-    serializer_class = AccountSerializer
-    queryset = Account.objects.all()
-
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('username', 'email')
-    pagination_class = pagination.LimitOffsetPagination
