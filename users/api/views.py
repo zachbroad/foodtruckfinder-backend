@@ -16,7 +16,7 @@ class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormVie
     lookup_field = 'pk'
     serializer_class = AccountSerializer
 
-    queryset = Account.objects.all(
+    queryset = Account.objects.all()
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username', 'email')
     pagination_class = pagination.LimitOffsetPagination
