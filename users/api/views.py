@@ -17,7 +17,16 @@ class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormVie
     serializer_class = AccountSerializer
 
     def get_queryset(self):
-        return Account.objects.all()
+        queryset = Account.objects.all()
+        username = self.request.query_params.get('username')
+        email = self.request.query_params.get('email')
+
+        if username:
+            queryset = queryset.filter(username_id=username)
+        elif email:
+            queryset = queryset.filter(email_id=email)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
