@@ -22,10 +22,11 @@ class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormVie
         username = self.request.query_params.get('username')
         email = self.request.query_params.get('email')
 
-        if username:
-            queryset = queryset.filter(username_id=username)
+        username = self.request.query_params.get('username', None)
+        if username is not None:
+            queryset = queryset.filter(username=username)
         elif email:
-            queryset = queryset.filter(email_id=email)
+            queryset = queryset.filter(email=email)
 
         return queryset
 
