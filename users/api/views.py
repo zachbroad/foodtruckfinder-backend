@@ -84,7 +84,7 @@ class AccountViewSet(ModelViewSet):
     queryset = Account.objects.all()
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('username', 'email')
+    search_fields = ('=username', '=email')
     pagination_class = pagination.LimitOffsetPagination
 
     

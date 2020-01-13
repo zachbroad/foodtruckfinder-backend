@@ -11,7 +11,6 @@ router.register(r'users', AccountViewSet)
 urlpatterns = [
     path('/', AccountAPIView.as_view(), name='truck-create'),
     path('<int:pk>/', AccountRUDView.as_view(), name='truck-rud'),
-    path(r'users/(?P<username>.+)/$', AccountAPIView.as_view()),
     
 ]
 
