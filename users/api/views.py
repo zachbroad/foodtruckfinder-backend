@@ -87,3 +87,5 @@ class AccountViewSet(ModelViewSet):
     search_fields = ('username', 'email')
     pagination_class = pagination.LimitOffsetPagination
 
+    
+
