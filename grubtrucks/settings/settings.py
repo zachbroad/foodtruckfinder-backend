@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth.registration',
     'taggit',
+    'taggit_serializer',
 
 
     'storages',

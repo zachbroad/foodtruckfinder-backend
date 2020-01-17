@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from trucks.models import Truck, MenuItem
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -15,9 +17,11 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ]
 
 
-class TruckSerializer(serializers.ModelSerializer):
+class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
+    tags = TagListSerializerField()
+
 
     class Meta:
         model = Truck
