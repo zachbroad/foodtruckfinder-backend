@@ -10,7 +10,7 @@ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     serializer_class = TruckSerializer
 
     def get_queryset(self):
-        queryset = Account.objects.all()
+        queryset = Truck.objects.all()
         title = self.request.query_params.get('title')
 
         
