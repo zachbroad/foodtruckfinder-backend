@@ -11,7 +11,7 @@ class Truck(models.Model):
     location = PlainLocationField(based_fields=['city'], zoom=7)
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
-    tags = TaggableManager()
+    tags = TaggableManager(verbose_name='tags', blank=True, max_length=50)
 
     def get_short_description(self):
         return self.description[0:255] + "..."
