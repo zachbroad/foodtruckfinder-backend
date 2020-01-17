@@ -12,13 +12,11 @@ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     def get_queryset(self):
         queryset = Account.objects.all()
         title = self.request.query_params.get('title')
-        tags = self.request.query_params.get('tags')
 
         
         if title is not None:
             queryset = queryset.filter(title=title)
-        elif tags:
-            queryset = queryset.filter(tags=tags)
+
 
         return queryset
 
