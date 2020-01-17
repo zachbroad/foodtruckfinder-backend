@@ -11,16 +11,17 @@ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
 
     def get_queryset(self):
         queryset = Account.objects.all()
-        username = self.request.query_params.get('username')
-        email = self.request.query_params.get('email')
+        title = self.request.query_params.get('title')
+        tags = self.request.query_params.get('tags')
 
-        username = self.request.query_params.get('username', None)
-        if username is not None:
-            queryset = queryset.filter(username=username)
-        elif email:
-            queryset = queryset.filter(email=email)
+        
+        if title is not None:
+            queryset = queryset.filter(title=title)
+        elif tags:
+            queryset = queryset.filter(tags=tags)
 
         return queryset
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
