@@ -28,5 +28,6 @@ class TruckSerializer(serializers.ModelSerializer):
             'image',
             'description',
             'menu',
+            'tags',
         ]
         read_only_fields = ['pk']
