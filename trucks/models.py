@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from taggit.managers import TaggableManager
 from location_field.forms.plain import PlainLocationField
 
 
@@ -10,6 +10,8 @@ class Truck(models.Model):
     description = models.CharField(max_length=500, null=True, blank=True)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+
+    tags = TaggableManager()
 
     def get_short_description(self):
         return self.description[0:255] + "..."
