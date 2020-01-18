@@ -22,11 +22,16 @@ class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormVie
         username = self.request.query_params.get('username')
         email = self.request.query_params.get('email')
 
-        username = self.request.query_params.get('username', None)
+        first_name = self.request.query_params.get('first_name', None)
+        last_name = self.request.query_params.get('last_name', None)
         if username is not None:
             queryset = queryset.filter(username=username)
         elif email:
             queryset = queryset.filter(email=email)
+        elif first_name:
+            queryset = queryset.filter(first_name=first_name)
+        elif last_name:
+            queryset = queryset.filter(last_name=last_name)
 
         return queryset
 
@@ -85,6 +90,7 @@ class AccountViewSet(ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=username', '=email')
+    filter_fields = ('first_name', 'last_name')
     pagination_class = pagination.LimitOffsetPagination
 
     
