@@ -47,6 +47,6 @@ class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()
 
-    filter_backends = (filters.searchFilter,)
+    filter_backends = (filters.SearchFilter,)
     search_fields = ('title')
     pagination_class = pagination.LimitOffsetPagination
