@@ -16,6 +16,25 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'image',
         ]
 
+class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
+    menu = MenuItemSerializer(many=True, required=False)
+    owner = serializers.CurrentUserDefault()
+    tags = TagListSerializerField()
+
+
+    class Meta:
+        model = Truck
+        fields = [
+            'pk',
+            'owner',
+            'title',
+            'image',
+            'description',
+            'menu',
+            'tags',
+        ]
+        read_only_fields = ['pk']
+
 
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True, required=False)

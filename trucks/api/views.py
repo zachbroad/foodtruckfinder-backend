@@ -2,10 +2,7 @@ from rest_framework import generics, filters, pagination
 from rest_framework.viewsets import ModelViewSet
 
 from trucks.models import Truck, MenuItem
-from .serializers import TruckSerializer, MenuItemSerializer
-
-
-
+from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer
 
 
 class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
@@ -50,3 +47,10 @@ class TruckViewSet(ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('title',)
     pagination_class = pagination.LimitOffsetPagination
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return TruckSerializer
+
+        return CreateTruckSerializer
+
