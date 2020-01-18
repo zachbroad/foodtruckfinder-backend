@@ -4,15 +4,9 @@ from rest_framework.viewsets import ModelViewSet
 from trucks.models import Truck, MenuItem
 from .serializers import TruckSerializer, MenuItemSerializer
 
-from django_filters import rest_framework as filters
 
 
-class TruckFilter(filters.FilterSet):
-    title = filters.CharFilter(lookup_expr='icontains')
 
-    class Meta:
-        model = Truck
-        fields = ('title: ['icontains']')
 
 class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
@@ -53,8 +47,6 @@ class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()
 
+    filter_backends = (filters.searchFilter,)
     search_fields = ('title')
-    filterset_class = TruckFilter
     pagination_class = pagination.LimitOffsetPagination
-
-
