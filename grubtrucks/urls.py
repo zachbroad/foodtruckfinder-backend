@@ -19,7 +19,7 @@ urlpatterns = [
 
         # Test site
         path(r'', index, name='index'),
-        path(r'trucks/', include('trucks.urls'), name='trucks-index'),
+        path('trucks/', include('trucks.urls'), name='trucks-index'),
 
         # Account
         path(r'accounts/', include('allauth.urls', )),

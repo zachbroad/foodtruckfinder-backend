@@ -8,20 +8,9 @@ from .serializers import TruckSerializer, MenuItemSerializer
 class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
     serializer_class = TruckSerializer
-
-    def get_queryset(self):
-        queryset = Truck.objects.all()
-        title = self.request.query_params.get('title')
-
-        
-        if title is not None:
-            queryset = queryset.filter(title=title)
+    queryset = Truck.objects.all()
 
 
-        return queryset
-
-    def perform_create(self, serializer):
-        serializer.save(truck=self.request.truck)
 
 
 class TruckDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -44,9 +33,7 @@ class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()
 
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('title')
-    filter_fileds = ('title')
+    filter_fields = ('title')
     pagination_class = pagination.LimitOffsetPagination
 
 
