@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 
     # local
     'trucks.apps.TrucksConfig',
-    'users',
+    'users.apps.UsersConfig',
 
     # 3rd party
     'django_filters',
