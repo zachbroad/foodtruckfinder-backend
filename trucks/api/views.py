@@ -48,5 +48,5 @@ class TruckViewSet(ModelViewSet):
     queryset = Truck.objects.all()
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('title')
+    search_fields = ('title',)
     pagination_class = pagination.LimitOffsetPagination
