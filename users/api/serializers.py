@@ -5,12 +5,12 @@ from users.models import Account
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['pk',
-                  'first_name',
-                  'last_name',
-                  'email',
-                  'username',
-                  'password',
-                  ]
+        fields = (
+            'pk',
+            'first_name',
+            'last_name',
+            'email',
+            'username',
+        )
         read_only_fields = ['pk']
 
