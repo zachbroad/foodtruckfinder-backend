@@ -21,7 +21,7 @@ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(truck=self.request.truck)
 
 
 class TruckDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -46,6 +46,7 @@ class TruckViewSet(ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('title')
+    filter_fileds = ('title')
     pagination_class = pagination.LimitOffsetPagination
 
 
