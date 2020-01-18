@@ -12,7 +12,7 @@ class TruckFilter(filters.FilterSet):
 
     class Meta:
         model = Truck
-        fields = ('title')
+        fields = ('title: ['icontains']')
 
 class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
