@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
-from grubtrucks.settings.production import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
+# from grubtrucks.settings.production import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
 
+
+DEFAULT_FROM_EMAIL = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 def registration(request, email):
     subject = 'Thank you for registering to ourn site'
