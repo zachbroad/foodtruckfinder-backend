@@ -32,7 +32,7 @@ class TruckDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView Crea
     serializer_class = TruckSerializer
 
     def get_queryset(self):
-        return Truck.objects.all()
+      return Truck.objects.all()
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
