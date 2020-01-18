@@ -25,6 +25,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }   
 
 ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
+TAGGIT_CASE_INSENSITIVE = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',

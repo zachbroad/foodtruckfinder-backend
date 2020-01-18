@@ -1,9 +1,12 @@
-from rest_framework import generics, filters, pagination
+from functools import reduce
+
+from django.db.models import Q
+from rest_framework import generics, pagination, filters
 from rest_framework.viewsets import ModelViewSet
+from taggit.managers import TaggableManager
 
 from trucks.models import Truck, MenuItem
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer
-
 
 """ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
@@ -23,6 +26,8 @@ from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSeriali
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        hlsearch|:echo
+        
  """
 
 """ class TruckDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -50,15 +55,16 @@ class TruckViewSet(ModelViewSet):
     pagination_class = pagination.LimitOffsetPagination
 
     def get_queryset(self):
-
         qs = super().get_queryset()
 
-        tags=self.kwargs.get('tags', None)
-
+        tags = self.request.query_params.get('tags', None)
         if tags is not None:
             tags = tags.split(',')
-            tags = Tags.objects.filter(tags__name__in=tags)
-            qs = Truck.objects.filter(tags__in=tags)
+            q = Q()
+            for tag in tags:
+                q = q | Q(tags__name__iexact=tag)
+
+            qs = Truck.objects.filter(q).all()
 
         return qs
 
@@ -67,4 +73,3 @@ class TruckViewSet(ModelViewSet):
             return CreateTruckSerializer
 
         return TruckSerializer
-
