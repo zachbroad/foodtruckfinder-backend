@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from users.api.serializers import AccountSerializer
 from trucks.models import Truck, MenuItem
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
@@ -38,7 +39,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True, required=False)
-    owner = serializers.CurrentUserDefault()
+    owner = AccountSerializer()
     tags = TagListSerializerField()
 
 
