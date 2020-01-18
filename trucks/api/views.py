@@ -1,4 +1,4 @@
-from rest_framework import generics, filters, pagination
+from rest_framework import generics, filters, pagination, viewsets
 from rest_framework.viewsets import ModelViewSet
 
 from trucks.models import Truck, MenuItem
@@ -45,7 +45,7 @@ class TruckViewSet(ModelViewSet):
     queryset = Truck.objects.all()
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('title', 'description', 'tags')
+    search_fields = ('title')
     pagination_class = pagination.LimitOffsetPagination
 
 
