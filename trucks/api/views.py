@@ -12,7 +12,7 @@ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     def get_queryset(self):
         queryset = Account.objects.all()
 
-    return queryset
+         return queryset
 
 
 
