@@ -47,11 +47,12 @@ class Truck(models.Model):
 class OpenningTime(models.Model):
 
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE,)
-    weekday = models.IntegerField(
-        choices=WEEKDAYS,
-        unique=True)
+    weekday = models.IntegerField(choices=WEEKDAYS)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
+
+    class Meta:
+        unique_together = ('truck', 'weekday',)
 
     def __str__(self):
         return WEEKDAYS[self.weekday-1][1]
