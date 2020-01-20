@@ -22,7 +22,6 @@ class Truck(models.Model):
     description = models.CharField(max_length=500, null=True, blank=True)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-
     tags = TaggableManager(verbose_name='tags', blank=True,)
 
     def get_short_description(self):
@@ -70,7 +69,6 @@ class MenuItem(models.Model):
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
-
 
     def __str__(self):
         return self.name
