@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from taggit.managers import TaggableManager
 from location_field.forms.plain import PlainLocationField
-
 
 WEEKDAYS = [
     (1, ("Monday")),
@@ -12,17 +13,17 @@ WEEKDAYS = [
     (5, ("Friday")),
     (6, ("Saturday")),
     (7, ("Sunday")),
- ]
-
+]
 
 
 class Truck(models.Model):
-    title = models.CharField(max_length=120, null=True)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True, default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
+    title = models.CharField(max_length=120)
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True,
+                              default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     description = models.CharField(max_length=500, null=True, blank=True)
-    location = PlainLocationField(based_fields=['city'], zoom=7)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    tags = TaggableManager(verbose_name='tags', blank=True,)
+    location = PlainLocationField(based_fields=['city'], zoom=7, null=True, blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    tags = TaggableManager(verbose_name='tags', blank=True)
 
     def get_short_description(self):
         return self.description[0:255] + "..."
@@ -30,38 +31,40 @@ class Truck(models.Model):
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
-    
     @property
     def hours_of_operation(self):
-        return self.openningtime_set.all()
+        return self.hours.all()
 
     @property
     def menu(self):
-        return self.menuitem_set.all()
+        return self.items.all()
 
     def __str__(self):
         return self.title
 
 
-class OpenningTime(models.Model):
+@receiver(post_save, sender=Truck)
+def create_times(sender, instance, created, **kwargs):
+    if created:
+        for i in range(1, 7):
+            OpenningTime.objects.create(truck=instance, weekday=i)
 
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE,)
+
+class OpenningTime(models.Model):
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='hours')
     weekday = models.IntegerField(choices=WEEKDAYS)
-    from_hour = models.TimeField()
-    to_hour = models.TimeField()
+    from_hour = models.TimeField(default='09:00')
+    to_hour = models.TimeField(default='17:00')
 
     class Meta:
         unique_together = ('truck', 'weekday',)
 
     def __str__(self):
-        return WEEKDAYS[self.weekday-1][1]
-
-
-
+        return WEEKDAYS[self.weekday - 1][1]
 
 
 class MenuItem(models.Model):
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE,)
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=120, null=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     price = models.FloatField(max_length=10)

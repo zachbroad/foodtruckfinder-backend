@@ -32,7 +32,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
-    hours_of_operation = OpenningTimeSerializer(many=True)
+    hours_of_operation = OpenningTimeSerializer(many=True, required=False)
     menu = MenuItemSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField()
