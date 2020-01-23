@@ -46,7 +46,7 @@ class Truck(models.Model):
 @receiver(post_save, sender=Truck)
 def create_times(sender, instance, created, **kwargs):
     if created:
-        for i in range(1, 7):
+        for i in range(0, 7):
             OpenningTime.objects.create(truck=instance, weekday=i)
 
 
