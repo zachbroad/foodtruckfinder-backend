@@ -7,13 +7,18 @@ class TruckAdmin(admin.ModelAdmin):
     model = Truck
 
 
-class MenuAdmin(admin.ModelAdmin):
+class MenuItemAdmin(admin.ModelAdmin):
     model = MenuItem
+
+''' class MenuItemComboAdmin(admin.ModelAdmin):
+    model = MenuItemCombo '''
 
 
 class OpenningTimeAdmin(admin.ModelAdmin):
     model = OpenningTime
 
+
+''' admin.site.register(MenuItemCombo, MenuItemComboAdmin) '''
 admin.site.register(OpenningTime, OpenningTimeAdmin)
 admin.site.register(Truck, TruckAdmin)
-admin.site.register(MenuItem, MenuAdmin)
+admin.site.register(MenuItem, MenuItemAdmin)

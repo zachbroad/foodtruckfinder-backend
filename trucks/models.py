@@ -46,7 +46,7 @@ class Truck(models.Model):
 @receiver(post_save, sender=Truck)
 def create_times(sender, instance, created, **kwargs):
     if created:
-        for i in range(0, 7):
+        for i in range(1, 8):
             OpenningTime.objects.create(truck=instance, weekday=i)
 
 
@@ -64,14 +64,40 @@ class OpenningTime(models.Model):
 
 
 class MenuItem(models.Model):
+    TYPE_ENTRE = 1
+    TYPE_SIDE = 2
+    TYPE_DRINK = 3
+    TYPE_DESERT = 4
+    TYPE_COMBO = 5
+
+    TYPE_CHOICES = [
+        (TYPE_ENTRE, 'Entre'),
+        (TYPE_SIDE, 'Side'),
+        (TYPE_DRINK, 'Drink'),
+        (TYPE_DESERT, 'Desert')
+    ]
+
+    type = models.IntegerField(choices=TYPE_CHOICES)
+
+    # non-specific
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=120, null=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=True, blank=True)
+    
+    # specific
+    
+    # TODO: #
+    # add other types #
+    # query choices by current truck field #
+    entre = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 1,}, null=True, blank=True)
+
+
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
     def __str__(self):
         return self.name
+
