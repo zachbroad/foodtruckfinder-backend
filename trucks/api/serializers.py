@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from users.api.serializers import AccountSerializer
 from trucks.models import Truck, MenuItem, OpenningTime
 from taggit_serializer.serializers import (TagListSerializerField,
@@ -24,6 +23,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
         model = MenuItem
 
         fields = [
+            'type',
             'name',
             'description',
             'price',

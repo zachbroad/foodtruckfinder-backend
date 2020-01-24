@@ -2,8 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from location_field.forms.plain import PlainLocationField
+
 
 WEEKDAYS = [
     (1, ("Monday")),
@@ -74,7 +76,8 @@ class MenuItem(models.Model):
         (TYPE_ENTRE, 'Entre'),
         (TYPE_SIDE, 'Side'),
         (TYPE_DRINK, 'Drink'),
-        (TYPE_DESERT, 'Desert')
+        (TYPE_DESERT, 'Desert'),
+        (TYPE_COMBO, 'Combo')
     ]
 
     type = models.IntegerField(choices=TYPE_CHOICES)
@@ -82,19 +85,43 @@ class MenuItem(models.Model):
     # non-specific
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=120, null=True)
-    description = models.CharField(max_length=500, null=True, blank=True)
+    description = models.CharField(max_length=500, null=True, blank=True, default='Sorry, this truck has no description.')
     price = models.FloatField(max_length=10)
-    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=True, blank=True)
+    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=True, blank=True, default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     
+
     # specific
     
     # TODO: #
     # add other types #
-    # query choices by current truck field #
+    # query choices by current truck field in admin panel #
     entre = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 1,}, null=True, blank=True)
 
 
+    def clean(self) -> None:
+        # Check if 
+        if self.type == MenuItem.TYPE_ENTRE:
+            if self.entre != None:
+                raise ValidationError('You must set the type to combo to add to the Entre items field.')
+        
+        elif self.type == MenuItem.TYPE_SIDE:
+            if self.entre != None:
+                raise ValidationError('You must set the type to combo to add to the Entre items field.')
 
+        elif self.type == MenuItem.TYPE_DRINK:
+            if self.entre != None:
+                raise ValidationError('You must set the type to combo to add to the Entre items field.')
+                
+        elif self.type == MenuItem.TYPE_DESERT:
+            if self.entre != None:
+                raise ValidationError('You must set the type to combo to add to the Entre items field.')
+        
+        elif self.type == MenuItem.TYPE_COMBO:
+            if self.truck != self.entre.truck:
+                raise ValidationError('You must set the Entre field to an entre that belongs to this truck.')
+            elif self.entre == None:
+                raise ValidationError('You must add an Entre if you select the type combo.')
+    
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
