@@ -93,28 +93,66 @@ class MenuItem(models.Model):
     # specific
     
     # TODO: #
-    # add other types #
+
     # query choices by current truck field in admin panel #
-    entre = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 1,}, null=True, blank=True)
+    entre = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 1,}, null=True, blank=True, related_name='item1')
+    side = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 2,}, null=True, blank=True, related_name='item2') 
+    drink = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 3,}, null=True, blank=True, related_name='item3')
+    desert = models.ForeignKey('self', on_delete=models.CASCADE, limit_choices_to={'type': 4,}, null=True, blank=True, related_name='item4')
 
+    def clean_item(self):
+        if self.entre != None:
+            raise ValidationError('You must set the type to combo to add to the Entre items field.')
+        if self.side != None:
+            raise ValidationError('You must set the type to combo to add to the Side items field.')
+        if self.drink != None:
+            raise ValidationError('You must set the type to combo to add to the Drink items field.')
+        if self.desert != None:
+            raise ValidationError('You must set the type to combo to add to the Desert items field.')
 
+    # TODO: #
+    # Validate all types #
     def clean(self) -> None:
         # Check if 
         if self.type == MenuItem.TYPE_ENTRE:
             if self.entre != None:
                 raise ValidationError('You must set the type to combo to add to the Entre items field.')
-        
+            if self.side != None:
+                raise ValidationError('You must set the type to combo to add to the Side items field.')
+            if self.drink != None:
+                raise ValidationError('You must set the type to combo to add to the Drink items field.')
+            if self.desert != None:
+                raise ValidationError('You must set the type to combo to add to the Desert items field.')
+
         elif self.type == MenuItem.TYPE_SIDE:
             if self.entre != None:
                 raise ValidationError('You must set the type to combo to add to the Entre items field.')
-
+            if self.side != None:
+                raise ValidationError('You must set the type to combo to add to the Side items field.')
+            if self.drink != None:
+                raise ValidationError('You must set the type to combo to add to the Drink items field.')
+            if self.desert != None:
+                raise ValidationError('You must set the type to combo to add to the Desert items field.')
+            
         elif self.type == MenuItem.TYPE_DRINK:
             if self.entre != None:
                 raise ValidationError('You must set the type to combo to add to the Entre items field.')
+            if self.side != None:
+                raise ValidationError('You must set the type to combo to add to the Side items field.')
+            if self.drink != None:
+                raise ValidationError('You must set the type to combo to add to the Drink items field.')
+            if self.desert != None:
+                raise ValidationError('You must set the type to combo to add to the Desert items field.')
                 
         elif self.type == MenuItem.TYPE_DESERT:
             if self.entre != None:
                 raise ValidationError('You must set the type to combo to add to the Entre items field.')
+            if self.side != None:
+                raise ValidationError('You must set the type to combo to add to the Side items field.')
+            if self.drink != None:
+                raise ValidationError('You must set the type to combo to add to the Drink items field.')
+            if self.desert != None:
+                raise ValidationError('You must set the type to combo to add to the Desert items field.')
         
         elif self.type == MenuItem.TYPE_COMBO:
             if self.truck != self.entre.truck:
@@ -122,6 +160,8 @@ class MenuItem(models.Model):
             elif self.entre == None:
                 raise ValidationError('You must add an Entre if you select the type combo.')
     
+    
+        
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
