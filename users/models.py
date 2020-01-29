@@ -31,11 +31,19 @@ class MyAccountManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
         )
+<<<<<<< HEAD
         
         if user.first_name is None:
             user.first_name = 'Super'
         if user.last_name is None:
             user.lane_name = 'User'
+=======
+
+        if user.first_name == None:
+            user.first_name = 'John'
+        if user.last_name == None:
+            user.last_name = 'Doe'
+>>>>>>> 4aa7c86c04c98b746a59e49162345af1efd8751a
 
         user.is_admin = True
         user.is_staff = True
@@ -47,8 +55,8 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30, null=True, blank=True)
-    last_name = models.CharField(max_length=30, null=True, blank=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
