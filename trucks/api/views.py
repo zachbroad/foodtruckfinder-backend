@@ -65,6 +65,14 @@ class TruckViewSet(ModelViewSet):
                 q = q | Q(tags__name__iexact=tag)
 
             qs = Truck.objects.filter(q).all()
+        
+        owner = self.request.query_params.get('owner', None)
+        if owner is not None:
+            q = Q()
+            q = q | Q(owner__pk=int(owner))
+
+            qs = Truck.objects.filter(q).all()
+
 
         return qs
 

@@ -31,19 +31,11 @@ class MyAccountManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
         )
-<<<<<<< HEAD
-        
-        if user.first_name is None:
-            user.first_name = 'Super'
-        if user.last_name is None:
-            user.lane_name = 'User'
-=======
 
         if user.first_name == None:
             user.first_name = 'John'
         if user.last_name == None:
             user.last_name = 'Doe'
->>>>>>> 4aa7c86c04c98b746a59e49162345af1efd8751a
 
         user.is_admin = True
         user.is_staff = True
