@@ -20,7 +20,7 @@ WEEKDAYS = [
 
 class Truck(models.Model):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=True, blank=True,
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', null=False, blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     description = models.CharField(max_length=500, null=True, blank=True)
     location = PlainLocationField(based_fields=['city'], zoom=7, null=True, blank=True)
