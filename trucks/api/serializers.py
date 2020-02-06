@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from users.api.serializers import AccountSerializer
-from trucks.models import Truck, MenuItem, OpenningTime
+from trucks.models import Truck, MenuItem, OpenningTime, Review
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
-
 
 class OpenningTimeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,10 +29,27 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'image',
         ]
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        reviewer = serializers.CurrentUserDefault()
+
+        fields = [
+            'pk',
+            'reviewer',
+            'rating',
+            'description',
+            'likes',
+            'dislikes',
+            'post_created',
+            'post_edited',
+        ]
+
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True, required=False)
     menu = MenuItemSerializer(many=True, required=False)
+    reviews = ReviewSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField()
 
@@ -48,6 +64,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'menu',
             'hours_of_operation',
             'tags',
+            'reviews',
         ]
         read_only_fields = ['pk']
 
@@ -57,6 +74,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True, required=False)
     owner = AccountSerializer()
     tags = TagListSerializerField()
+    reviews = ReviewSerializer(many=True)
 
     class Meta:
         model = Truck
@@ -69,5 +87,6 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'menu',
             'hours_of_operation',
             'tags',
+            'reviews',
         ]
         read_only_fields = ['pk']
