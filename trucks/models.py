@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from location_field.forms.plain import PlainLocationField
+from phone_field import PhoneField
 
 
 WEEKDAYS = [
@@ -28,6 +29,9 @@ class Truck(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
     tags = TaggableManager(verbose_name='tags', blank=True)
+    phone = PhoneField(blank=True, help_text='Contact number')
+    website = models.URLField(blank=True,)
+    #phone = models.Charfield   OR  phonenumber_field dep.
 
     def get_short_description(self):
         return self.description[0:255] + "..."

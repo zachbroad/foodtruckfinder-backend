@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'taggit',
     'taggit_serializer',
+    'phone_field',
 
 
     'storages',
