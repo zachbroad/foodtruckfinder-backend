@@ -7,10 +7,12 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = (
             'pk',
+            'username',
+            'email',
+            'phone',
             'first_name',
             'last_name',
-            'email',
-            'username',
+
         )
         read_only_fields = ['pk']
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-
+from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 
 
@@ -49,6 +49,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    phone = PhoneField(blank=True,) 
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
