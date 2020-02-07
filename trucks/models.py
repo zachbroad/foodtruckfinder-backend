@@ -97,7 +97,7 @@ class OpenningTime(models.Model):
 
 class MenuItem(models.Model):
 
-    type = models.IntegerField(choices=TYPE_CHOICES[0:4])
+    type = models.IntegerField(choices=TYPE_CHOICES)
 
     # non-specific
     truck = models.ForeignKey(
@@ -119,50 +119,13 @@ class MenuItem(models.Model):
     
 
 
-class MenuItemCombo(models.Model):
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='combos')
-    name = models.CharField(max_length=120, null=True)
-    description = models.CharField(
-        max_length=500, null=True, blank=True, default='Sorry, this combo has no description.')
-    price = models.FloatField(max_length=10)
-    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
-                              default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
-
-    entre = models.ForeignKey(MenuItem, on_delete=models.CASCADE, limit_choices_to={
-                              'type': 1, }, related_name='entre')
-    side1 = models.ForeignKey(MenuItem, on_delete=models.CASCADE, limit_choices_to={
-                             'type': 2, }, null=True, blank=True, related_name='side1')
-    side2 = models.ForeignKey(MenuItem, on_delete=models.CASCADE, limit_choices_to={
-                             'type': 2, }, null=True, blank=True, related_name='side2')
-    drink = models.ForeignKey(MenuItem, on_delete=models.CASCADE, limit_choices_to={
-                              'type': 3, }, null=True, blank=True, related_name='drink')
-    desert = models.ForeignKey(MenuItem, on_delete=models.CASCADE, limit_choices_to={
-                               'type': 4, }, null=True, blank=True, related_name='desert')
-
-    def clean_item(self):
-
-        if self.truck != self.entre.truck:
-            raise ValidationError(
-                'You must set the Entre field to an entre that belongs to this truck.')
-        elif self.entre == None:
-            raise ValidationError(
-                'You must add an Entre if you select the type combo.')
-
-    def get_absolute_image_url(self):
-        return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
-
-    def __str__(self):
-        return self.name
-
-
 class Menu(models.Model):
     truck = models.ForeignKey(
         Truck, on_delete=models.CASCADE, related_name='menu')
 
     @property
     def combos(self):
-        return self.truck.combos.all()
+        return self.truck.items.all().filter(type=5)
 
     @property
     def entres(self):

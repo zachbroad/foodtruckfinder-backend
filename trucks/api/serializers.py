@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from users.api.serializers import AccountSerializer
-from trucks.models import Truck, MenuItem, MenuItemCombo, Menu, OpenningTime, Review
+from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -31,38 +31,11 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ]
 
 
-menu_items = MenuItemSerializer(many=True, required=False)
-
-class MenuItemComboSerializer(serializers.ModelSerializer):
-
-    entre = MenuItemSerializer(many=False, required=True)
-    side1 = MenuItemSerializer(many=False, required=True) 
-    side2 = MenuItemSerializer(many=False, required=True)
-    drink = MenuItemSerializer(many=False, required=True)
-    desert = MenuItemSerializer(many=False, required=True)    
-    
-
-    class Meta:
-        model = MenuItemCombo
-
-        fields = [
-            'name',
-            'description',
-            'price',
-            'image',
-
-            'entre',
-            'side1',
-            'side2',
-            'drink',
-            'desert',
-        ]
-
 
 class MenuSerializer(serializers.ModelSerializer):
     
 
-    combos  = MenuItemComboSerializer(many=True, required=False)
+    combos  = MenuItemSerializer(many=True, required=False)
     entres  = MenuItemSerializer(many=True, required=False)
     sides   = MenuItemSerializer(many=True, required=False)
     drinks  = MenuItemSerializer(many=True, required=False)
