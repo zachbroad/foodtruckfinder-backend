@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Truck, MenuItem, OpenningTime, Review
+from .models import Truck, MenuItem, MenuItemCombo, Menu, OpenningTime, Review
 
 
 class TruckAdmin(admin.ModelAdmin):
@@ -10,9 +10,11 @@ class TruckAdmin(admin.ModelAdmin):
 class MenuItemAdmin(admin.ModelAdmin):
     model = MenuItem
 
-''' class MenuItemComboAdmin(admin.ModelAdmin):
-    model = MenuItemCombo '''
+class MenuItemComboAdmin(admin.ModelAdmin):
+    model = MenuItemCombo 
 
+""" class MenuAdmin(admin.ModelAdmin):
+    model = Menu """
 
 class OpenningTimeAdmin(admin.ModelAdmin):
     model = OpenningTime
@@ -25,4 +27,6 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.register(OpenningTime, OpenningTimeAdmin)
 admin.site.register(Truck, TruckAdmin)
 admin.site.register(MenuItem, MenuItemAdmin)
+
+admin.site.register(MenuItemCombo, MenuItemComboAdmin)
 admin.site.register(Review, ReviewAdmin)
