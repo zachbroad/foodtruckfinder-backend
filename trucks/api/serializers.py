@@ -23,6 +23,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
         model = MenuItem
 
         fields = [
+            'type',
             'name',
             'description',
             'price',
@@ -45,11 +46,11 @@ class MenuSerializer(serializers.ModelSerializer):
         model = Menu
 
         fields = [
-            'combos',
             'entres',
             'sides',
             'drinks',
             'deserts',
+            'combos',
         ]
 
 
