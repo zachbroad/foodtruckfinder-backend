@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, email, username, first_name, last_name, password=None):
+    def create_user(self, email, username, first_name, last_name, phone, password=None):
         if not email:
             raise ValueError("Users must have an email address")
         if not username:
@@ -17,25 +17,31 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             username=username,
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password, first_name=None, last_name=None):
+    def create_superuser(self, email, username, password,phone=None, first_name=None, last_name=None):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
             username=username,
             first_name=first_name,
             last_name=last_name,
+            phone=phone,
         )
 
-        if user.first_name == None:
+        if user.first_name is None:
             user.first_name = 'John'
-        if user.last_name == None:
+        if user.last_name is None:
             user.last_name = 'Doe'
+        if user.phone is None:
+            user.phone = '5555555555'
 
         user.is_admin = True
         user.is_staff = True
@@ -49,7 +55,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    phone = PhoneField(blank=True,) 
+    phone = PhoneField()
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
