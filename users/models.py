@@ -26,7 +26,7 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password,phone=None, first_name=None, last_name=None):
+    def create_superuser(self, email, username, password, phone='5555555555', first_name='Super', last_name='User'):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -35,13 +35,6 @@ class MyAccountManager(BaseUserManager):
             last_name=last_name,
             phone=phone,
         )
-
-        if user.first_name is None:
-            user.first_name = 'John'
-        if user.last_name is None:
-            user.last_name = 'Doe'
-        if user.phone is None:
-            user.phone = '5555555555'
 
         user.is_admin = True
         user.is_staff = True
@@ -69,7 +62,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def has_perm(self, perm, obj=None):
         return self.is_superuser

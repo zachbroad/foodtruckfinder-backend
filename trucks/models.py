@@ -9,13 +9,13 @@ from phone_field import PhoneField
 
 
 WEEKDAYS = [
-    (1, ("Monday")),
-    (2, ("Tuesday")),
-    (3, ("Wednesday")),
-    (4, ("Thursday")),
-    (5, ("Friday")),
-    (6, ("Saturday")),
-    (7, ("Sunday")),
+    (1, "Monday"),
+    (2, "Tuesday"),
+    (3, "Wednesday"),
+    (4, "Thursday"),
+    (5, "Friday"),
+    (6, "Saturday"),
+    (7, "Sunday"),
 ]
 
 TYPE_ENTRE = 1
@@ -52,7 +52,11 @@ class Truck(models.Model):
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
-    
+
+    @property
+    def reviews(self):
+        return self.reviews.all()
+
     @property
     def menus(self):
         return self.menu.all()
@@ -116,8 +120,6 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.name
 
-    
-
 
 class Menu(models.Model):
     truck = models.ForeignKey(
@@ -146,24 +148,48 @@ class Menu(models.Model):
 
 class Review(models.Model):
     RATING_CHOICES = [
-        (1, '1.0'),
-        (1.5, '1.5'),
-        (2, '2.0'),
-        (2.5, '2.5'),
-        (3, '3.0'),
-        (3.5, '3.5'),
-        (4, '4.0'),
-        (4.5, '4.5'),
-        (5, '5.0')
+        (0, '0.0'),
+        (1, '0.5'),
+        (2, '1.0'),
+        (3, '1.5'),
+        (4, '2.0'),
+        (5, '2.5'),
+        (6, '3.0'),
+        (7, '3.5'),
+        (8, '4.0'),
+        (9, '4.5'),
+        (10, '5.0')
     ]
     truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='review')
+        Truck, on_delete=models.CASCADE, related_name='reviews')
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField(
-        choices=RATING_CHOICES, verbose_name='rating')
+        choices=RATING_CHOICES, verbose_name='truck_rating')
     description = models.CharField(max_length=500, blank=False)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.truck.title + ' - Review: ' + self.reviewer.username
+
+    @property
+    def likes(self):
+        return self.likes.all()
+
+    @property
+    def dislikes(self):
+        return self.dislikes.all()
+
+class Like(models.Model):
+   like = models.BooleanField(null=False, blank=False)
+   review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+   liker = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True,related_name='liker')
+
+   def __str__(self):
+       if self.like:
+           liked = ' - Liked by: '
+       else:
+           liked = ' - Disliked by: '
+       return self.review.__str__() + liked + self.liker.__str__()
+
