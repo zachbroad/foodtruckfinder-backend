@@ -1,11 +1,8 @@
-
 from rest_framework import serializers
 from users.api.serializers import AccountSerializer
-from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review
+from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
-
-
 
 class OpenningTimeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,23 +50,37 @@ class MenuSerializer(serializers.ModelSerializer):
             'combos',
         ]
 
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        liked_by = serializers.CurrentUserDefault()
+
+        fields = [
+            'pk',
+            'is_liked',
+            'liked_by',
+        ]
 
 class ReviewSerializer(serializers.ModelSerializer):
+    total_likes = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Review
         reviewer = serializers.CurrentUserDefault()
+
 
         fields = [
             'pk',
             'reviewer',
             'rating',
             'description',
-            'likes',
-            'dislikes',
+            'total_likes',
             'post_created',
             'post_edited',
         ]
-
+    def get_total_likes(self, obj):
+        return obj.likes.all().filter(is_liked=True).count() - obj.likes.all().filter(is_liked=False).count()
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True, required=False)
@@ -99,7 +110,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True)
     menu = MenuSerializer(many=True, required=False)
-    owner = AccountSerializer()
+    owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField()
     reviews = ReviewSerializer(many=True)
 

@@ -45,7 +45,6 @@ class Truck(models.Model):
     tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True,)
-    # phone = models.Charfield   OR  phonenumber_field dep.
 
     def get_short_description(self):
         return self.description[0:255] + "..."
@@ -174,22 +173,22 @@ class Review(models.Model):
         return self.truck.title + ' - Review: ' + self.reviewer.username
 
     @property
-    def likes(self):
-        return self.likes.all()
+    def all_likes(self):
+        return self.likes.all().filter(is_liked=True)
 
     @property
-    def dislikes(self):
-        return self.dislikes.all()
+    def all_dislikes(self):
+        return self.likes.all().filter(is_liked=False)
 
 class Like(models.Model):
-   like = models.BooleanField(null=False, blank=False)
+   is_liked = models.BooleanField(null=False, blank=False)
    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
-   liker = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True,related_name='liker')
+   liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True, related_name='liked_by')
 
    def __str__(self):
-       if self.like:
+       if self.is_liked:
            liked = ' - Liked by: '
        else:
            liked = ' - Disliked by: '
-       return self.review.__str__() + liked + self.liker.__str__()
+       return self.review.__str__() + liked + self.liked_by.__str__()
 
