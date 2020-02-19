@@ -1,4 +1,6 @@
 from django.contrib import admin
+import json
+from django.contrib import admin
 from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
 from .models import Truck, MenuItem, Menu, OpenningTime, Review, Like
@@ -6,9 +8,16 @@ from .models import Truck, MenuItem, Menu, OpenningTime, Review, Like
 
 class TruckAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},
+        map_fields.AddressField: {
+            'widget': map_widgets.GoogleMapsAddressWidget(attrs={'data-map-type': 'roadmap',
+            'data-autocomplete-options': json.dumps({ 'types': ['geocode',
+                'establishment'], 'componentRestrictions': {
+                  'country': 'us'
+              }
+          })
+      })}
     }
-    readonly_fields = ['geolocation']
+
     model = Truck
 
 
