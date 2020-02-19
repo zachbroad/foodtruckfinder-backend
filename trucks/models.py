@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
-from location_field.forms.plain import PlainLocationField
+from location_field.models.plain import PlainLocationField
 from phone_field import PhoneField
 
 
@@ -34,6 +34,7 @@ TYPE_CHOICES = [
 
 
 class Truck(models.Model):
+
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
@@ -42,6 +43,8 @@ class Truck(models.Model):
     location = PlainLocationField(based_fields=['city'], zoom=7, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
+    city = models.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['city'], zoom=7)
     tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True,)

@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'taggit_serializer',
     'phone_field',
 
-
     'storages',
 ]
 
@@ -163,6 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
+GOOGLE_MAPS_V3_APIKEY = 'AIzaSyA8kKFG0-n_lV-xNBld3iJjLu2DP34w--I'
 GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyC3dAA4FyHJORduaUx7Yr7eZuX97hVmAHQ'
 
 LANGUAGE_CODE = 'en-us'
