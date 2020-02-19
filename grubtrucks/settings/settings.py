@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
     # 3rd party
     'django_filters',
-    'location_field',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -53,7 +52,7 @@ INSTALLED_APPS = [
     'taggit',
     'taggit_serializer',
     'phone_field',
-
+    'django_google_maps',
     'storages',
 ]
 
@@ -162,8 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-GOOGLE_MAPS_V3_APIKEY = 'AIzaSyA8kKFG0-n_lV-xNBld3iJjLu2DP34w--I'
-GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyC3dAA4FyHJORduaUx7Yr7eZuX97hVmAHQ'
+GOOGLE_MAPS_API_KEY = 'AIzaSyA8kKFG0-n_lV-xNBld3iJjLu2DP34w--I'
 
 LANGUAGE_CODE = 'en-us'
 

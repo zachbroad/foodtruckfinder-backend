@@ -4,8 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
-from location_field.models.plain import PlainLocationField
 from phone_field import PhoneField
+from django_google_maps import fields as map_fields
 
 
 WEEKDAYS = [
@@ -40,11 +40,10 @@ class Truck(models.Model):
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     description = models.CharField(
         max_length=500, blank=True, default='Sorry, this truck has no description')
-    location = PlainLocationField(based_fields=['city'], zoom=7, blank=True)
+    address = map_fields.AddressField(max_length=200)
+    geolocation = map_fields.GeoLocationField(max_length=100, )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
-    city = models.CharField(max_length=255)
-    location = PlainLocationField(based_fields=['city'], zoom=7)
     tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True,)

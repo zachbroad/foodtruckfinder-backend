@@ -1,9 +1,14 @@
 from django.contrib import admin
-
+from django_google_maps import widgets as map_widgets
+from django_google_maps import fields as map_fields
 from .models import Truck, MenuItem, Menu, OpenningTime, Review, Like
 
 
 class TruckAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},
+    }
+    readonly_fields = ['geolocation']
     model = Truck
 
 
