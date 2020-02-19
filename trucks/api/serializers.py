@@ -97,6 +97,8 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'title',
             'image',
             'description',
+            'address',
+            'geolocation',
             'phone',
             'website',
             'menu',
@@ -110,7 +112,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True)
     menu = MenuSerializer(many=True, required=False)
-    owner = serializers.CurrentUserDefault()
+    owner = AccountSerializer()
     tags = TagListSerializerField()
     reviews = ReviewSerializer(many=True)
 
@@ -122,6 +124,8 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'title',
             'image',
             'description',
+            'address',
+            'geolocation',
             'phone',
             'website',
             'menu',
