@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
@@ -41,8 +42,8 @@ class Truck(models.Model):
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     description = models.CharField(
         max_length=500, blank=True, default='Sorry, this truck has no description')
-    address = map_fields.AddressField(max_length=200)
-    geolocation = map_fields.GeoLocationField(max_length=100, )
+    address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
+    geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
     tags = TaggableManager(verbose_name='tags', blank=True)
@@ -78,16 +79,25 @@ class Truck(models.Model):
     def save(self, *args, **kwargs):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
-        if getattr(self, 'address', "None"):
+        # Check if address not given when geolocation is
+        if self.address == "None" or self.address is None or self.address == "":
             points = self.geolocation.split(',')
             lat = points[0]
-            lon = points[1]
-            self.address = gmaps.reverse_geocode((float(lat), float(lon)))
-            #PARSE
+            lng = points[1]
+            resp = gmaps.reverse_geocode((float(lat), float(lng)))
+            address_components = resp[0]['address_components']
+            house_number = address_components[0]['long_name']
+            street_name = address_components[1]['long_name']
+            city_name = address_components[2]['long_name']
+            state_abbr = address_components[4]['short_name']
+            country_abbr = address_components[5]['short_name']
+            self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
 
-        elif getattr(self, 'geolocation', "None"):
-            self.address = gmaps.geocode('')
-            # PARSE
+        if self.geolocation == "None" or self.geolocation is None or self.geolocation == "":
+            resp = gmaps.geocode(self.address)
+            location = resp[0]['geometry']['location']
+            self.geolocation = "{},{}".format(location['lat'], location ['lng'])
+
         super().save(*args, **kwargs)
 
 @receiver(post_save, sender=Truck)
