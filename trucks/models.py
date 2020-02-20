@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from phone_field import PhoneField
 from django_google_maps import fields as map_fields
+import googlemaps
 
 
 WEEKDAYS = [
@@ -73,6 +74,21 @@ class Truck(models.Model):
     def __str__(self):
         return self.title
 
+
+    def save(self, *args, **kwargs):
+        gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+
+        if getattr(self, 'address', "None"):
+            points = self.geolocation.split(',')
+            lat = points[0]
+            lon = points[1]
+            self.address = gmaps.reverse_geocode((float(lat), float(lon)))
+            #PARSE
+
+        elif getattr(self, 'geolocation', "None"):
+            self.address = gmaps.geocode('')
+            # PARSE
+        super().save(*args, **kwargs)
 
 @receiver(post_save, sender=Truck)
 def create_times(sender, instance, created, **kwargs):
