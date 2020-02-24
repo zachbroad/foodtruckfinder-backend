@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from users.api.serializers import AccountSerializer
-from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like
+from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -12,6 +12,17 @@ class OpenningTimeSerializer(serializers.ModelSerializer):
             'weekday',
             'from_hour',
             'to_hour',
+        ]
+
+class VisitSerializer(serializers.ModelSerializer):
+    visitor = serializers.CurrentUserDefault()
+
+    class Meta:
+        model = Visit
+
+        fields = [
+            'visitor',
+            'visited'
         ]
 
 
@@ -31,8 +42,6 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 
 class MenuSerializer(serializers.ModelSerializer):
-    
-
     combos  = MenuItemSerializer(many=True, required=False)
     entres  = MenuItemSerializer(many=True, required=False)
     sides   = MenuItemSerializer(many=True, required=False)
@@ -112,6 +121,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True)
     menu = MenuSerializer(many=True, required=False)
+    visit_history = VisitSerializer(many=True, required=False)
     owner = AccountSerializer()
     tags = TagListSerializerField()
     reviews = ReviewSerializer(many=True)
@@ -129,6 +139,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
+            'visit_history',
             'hours_of_operation',
             'tags',
             'reviews',

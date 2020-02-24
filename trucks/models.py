@@ -65,6 +65,10 @@ class Truck(models.Model):
         return self.menu.all()
 
     @property
+    def visit_history(self):
+        return self.visits.all()
+
+    @property
     def hours_of_operation(self):
         return self.hours.all()
 
@@ -219,4 +223,10 @@ class Like(models.Model):
        else:
            liked = ' - Disliked by: '
        return self.review.__str__() + liked + self.liked_by.__str__()
+
+
+class Visit(models.Model):
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
+    visitor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    visited = models.DateTimeField(auto_now=True)
 

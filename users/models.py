@@ -56,6 +56,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    @property
+    def search_history(self):
+        return self.search_terms.all()
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
@@ -70,6 +74,11 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def had_module_perms(self, app_label):
         return True
 
+
+class SearchTerm(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
+    term = models.CharField(max_length=50,blank=False, null=False)
+    created = models.DateTimeField(auto_now_add=True)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
