@@ -70,17 +70,27 @@ class LikeSerializer(serializers.ModelSerializer):
             'liked_by',
         ]
 
+# class NewReviewSerializer(serializers.ModelSerializer):
+#     truck = serializers.IntegerField()
+#
+#     class Meta:
+#         model = Review
+#
+#         fields = [
+#             'reviewer',
+#             'rating',
+#             'truck',
+#         ]
+
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
-
+    reviewer = serializers.CurrentUserDefault()
 
     class Meta:
         model = Review
-        reviewer = serializers.CurrentUserDefault()
-
 
         fields = [
-            'pk',
+            'truck',
             'reviewer',
             'rating',
             'description',
@@ -88,6 +98,13 @@ class ReviewSerializer(serializers.ModelSerializer):
             'post_created',
             'post_edited',
         ]
+
+        read_only_fields = [
+            'total_likes',
+            'post_created',
+            'post_edited',
+        ]
+
     def get_total_likes(self, obj):
         return obj.likes.all().filter(is_liked=True).count() - obj.likes.all().filter(is_liked=False).count()
 

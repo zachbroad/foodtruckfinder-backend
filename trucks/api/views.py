@@ -1,12 +1,9 @@
-from functools import reduce
-
 from django.db.models import Q
-from rest_framework import generics, pagination, filters
+from rest_framework import generics, pagination, filters, permissions
 from rest_framework.viewsets import ModelViewSet
-from taggit.managers import TaggableManager
 
-from trucks.models import Truck, MenuItem
-from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer
+from trucks.models import Truck, MenuItem, Review
+from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer
 
 """ class TruckListView(generics.CreateAPIView):  # DetailView CreateView FormView
     lookup_field = 'pk'
@@ -44,6 +41,13 @@ class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView C
 
     def get_queryset(self):
         return MenuItem.objects.all()
+
+
+class ReviewsViewSet(ModelViewSet):
+    serializer_class = ReviewSerializer
+    queryset = Review.objects.all()
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class TruckViewSet(ModelViewSet):

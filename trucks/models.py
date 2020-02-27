@@ -9,7 +9,6 @@ from phone_field import PhoneField
 from django_google_maps import fields as map_fields
 import googlemaps
 
-
 WEEKDAYS = [
     (1, "Monday"),
     (2, "Tuesday"),
@@ -36,7 +35,6 @@ TYPE_CHOICES = [
 
 
 class Truck(models.Model):
-
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
@@ -48,7 +46,7 @@ class Truck(models.Model):
                               on_delete=models.CASCADE)
     tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
-    website = models.URLField(blank=True,)
+    website = models.URLField(blank=True, )
 
     def get_short_description(self):
         return self.description[0:255] + "..."
@@ -79,7 +77,6 @@ class Truck(models.Model):
     def __str__(self):
         return self.title
 
-
     def save(self, *args, **kwargs):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
@@ -100,9 +97,10 @@ class Truck(models.Model):
         if self.geolocation == "None" or self.geolocation is None or self.geolocation == "":
             resp = gmaps.geocode(self.address)
             location = resp[0]['geometry']['location']
-            self.geolocation = "{},{}".format(location['lat'], location ['lng'])
+            self.geolocation = "{},{}".format(location['lat'], location['lng'])
 
         super().save(*args, **kwargs)
+
 
 @receiver(post_save, sender=Truck)
 def create_times(sender, instance, created, **kwargs):
@@ -110,10 +108,11 @@ def create_times(sender, instance, created, **kwargs):
         for i in range(1, 8):
             OpenningTime.objects.create(truck=instance, weekday=i)
 
+
 @receiver(post_save, sender=Truck)
 def create_menu(sender, instance, created, **kwargs):
     if created:
-        Menu.objects.create(truck=instance,)
+        Menu.objects.create(truck=instance, )
 
 
 class OpenningTime(models.Model):
@@ -131,7 +130,6 @@ class OpenningTime(models.Model):
 
 
 class MenuItem(models.Model):
-
     type = models.IntegerField(choices=TYPE_CHOICES)
 
     # non-specific
@@ -143,7 +141,6 @@ class MenuItem(models.Model):
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
-
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
@@ -175,7 +172,7 @@ class Menu(models.Model):
     @property
     def deserts(self):
         return self.truck.items.all().filter(type=4)
-    
+
 
 class Review(models.Model):
     RATING_CHOICES = [
@@ -191,13 +188,10 @@ class Review(models.Model):
         (9, '4.5'),
         (10, '5.0')
     ]
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='reviews')
-    reviewer = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    rating = models.IntegerField(
-        choices=RATING_CHOICES, verbose_name='truck_rating')
-    description = models.CharField(max_length=500, blank=False)
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=RATING_CHOICES, verbose_name='truck_rating')
+    description = models.CharField(max_length=500, blank=True, null=True)
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
 
@@ -212,21 +206,22 @@ class Review(models.Model):
     def all_dislikes(self):
         return self.likes.all().filter(is_liked=False)
 
-class Like(models.Model):
-   is_liked = models.BooleanField(null=False, blank=False)
-   review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
-   liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True, related_name='liked_by')
 
-   def __str__(self):
-       if self.is_liked:
-           liked = ' - Liked by: '
-       else:
-           liked = ' - Disliked by: '
-       return self.review.__str__() + liked + self.liked_by.__str__()
+class Like(models.Model):
+    is_liked = models.BooleanField(null=False, blank=False)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True,
+                                    related_name='liked_by')
+
+    def __str__(self):
+        if self.is_liked:
+            liked = ' - Liked by: '
+        else:
+            liked = ' - Disliked by: '
+        return self.review.__str__() + liked + self.liked_by.__str__()
 
 
 class Visit(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
     visitor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
     visited = models.DateTimeField(auto_now=True)
-
