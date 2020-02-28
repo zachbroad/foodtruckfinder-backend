@@ -80,7 +80,6 @@ class ReviewsViewSet(ModelViewSet):
                 l = Like.objects.create(**serializer.data, liked_by=self.request.user, review_id=pk)
                 ls = LikeSerializer(l)
                 return Response(ls.data)
-                    # return Response("Unable to create Like... {}".format(serializer.error_messages))
 
         else:
             return Response("Invalid data for LikeSerializer")
