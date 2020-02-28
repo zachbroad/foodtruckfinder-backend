@@ -23,8 +23,6 @@ class ReviewsViewSet(ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('reviewer',)
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
     def get_serializer_class(self):
         if self.action == 'like':
             return LikeSerializer
