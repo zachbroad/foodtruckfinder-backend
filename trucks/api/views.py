@@ -21,7 +21,7 @@ class ReviewsViewSet(ModelViewSet):
     queryset = Review.objects.all()
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('reviewer',)
+    search_fields = ('reviewer__id',)
 
     def get_serializer_class(self):
         if self.action == 'like':
