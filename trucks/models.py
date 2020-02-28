@@ -208,8 +208,7 @@ class Review(models.Model):
 class Like(models.Model):
     is_liked = models.BooleanField(null=False, blank=False)
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
-    liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True,
-                                    related_name='liked_by')
+    liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
 
     def __str__(self):
         if self.is_liked:
