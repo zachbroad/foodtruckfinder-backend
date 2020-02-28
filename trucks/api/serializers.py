@@ -84,6 +84,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
     reviewer = serializers.CurrentUserDefault()
 
+    rating = serializers.FloatField(source='get_rating_display')
+
     class Meta:
         model = Review
 
@@ -140,7 +142,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = MenuSerializer(many=True, required=False)
     visit_history = VisitSerializer(many=True, required=False)
     owner = AccountSerializer()
-    tags = TagListSerializerField()
+    tags = TagListSerializerField(allow_null=True, required=False)
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()
 
