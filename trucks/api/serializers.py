@@ -168,4 +168,6 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
         read_only_fields = ['pk']
 
     def get_rating(self, instance):
-        return Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg'] / 2
+        rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
+        if rating is not None:
+            return rating / 2
