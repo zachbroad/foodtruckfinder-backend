@@ -207,7 +207,7 @@ class Review(models.Model):
 
 class Like(models.Model):
     is_liked = models.BooleanField(null=False, blank=False)
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes', unique=False)
     liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
 
     def __str__(self):
@@ -222,5 +222,5 @@ class Like(models.Model):
 
 class Visit(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
-    visitor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    visitor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     visited = models.DateTimeField(auto_now=True)

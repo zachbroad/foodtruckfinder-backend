@@ -70,7 +70,7 @@ class ReviewsViewSet(ModelViewSet):
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
         if serializer.is_valid():
-            existing_like = Like.objects.filter(liked_by=self.request.user, review_id=pk)
+            existing_like = Like.objects.filter(liked_by=self.request.user).filter(review_id=pk)
             if existing_like.exists():
                 obj: Like = existing_like.first()
                 obj.is_liked = serializer.data['is_liked']
