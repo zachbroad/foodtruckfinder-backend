@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from rest_framework import serializers
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
@@ -15,6 +16,7 @@ class OpenningTimeSerializer(serializers.ModelSerializer):
             'from_hour',
             'to_hour',
         ]
+
 
 class VisitSerializer(serializers.ModelSerializer):
     visitor = serializers.CurrentUserDefault()
@@ -42,12 +44,11 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ]
 
 
-
 class MenuSerializer(serializers.ModelSerializer):
-    combos  = MenuItemSerializer(many=True, required=False)
-    entres  = MenuItemSerializer(many=True, required=False)
-    sides   = MenuItemSerializer(many=True, required=False)
-    drinks  = MenuItemSerializer(many=True, required=False)
+    combos = MenuItemSerializer(many=True, required=False)
+    entres = MenuItemSerializer(many=True, required=False)
+    sides = MenuItemSerializer(many=True, required=False)
+    drinks = MenuItemSerializer(many=True, required=False)
     deserts = MenuItemSerializer(many=True, required=False)
 
     class Meta:
@@ -60,6 +61,7 @@ class MenuSerializer(serializers.ModelSerializer):
             'deserts',
             'combos',
         ]
+
 
 class LikeSerializer(serializers.ModelSerializer):
     liked_by = serializers.StringRelatedField(read_only=True)
@@ -77,18 +79,6 @@ class LikeSerializer(serializers.ModelSerializer):
             'liked_by',
         ]
 
-
-# class NewReviewSerializer(serializers.ModelSerializer):
-#     truck = serializers.IntegerField()
-#
-#     class Meta:
-#         model = Review
-#
-#         fields = [
-#             'reviewer',
-#             'rating',
-#             'truck',
-#         ]
 
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
@@ -116,6 +106,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_total_likes(self, obj):
         return obj.likes.all().filter(is_liked=True).count() - obj.likes.all().filter(is_liked=False).count()
+
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpenningTimeSerializer(many=True, required=False)
@@ -151,6 +142,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     owner = AccountSerializer()
     tags = TagListSerializerField()
     reviews = ReviewSerializer(many=True)
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -168,6 +160,10 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'visit_history',
             'hours_of_operation',
             'tags',
+            'rating',
             'reviews',
         ]
         read_only_fields = ['pk']
+
+    def get_rating(self, instance):
+        return Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg'] / 2

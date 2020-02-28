@@ -44,7 +44,7 @@ class Truck(models.Model):
                               on_delete=models.CASCADE)
     tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
-    website = models.URLField(blank=True, )
+    website = models.URLField(blank=True)
 
     def get_short_description(self):
         return self.description[0:255] + "..."
@@ -193,6 +193,9 @@ class Review(models.Model):
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('reviewer', 'truck',)
+
     def __str__(self):
         return self.truck.title + ' - Review: ' + self.reviewer.username
 
@@ -207,7 +210,7 @@ class Review(models.Model):
 
 class Like(models.Model):
     is_liked = models.BooleanField(null=False, blank=False)
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes', unique=False)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
     liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
 
     def __str__(self):
@@ -215,9 +218,7 @@ class Like(models.Model):
             liked = ' - Liked by: '
         else:
             liked = ' - Disliked by: '
-        return self.review.__str__() + liked + self.liked_by.__str__()
-
-
+        return str(self.review) + liked + str(self.liked_by)
 
 
 class Visit(models.Model):
