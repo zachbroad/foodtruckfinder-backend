@@ -1,13 +1,11 @@
-import json
-from django.db import models
+import googlemaps
 from django.conf import settings
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.exceptions import ValidationError
-from taggit.managers import TaggableManager
-from phone_field import PhoneField
 from django_google_maps import fields as map_fields
-import googlemaps
+from phone_field import PhoneField
+from taggit.managers import TaggableManager
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -219,6 +217,8 @@ class Like(models.Model):
         else:
             liked = ' - Disliked by: '
         return self.review.__str__() + liked + self.liked_by.__str__()
+
+
 
 
 class Visit(models.Model):

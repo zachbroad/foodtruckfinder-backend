@@ -1,8 +1,10 @@
 from rest_framework import serializers
-from users.api.serializers import AccountSerializer
-from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
+
+from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
+from users.api.serializers import AccountSerializer
+
 
 class OpenningTimeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,15 +62,21 @@ class MenuSerializer(serializers.ModelSerializer):
         ]
 
 class LikeSerializer(serializers.ModelSerializer):
+    liked_by = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Like
-        liked_by = serializers.CurrentUserDefault()
+
+        read_only_fields = (
+            'pk',
+        )
 
         fields = [
             'pk',
             'is_liked',
             'liked_by',
         ]
+
 
 # class NewReviewSerializer(serializers.ModelSerializer):
 #     truck = serializers.IntegerField()
@@ -90,6 +98,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
 
         fields = [
+            'id',
             'truck',
             'reviewer',
             'rating',
