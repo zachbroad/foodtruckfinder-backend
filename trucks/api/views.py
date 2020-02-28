@@ -50,6 +50,7 @@ class ReviewsViewSet(ModelViewSet):
     queryset = Review.objects.all()
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = ('title',)
 
     def get_serializer_class(self):
         if self.action == 'like':
@@ -65,8 +66,6 @@ class ReviewsViewSet(ModelViewSet):
 
     @action(detail=True, methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
     def like(self, request, pk=None):
-        # data = list(self.request.data)
-        # data['liked_by'] = self.request.user
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
         if serializer.is_valid():
@@ -83,6 +82,7 @@ class ReviewsViewSet(ModelViewSet):
 
         else:
             return Response("Invalid data for LikeSerializer")
+
 
 class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
