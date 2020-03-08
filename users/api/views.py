@@ -8,9 +8,16 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 
-from users.models import Account
-from .serializers import AccountSerializer
+from users.models import Account, FavoriteTruck
+from .serializers import AccountSerializer, FavoriteTruckSerializer
 
+
+class FavoritesViewSet(ModelViewSet):
+    serializer_class = FavoriteTruckSerializer
+    queryset = FavoriteTruck.objects.all()
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('user__id',)
 
 
 class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormView

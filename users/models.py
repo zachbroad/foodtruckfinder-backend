@@ -84,11 +84,9 @@ class FavoriteTruck(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, )
     created = models.DateTimeField(auto_now_add=True)
     
-    
     class Meta:
         unique_together = ('user', 'truck')
        
-        
     def __str__(self):
         return '{} favorited by {}'.format(self.truck.title, self.user.username)
 

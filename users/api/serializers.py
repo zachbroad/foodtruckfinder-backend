@@ -3,10 +3,12 @@ from users.models import Account, SearchTerm, FavoriteTruck
 
 
 class FavoriteTruckSerializer(serializers.ModelSerializer):
+    user = serializers.CurrentUserDefault()
 
     class Meta:
         model = FavoriteTruck
         fields = (
+            'user',
             'truck',
         )
 
