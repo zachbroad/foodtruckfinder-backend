@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
-
+from trucks.models import Truck
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, phone, password=None):
@@ -57,6 +57,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     @property
+    def favorites(self):
+        return self.favorite_trucks.all()
+
+    @property
     def search_history(self):
         return self.search_terms.all()
 
@@ -73,6 +77,20 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def had_module_perms(self, app_label):
         return True
+
+
+class FavoriteTruck(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, )
+    created = models.DateTimeField(auto_now_add=True)
+    
+    
+    class Meta:
+        unique_together = ('user', 'truck')
+       
+        
+    def __str__(self):
+        return '{} favorited by {}'.format(self.truck.title, self.user.username)
 
 
 class SearchTerm(models.Model):
