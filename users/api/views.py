@@ -21,13 +21,14 @@ class FavoritesViewSet(ModelViewSet, generics.DestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            instances = self.get_object()
-            self.perform_destroy(instances)
+            instance = self.get_object()
+            self.perform_destroy(instance)
         except Http404:
             pass
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_object(self):
+        # "SHOULD" always return 1 object
         return self.model.objects.get(truck__id=self.request.query_params.get('truck__id'),
                                       user__id=self.request.query_params.get('user__id'))
 
@@ -36,9 +37,11 @@ class FavoritesViewSet(ModelViewSet, generics.DestroyAPIView):
         user_id = self.request.query_params.get('user__id')
         truck_id = self.request.query_params.get('truck__id')
 
-        if user_id is not None:
+        if user_id is not None and truck_id is not None:
+            queryset = queryset.filter(user__id=user_id, truck__id=truck_id)
+        elif user_id is not None:
             queryset = queryset.filter(user__id=user_id)
-        elif truck_id:
+        elif truck_id is not None:
             queryset = queryset.filter(truck__id=truck_id)
 
         return queryset
