@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework import mixins, viewsets, permissions, filters, pagination, generics
 from rest_framework.authtoken.models import Token
@@ -6,17 +7,40 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
-
+from django.http import Http404, HttpResponseRedirect
+from django_filters.rest_framework import DjangoFilterBackend
 from users.models import Account, FavoriteTruck
 from .serializers import AccountSerializer, FavoriteTruckSerializer
 
 
-class FavoritesViewSet(ModelViewSet):
+class FavoritesViewSet(ModelViewSet, generics.DestroyAPIView):
     serializer_class = FavoriteTruckSerializer
-    queryset = FavoriteTruck.objects.all()
+    model = FavoriteTruck
+    queryset = model.objects.all()
 
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('user__id',)
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instances = self.get_object()
+            self.perform_destroy(instances)
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_object(self):
+        return self.model.objects.get(truck__id=self.request.query_params.get('truck__id'),
+                                      user__id=self.request.query_params.get('user__id'))
+
+    def get_queryset(self):
+        queryset = FavoriteTruck.objects.all()
+        user_id = self.request.query_params.get('user__id')
+        truck_id = self.request.query_params.get('truck__id')
+
+        if user_id is not None:
+            queryset = queryset.filter(user__id=user_id)
+        elif truck_id:
+            queryset = queryset.filter(truck__id=truck_id)
+
+        return queryset
 
 
 class CustomUserAPIView(generics.CreateAPIView):
@@ -27,7 +51,6 @@ class CustomUserAPIView(generics.CreateAPIView):
         queryset = Account.objects.all()
         username = self.request.query_params.get('username')
         email = self.request.query_params.get('email')
-
         first_name = self.request.query_params.get('first_name', None)
         last_name = self.request.query_params.get('last_name', None)
         if username is not None:
@@ -45,7 +68,7 @@ class CustomUserAPIView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class AccountRudView(generics.RetrieveUpdateDestroyAPIView): # DetailView CreateView FormView
+class AccountRudView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     serializer_class = AccountSerializer
 
@@ -82,9 +105,9 @@ class ValidateToken(APIView):
     def post(self, request, *args, **kwargs):
         token = self.request.data['token']
 
-        tokenObj = Token.objects.filter(key=token).first()
+        token_obj = Token.objects.filter(key=token).first()
 
-        if tokenObj:
+        if token_obj:
             return Response("Valid token", status=status.HTTP_200_OK)
 
         return Response("Invalid token", status=status.HTTP_403_FORBIDDEN)
