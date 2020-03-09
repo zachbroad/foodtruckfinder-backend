@@ -4,10 +4,9 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
-from users.api.serializers import AccountSerializer
 
 
-class OpenningTimeSerializer(serializers.ModelSerializer):
+class OpeningTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpenningTime
 
@@ -111,7 +110,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
-    hours_of_operation = OpenningTimeSerializer(many=True, required=False)
+    hours_of_operation = OpeningTimeSerializer(many=True, required=False)
     menu = MenuSerializer(many=True, required=False)
     reviews = ReviewSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
@@ -138,10 +137,10 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
-    hours_of_operation = OpenningTimeSerializer(many=True)
+    hours_of_operation = OpeningTimeSerializer(many=True)
     menu = MenuSerializer(many=True, required=False)
     visit_history = VisitSerializer(many=True, required=False)
-    owner = AccountSerializer()
+    owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField(allow_null=True, required=False)
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()

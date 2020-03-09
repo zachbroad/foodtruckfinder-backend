@@ -1,4 +1,3 @@
-# Generic --> Convienence
 from rest_framework import status
 from rest_framework import mixins, viewsets, permissions, filters, pagination, generics
 from rest_framework.authtoken.models import Token
@@ -20,7 +19,7 @@ class FavoritesViewSet(ModelViewSet):
     search_fields = ('user__id',)
 
 
-class CustomUserAPIView(generics.CreateAPIView): # DetailView CreateView FormView
+class CustomUserAPIView(generics.CreateAPIView):
     lookup_field = 'pk'
     serializer_class = AccountSerializer
 

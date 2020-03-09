@@ -7,6 +7,7 @@ from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 from trucks.models import Truck
 
+
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, phone, password=None):
         if not email:
@@ -93,7 +94,7 @@ class FavoriteTruck(models.Model):
 
 class SearchTerm(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
-    term = models.CharField(max_length=50,blank=False, null=False)
+    term = models.CharField(max_length=50, blank=False, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

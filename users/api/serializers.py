@@ -1,13 +1,17 @@
 from rest_framework import serializers
 from users.models import Account, SearchTerm, FavoriteTruck
+from trucks.api.serializers import TruckSerializer
 
 
 class FavoriteTruckSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
 
+    truck = TruckSerializer(many=False, required=False)
+
     class Meta:
         model = FavoriteTruck
         fields = (
+            'pk',
             'user',
             'truck',
         )
