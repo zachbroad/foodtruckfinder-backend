@@ -17,6 +17,7 @@ class FavoritesViewSet(ModelViewSet, generics.DestroyAPIView):
     serializer_class = FavoriteTruckSerializer
     model = FavoriteTruck
     queryset = model.objects.all()
+    # permissions
 
     def destroy(self, request, *args, **kwargs):
         try:
