@@ -7,6 +7,10 @@ from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 from trucks.models import Truck
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
+
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, phone, password=None):
@@ -87,9 +91,17 @@ class FavoriteTruck(models.Model):
     
     class Meta:
         unique_together = ('user', 'truck')
-       
+
     def __str__(self):
         return '{} favorited by {}'.format(self.truck.title, self.user.username)
+
+    @staticmethod
+    def pre_save(instance, sender, **kwargs):
+        instance.truck = Truck.objects.get(user__id=instance.user, truck__id=instance.truck.pk)
+        print(instance)
+
+
+pre_save.connect(FavoriteTruck.pre_save, FavoriteTruck, dispatch_uid="sightera.yourpackage.models.TodoList")
 
 
 class SearchTerm(models.Model):
