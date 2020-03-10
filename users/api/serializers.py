@@ -6,8 +6,6 @@ from trucks.api.serializers import TruckSerializer
 class FavoriteTruckSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
 
-    truck = TruckSerializer(many=False, required=False)
-
     class Meta:
         model = FavoriteTruck
         fields = (

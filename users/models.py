@@ -95,13 +95,6 @@ class FavoriteTruck(models.Model):
     def __str__(self):
         return '{} favorited by {}'.format(self.truck.title, self.user.username)
 
-    @staticmethod
-    def pre_save(instance, sender, **kwargs):
-        instance.truck = Truck.objects.get(user__id=instance.user, truck__id=instance.truck.pk)
-        print(instance)
-
-
-pre_save.connect(FavoriteTruck.pre_save, FavoriteTruck, dispatch_uid="sightera.yourpackage.models.TodoList")
 
 
 class SearchTerm(models.Model):
