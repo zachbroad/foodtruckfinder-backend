@@ -8,7 +8,7 @@ from allauth.account.views import PasswordResetView
 from rest_framework import routers
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet
-from users.api.views import AccountViewSet, FavoritesViewSet
+from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
@@ -16,6 +16,7 @@ router.register(r'trucks', TruckViewSet)
 router.register(r'users', AccountViewSet)
 router.register(r'reviews', ReviewsViewSet)
 router.register(r'favorites', FavoritesViewSet)
+router.register(r'feedback', FeedbackViewSet)
 
 urlpatterns = [
 

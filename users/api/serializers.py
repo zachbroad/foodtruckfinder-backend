@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import Account, SearchTerm, FavoriteTruck
+from users.models import Account, SearchTerm, FavoriteTruck, Feedback
 from trucks.api.serializers import TruckSerializer
 
 
@@ -14,6 +14,17 @@ class FavoriteTruckSerializer(serializers.ModelSerializer):
             'truck',
         )
 
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    user = serializers.CurrentUserDefault()
+
+    class Meta:
+        model = Feedback
+        fields = (
+            'user',
+            'image',
+            'description',
+        )
 
 class SearchTermSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()

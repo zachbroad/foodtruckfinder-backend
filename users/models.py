@@ -106,3 +106,11 @@ class SearchTerm(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='feedback')
+    description = models.CharField(max_length=999, blank=False, null=False)
+    image = models.ImageField(blank=True, null=True)
+    checked = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)

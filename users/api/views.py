@@ -9,8 +9,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from django.http import Http404, HttpResponseRedirect
 from django_filters.rest_framework import DjangoFilterBackend
-from users.models import Account, FavoriteTruck
-from .serializers import AccountSerializer, FavoriteTruckSerializer
+from users.models import Account, FavoriteTruck, Feedback
+from .serializers import AccountSerializer, FavoriteTruckSerializer, FeedbackSerializer
 
 
 class FavoritesViewSet(ModelViewSet, generics.DestroyAPIView):
@@ -127,4 +127,6 @@ class AccountViewSet(ModelViewSet):
     pagination_class = pagination.LimitOffsetPagination
 
     
-
+class FeedbackViewSet(ModelViewSet):
+    serializer_class = FeedbackSerializer
+    queryset = Feedback.objects.all()
