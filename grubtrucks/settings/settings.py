@@ -1,7 +1,12 @@
 import os
 
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
+GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\gdal300.dll'
 
 # Quick-start development settings - unsuitable for production
 
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     # 3rd party
+
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',

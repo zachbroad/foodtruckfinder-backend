@@ -21,11 +21,12 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = (
-            'pk'
+            'pk',
             'user',
             'image',
             'description',
         )
+
 
 class SearchTermSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
