@@ -70,20 +70,20 @@ class TruckViewSet(ModelViewSet):
 
         tags = self.request.query_params.get('tags', None)
         owner = self.request.query_params.get('owner', None)
-        geolocation = self.request.query_params.get('geolocation', None)
-        address = self.request.query_params.get('address', None)
-        distance = self.request.query_params.get('distance', 25)
-
-        if geolocation is not None:
-            geolocation = geolocation.split(',')
-            lat = float(geolocation[0])
-            lng = float(geolocation[1])
-            location = Point(lat, lng)
-            Truck.objects.filter(geolocation__distance=(location, Distance(km=distance)))
-
-        if address is not None and geolocation is None:
-            print("k")
-            # geocode
+        # geolocation = self.request.query_params.get('geolocation', None)
+        # address = self.request.query_params.get('address', None)
+        # distance = self.request.query_params.get('distance', 25)
+        #
+        # if geolocation is not None:
+        #     geolocation = geolocation.split(',')
+        #     lat = float(geolocation[0])
+        #     lng = float(geolocation[1])
+        #     location = Point(lat, lng)
+        #     Truck.objects.filter(geolocation__distance=(location, Distance(km=distance)))
+        #
+        # if address is not None and geolocation is None:
+        #     print("k")
+        #     # geocode
 
         if tags is not None:
             tags = tags.split(',')
