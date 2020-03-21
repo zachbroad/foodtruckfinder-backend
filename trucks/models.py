@@ -79,7 +79,7 @@ class Truck(models.Model):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
-        if self.address == "None" or self.address is None or self.address == "":
+        if self.address == "None" or self.address is None:
             points = self.geolocation.split(',')
             lat = points[0]
             lng = points[1]
