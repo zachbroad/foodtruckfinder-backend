@@ -151,6 +151,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
+    favorites = serializers.IntegerField(source='num_favorites')
 
     class Meta:
         model = Truck
@@ -171,15 +172,19 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'tags',
             'rating',
             'reviews',
+            'favorites',
         ]
         read_only_fields = ['pk']
 
     def get_distance(self, instance):
-        request = self.context['request']
-        geo = request.query_params.get('geolocation', None)
-        if geo is not None:
-            geo = geo.split(',')
-            return instance.distance(geo[0], geo[1])
+        try:
+            request = self.context['request']
+            geo = request.query_params.get('geolocation', None)
+            if geo is not None:
+                geo = geo.split(',')
+                return instance.distance(geo[0], geo[1])
+        except:
+            return None
 
         return None
 

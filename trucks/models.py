@@ -47,6 +47,10 @@ class Truck(models.Model):
     website = models.URLField(blank=True)
 
     @property
+    def num_favorites(self):
+        return self.favorites.count()
+
+    @property
     def lat(self):
         return self.geolocation.lat
 

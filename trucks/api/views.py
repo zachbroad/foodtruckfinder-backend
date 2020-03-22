@@ -1,4 +1,4 @@
-from django.db.models import Q, F, ExpressionWrapper
+from django.db.models import Q, F, ExpressionWrapper, Count
 from rest_framework import generics, pagination, filters, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,7 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
 
 from trucks.models import Truck, MenuItem, Review, Like, Visit
-from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, VisitSerializer
+from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
+    VisitSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -115,9 +116,9 @@ class TruckViewSet(ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def trending(self, request):
-        qs = Truck.objects.all().annotate(favorites=F('favorites')).order_by('favorites')
+        qs = self.get_queryset().annotate(favorite_count=Count(F('favorites'))).order_by('favorite_count')
         serializer = self.get_serializer_class()
-        data = serializer(qs, many=True)
+        data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
 
 
