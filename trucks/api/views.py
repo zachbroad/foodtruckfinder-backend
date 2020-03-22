@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from trucks.models import Truck, MenuItem, Review, Like
-from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer
+from trucks.models import Truck, MenuItem, Review, Like, Visit
+from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, VisitSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -14,6 +14,12 @@ class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView C
 
     def get_queryset(self):
         return MenuItem.objects.all()
+
+
+class VisitViewSet(ModelViewSet):  # DetailView CreateView FormView
+    lookup_field = 'pk'
+    serializer_class = VisitSerializer
+    queryset = Visit.objects.all()
 
 
 class ReviewsViewSet(ModelViewSet):

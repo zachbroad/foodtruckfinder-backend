@@ -19,15 +19,20 @@ class OpeningTimeSerializer(serializers.ModelSerializer):
 
 class VisitSerializer(serializers.ModelSerializer):
     visitor = serializers.CurrentUserDefault()
+    truck = serializers.SerializerMethodField()
 
     class Meta:
         model = Visit
 
         fields = [
             'pk',
+            'truck',
             'visitor',
             'visited'
         ]
+
+    def truck(self, obj):
+        return obj.pk
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
