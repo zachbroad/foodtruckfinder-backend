@@ -24,6 +24,7 @@ class VisitSerializer(serializers.ModelSerializer):
         model = Visit
 
         fields = [
+            'pk',
             'visitor',
             'visited'
         ]

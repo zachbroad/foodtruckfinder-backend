@@ -249,5 +249,5 @@ class Like(models.Model):
 
 class Visit(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
-    visitor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     visited = models.DateTimeField(auto_now=True)
