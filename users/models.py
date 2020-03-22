@@ -86,7 +86,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
 class FavoriteTruck(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, )
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='favorites')
     created = models.DateTimeField(auto_now_add=True)
     
     class Meta:

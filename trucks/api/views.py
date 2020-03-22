@@ -1,8 +1,9 @@
 from django.db.models import Q, F, ExpressionWrapper
-from rest_framework import generics, pagination, filters, permissions
+from rest_framework import generics, pagination, filters, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import views
 
 from trucks.models import Truck, MenuItem, Review, Like
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer
@@ -81,10 +82,8 @@ class TruckViewSet(ModelViewSet):
                 if dist <= float(MAX_DISTANCE):
                     sorted_trucks.append(truck)
 
-            qs = sorted(sorted_trucks, key= lambda i: i.distance(lat, lng))
+            qs = sorted(sorted_trucks, key=lambda i: i.distance(lat, lng))
             return qs
-
-        return super().get_queryset()
 
         if tags is not None:
             tags = tags.split(',')
@@ -107,3 +106,20 @@ class TruckViewSet(ModelViewSet):
             return CreateTruckSerializer
 
         return TruckSerializer
+
+    @action(detail=False, methods=["GET"])
+    def trending(self, request):
+        qs = Truck.objects.all().annotate(favorites=F('favorites')).order_by('favorites')
+        serializer = self.get_serializer_class()
+        data = serializer(qs, many=True)
+        return Response(data.data)
+
+
+class DashboardView(views.APIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    pass
+
+
+class DashboardViewSet(ModelViewSet):
+    serializer_class = TruckSerializer
+    queryset = Truck.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
