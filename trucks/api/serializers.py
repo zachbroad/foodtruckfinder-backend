@@ -145,7 +145,7 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpeningTimeSerializer(many=True)
     menu = MenuSerializer(many=True, required=False)
-    visit_history = VisitSerializer(many=True, required=False)
+    # visit_history = VisitSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField(allow_null=True, required=False)
     reviews = ReviewSerializer(many=True)
@@ -167,7 +167,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            'visit_history',
+            # 'visit_history',
             'hours_of_operation',
             'tags',
             'rating',

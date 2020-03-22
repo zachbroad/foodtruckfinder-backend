@@ -116,7 +116,7 @@ class TruckViewSet(ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def trending(self, request):
-        qs = self.get_queryset().annotate(favorite_count=Count(F('favorites'))).order_by('favorite_count')
+        qs = self.get_queryset().annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
         serializer = self.get_serializer_class()
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
