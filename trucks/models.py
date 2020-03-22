@@ -46,6 +46,32 @@ class Truck(models.Model):
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
 
+    @property
+    def lat(self):
+        return self.geolocation.lat
+
+    @property
+    def lng(self):
+        return self.geolocation.lon
+
+    @staticmethod
+    def distance_raw(lat, lng, lat2, lng2):
+        import math
+
+        delta_lat = math.radians(lat2 - lat)
+        delta_lng = math.radians(lng2 - lng)
+        radius = 6371
+
+        a = math.sin(delta_lat / 2) * math.sin(delta_lat / 2) + math.cos(math.radians(lat)) \
+            * math.cos(math.radians(lat2)) * math.sin(delta_lng / 2) * math.sin(delta_lng / 2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        d = radius * c
+
+        return d
+
+    def distance(self, lat, lng):
+        return Truck.distance_raw(float(lat), float(lng), float(self.geolocation.lat), float(self.geolocation.lon))
+
     def get_short_description(self):
         return self.description[0:255] + "..."
 

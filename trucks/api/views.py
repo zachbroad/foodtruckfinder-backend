@@ -1,13 +1,11 @@
-from django.db.models import Q
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import Distance
+from django.db.models import Q, F, ExpressionWrapper
 from rest_framework import generics, pagination, filters, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer
 from trucks.models import Truck, MenuItem, Review, Like
+from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -70,20 +68,23 @@ class TruckViewSet(ModelViewSet):
 
         tags = self.request.query_params.get('tags', None)
         owner = self.request.query_params.get('owner', None)
-        # geolocation = self.request.query_params.get('geolocation', None)
-        # address = self.request.query_params.get('address', None)
-        # distance = self.request.query_params.get('distance', 25)
-        #
-        # if geolocation is not None:
-        #     geolocation = geolocation.split(',')
-        #     lat = float(geolocation[0])
-        #     lng = float(geolocation[1])
-        #     location = Point(lat, lng)
-        #     Truck.objects.filter(geolocation__distance=(location, Distance(km=distance)))
-        #
-        # if address is not None and geolocation is None:
-        #     print("k")
-        #     # geocode
+
+        geolocation = self.request.query_params.get('geolocation', None)
+        MAX_DISTANCE = self.request.query_params.get('distance', 25)
+
+        if geolocation is not None and self.action == 'list':
+            lat, lng = geolocation.split(',')
+            sorted_trucks = list()
+
+            for truck in qs:
+                dist = truck.distance(lat, lng)
+                if dist <= float(MAX_DISTANCE):
+                    sorted_trucks.append(truck)
+
+            qs = sorted(sorted_trucks, key= lambda i: i.distance(lat, lng))
+            return qs
+
+        return super().get_queryset()
 
         if tags is not None:
             tags = tags.split(',')

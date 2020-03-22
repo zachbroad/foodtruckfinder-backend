@@ -144,6 +144,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField(allow_null=True, required=False)
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()
+    distance = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -152,6 +153,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'owner',
             'title',
             'image',
+            'distance',
             'description',
             'address',
             'geolocation',
@@ -165,6 +167,16 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'reviews',
         ]
         read_only_fields = ['pk']
+
+    def get_distance(self, instance):
+        request = self.context['request']
+        geo = request.query_params.get('geolocation', None)
+        if geo is not None:
+            geo = geo.split(',')
+            return instance.distance(geo[0], geo[1])
+
+        return None
+
 
     def get_rating(self, instance):
         rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
