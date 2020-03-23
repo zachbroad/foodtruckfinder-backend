@@ -225,8 +225,8 @@ class Review(models.Model):
         super()
 
     def save(self, *args, **kwargs):
-        self.full_clean()
-        super()
+        self.full_clean(*args, **kwargs)
+        super(Review, self).save(*args, **kwargs)
 
     @property
     def all_likes(self):
