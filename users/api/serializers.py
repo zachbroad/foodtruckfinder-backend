@@ -1,11 +1,9 @@
 from rest_framework import serializers
 from users.models import Account, SearchTerm, FavoriteTruck, Feedback
-from trucks.api.serializers import TruckSerializer
 
 
 class FavoriteTruckSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
-    truck = TruckSerializer()
 
     class Meta:
         model = FavoriteTruck

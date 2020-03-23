@@ -4,6 +4,7 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
+from users.api.serializers import AccountSerializer
 
 
 class OpeningTimeSerializer(serializers.ModelSerializer):
@@ -87,7 +88,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
-    reviewer = serializers.CurrentUserDefault()
+    reviewer = AccountSerializer()
     rating = serializers.IntegerField()
 
     class Meta:
