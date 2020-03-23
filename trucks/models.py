@@ -255,3 +255,6 @@ class Visit(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
     visitor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     visited = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        get_latest_by = ('visited')

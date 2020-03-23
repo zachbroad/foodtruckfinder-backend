@@ -121,6 +121,15 @@ class TruckViewSet(ModelViewSet):
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
 
+    @action(detail=False, methods=["GET"])
+    def recent(self, request):
+        qs = self.get_queryset()
+        visits = Visit.objects.filter(visitor=self.request.user)[:10]
+        qs = qs.filter(visits__in=visits).distinct()
+        serializer = self.get_serializer_class()
+        data = serializer(qs, many=True, context={'request': request})
+        return Response(data.data)
+
 
 class DashboardView(views.APIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     pass
