@@ -7,9 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
-
 from trucks.models import Truck, MenuItem, Review, Like, Visit
-from users.models import FavoriteTruck, Account
+from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer
 
