@@ -2,7 +2,6 @@ from django.conf import settings
 from django.db.models import Q, F, ExpressionWrapper, Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, pagination, permissions, mixins
-import rest_framework_filters as filters
 from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
