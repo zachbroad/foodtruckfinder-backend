@@ -122,7 +122,7 @@ class TruckViewSet(ModelViewSet):
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
 
-    @action(detail=False, methods=["GET"])
+    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated,])
     def recent(self, request):
         qs = self.get_queryset()
         visits = Visit.objects.filter(visitor=self.request.user)[:10]
