@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
 
 from trucks.models import Truck, MenuItem, Review, Like, Visit
+from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer
 
@@ -117,6 +118,24 @@ class TruckViewSet(ModelViewSet):
     @action(detail=False, methods=["GET"])
     def trending(self, request):
         qs = self.get_queryset().annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+        serializer = self.get_serializer_class()
+        data = serializer(qs, many=True, context={'request': request})
+        return Response(data.data)
+
+    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated,])
+    def recent(self, request):
+        qs = self.get_queryset()
+        visits = Visit.objects.filter(visitor=self.request.user)[:10]
+        qs = qs.filter(visits__in=visits).distinct()
+        serializer = self.get_serializer_class()
+        data = serializer(qs, many=True, context={'request': request})
+        return Response(data.data)
+
+    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated,])
+    def favorites(self, request):
+        qs = self.get_queryset()
+        favorites = FavoriteTruck.objects.filter(user=self.request.user)
+        qs = qs.filter(favorites__in=favorites)
         serializer = self.get_serializer_class()
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
