@@ -5,6 +5,7 @@ from trucks.api.serializers import TruckSerializer
 
 class FavoriteTruckSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
+    truck = TruckSerializer()
 
     class Meta:
         model = FavoriteTruck
