@@ -1,10 +1,12 @@
 import googlemaps
 from django.conf import settings
+from django.core import validators
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
+from rest_framework.exceptions import ValidationError
 from taggit.managers import TaggableManager
 
 WEEKDAYS = [
@@ -203,22 +205,10 @@ class Menu(models.Model):
 
 
 class Review(models.Model):
-    RATING_CHOICES = [
-        (0, '0.0'),
-        (1, '0.5'),
-        (2, '1.0'),
-        (3, '1.5'),
-        (4, '2.0'),
-        (5, '2.5'),
-        (6, '3.0'),
-        (7, '3.5'),
-        (8, '4.0'),
-        (9, '4.5'),
-        (10, '5.0')
-    ]
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    rating = models.IntegerField(choices=RATING_CHOICES, verbose_name='truck_rating')
+    rating = models.IntegerField(verbose_name='truck_rating',
+                                 validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
     description = models.CharField(max_length=500, blank=True, null=True)
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
@@ -228,6 +218,15 @@ class Review(models.Model):
 
     def __str__(self):
         return self.truck.title + ' - Review: ' + self.reviewer.username
+
+    def clean(self):
+        if self.rating < 0 or self.rating > 5:
+            raise ValidationError("Invalid rating. Value must be between 0 and 5.")
+        super()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super()
 
     @property
     def all_likes(self):

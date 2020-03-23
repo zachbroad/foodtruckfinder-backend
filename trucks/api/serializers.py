@@ -88,8 +88,7 @@ class LikeSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
     reviewer = serializers.CurrentUserDefault()
-
-    rating = serializers.FloatField(source='get_rating_display')
+    rating = serializers.IntegerField()
 
     class Meta:
         model = Review
@@ -192,4 +191,4 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     def get_rating(self, instance):
         rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
-            return rating / 2
+            return rating
