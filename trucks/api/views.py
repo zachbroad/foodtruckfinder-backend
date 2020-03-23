@@ -1,12 +1,16 @@
+from django.conf import settings
 from django.db.models import Q, F, ExpressionWrapper, Count
-from rest_framework import generics, pagination, filters, permissions, mixins
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, pagination, permissions, mixins
+import rest_framework_filters as filters
+from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
 
 from trucks.models import Truck, MenuItem, Review, Like, Visit
-from users.models import FavoriteTruck
+from users.models import FavoriteTruck, Account
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer
 
@@ -24,13 +28,14 @@ class VisitViewSet(ModelViewSet):  # DetailView CreateView FormView
     serializer_class = VisitSerializer
     queryset = Visit.objects.all()
 
+    filterset_fields = ['truck', 'visitor']
+
 
 class ReviewsViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
     queryset = Review.objects.all()
 
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('reviewer__id',)
+    filterset_fields = ['truck', 'reviewer']
 
     def get_serializer_class(self):
         if self.action == 'like':
@@ -68,7 +73,7 @@ class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()
 
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (drf_filters.SearchFilter,)
     search_fields = ('title',)
     pagination_class = pagination.LimitOffsetPagination
 
@@ -122,7 +127,7 @@ class TruckViewSet(ModelViewSet):
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
 
-    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated,])
+    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated, ])
     def recent(self, request):
         qs = self.get_queryset()
         visits = Visit.objects.filter(visitor=self.request.user)[:10]
@@ -131,7 +136,7 @@ class TruckViewSet(ModelViewSet):
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
 
-    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated,])
+    @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated, ])
     def favorites(self, request):
         qs = self.get_queryset()
         favorites = FavoriteTruck.objects.filter(user=self.request.user)

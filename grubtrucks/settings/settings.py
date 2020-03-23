@@ -1,7 +1,5 @@
 import os
 
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +25,7 @@ ALLOWED_HOSTS = [
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
-}   
+}
 
 ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
 TAGGIT_CASE_INSENSITIVE = True
@@ -47,9 +45,9 @@ INSTALLED_APPS = [
 
     # 3rd party
 
-    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'rest_auth',
     'allauth',
     'allauth.account',
@@ -71,7 +69,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
@@ -83,9 +80,9 @@ SITE_ID = 1
 # )
 
 # TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
 #     os.path.join(BASE_DIR, 'templates'),
 # )
 
@@ -127,8 +124,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.IsAuthenticated',
