@@ -8,7 +8,7 @@ from rest_framework import views
 from trucks.models import Truck, MenuItem, Review, Like, Visit
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
-    VisitSerializer
+    VisitSerializer, TruckDashboardSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -142,6 +142,10 @@ class DashboardView(views.APIView, mixins.RetrieveModelMixin, mixins.UpdateModel
 
 
 class DashboardViewSet(ModelViewSet):
-    serializer_class = TruckSerializer
+    serializer_class = TruckDashboardSerializer
     queryset = Truck.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.filter(owner=user)

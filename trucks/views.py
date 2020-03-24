@@ -15,7 +15,6 @@ def detail(request, truck_id):
 
 
 def menu(request, truck_id):
-
     full_menu = MenuItem.objects.filter(truck=truck_id)
     return render(request, 'trucks/menu.html', {'full_menu': full_menu})
 

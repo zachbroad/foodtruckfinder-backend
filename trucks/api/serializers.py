@@ -188,8 +188,38 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         return None
 
-
     def get_rating(self, instance):
         rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
             return rating
+
+
+class TruckDashboardSerializer(TruckSerializer):
+    visits = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Truck
+        fields = [
+            'pk',
+            'title',
+            'image',
+            'description',
+            'address',
+            'geolocation',
+            'phone',
+            'website',
+            'menu',
+            # 'visit_history',
+            'hours_of_operation',
+            'tags',
+            'rating',
+            'reviews',
+            'favorites',
+            'visits',
+        ]
+        read_only_fields = ['pk']
+
+
+    def get_visits(self, instance):
+        return instance.visits.count()
+

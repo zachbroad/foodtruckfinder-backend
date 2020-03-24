@@ -2,6 +2,7 @@ import googlemaps
 from django.conf import settings
 from django.core import validators
 from django.db import models
+from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_google_maps import fields as map_fields
