@@ -4,6 +4,7 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from trucks.models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
+from users.api.serializers import AccountSerializer
 
 
 class OpeningTimeSerializer(serializers.ModelSerializer):
@@ -86,11 +87,8 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    from grub
     total_likes = serializers.SerializerMethodField()
-    reviewer = AccountSerializer(
-        default=serializers.CurrentUserDefault()
-    )
+    reviewer = AccountSerializer()
     rating = serializers.IntegerField()
 
     class Meta:
@@ -189,6 +187,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             return None
 
         return None
+
 
     def get_rating(self, instance):
         rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
