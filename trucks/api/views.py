@@ -1,8 +1,5 @@
-from django.conf import settings
 from django.db.models import Q, F, ExpressionWrapper, Count
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, pagination, permissions, mixins
-import rest_framework_filters as filters
 from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -43,13 +40,8 @@ class ReviewsViewSet(ModelViewSet):
 
         return super().get_serializer_class()
 
-    def get_permissions(self):
-        if self.action == 'LIKE':
-            return (permissions.IsAuthenticated,)
-
-        return super().get_permissions()
-
-    @action(detail=True, methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+    @action(detail=True, methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+            permission_classes=(permissions.IsAuthenticated,))
     def like(self, request, pk=None):
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
