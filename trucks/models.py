@@ -226,7 +226,7 @@ class Review(models.Model):
         super()
 
     def save(self, *args, **kwargs):
-        self.full_clean(*args, **kwargs)
+        self.full_clean()
         super(Review, self).save(*args, **kwargs)
 
     @property

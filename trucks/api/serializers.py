@@ -95,6 +95,23 @@ class ReviewTruckSerializer(serializers.ModelSerializer):
             'image',
         ]
 
+
+class CreateReviewSerializer(serializers.ModelSerializer):
+    reviewer = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Review
+
+        fields = [
+            'truck',
+            'reviewer',
+            'rating',
+            'description',
+        ]
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
     truck = ReviewTruckSerializer()
