@@ -199,7 +199,7 @@ class TruckDashboardSerializer(TruckSerializer):
 
     class Meta:
         model = Truck
-        fields = [
+        fields = (
             'pk',
             'title',
             'image',
@@ -216,10 +216,14 @@ class TruckDashboardSerializer(TruckSerializer):
             'reviews',
             'favorites',
             'visits',
-        ]
-        read_only_fields = ['pk']
+        )
 
+        read_only_fields = (
+            'pk',
+            'visits',
+            'reviews',
+            'favorites',
+        )
 
     def get_visits(self, instance):
         return instance.visits.count()
-
