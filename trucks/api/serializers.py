@@ -86,8 +86,18 @@ class LikeSerializer(serializers.ModelSerializer):
         ]
 
 
+class ReviewTruckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Truck
+        fields = [
+            'pk',
+            'title',
+            'image',
+        ]
+
 class ReviewSerializer(serializers.ModelSerializer):
     total_likes = serializers.SerializerMethodField()
+    truck = ReviewTruckSerializer()
     reviewer = AccountSerializer()
     rating = serializers.IntegerField()
 
