@@ -31,12 +31,12 @@ class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         # "SHOULD" always return 1 object
         return self.model.objects.get(truck__id=self.request.query_params.get('truck'),
-                                      user__id=self.request.query_params.get('user__id'))
+                                      user__id=self.request.query_params.get('user'))
 
     def get_queryset(self):
         queryset = FavoriteTruck.objects.all()
         user_id = self.request.query_params.get('user__id')
-        truck_id = self.request.query_params.get('truck')
+        truck_id = self.request.query_params.get('truck___id')
 
         if user_id is not None and truck_id is not None:
             queryset = queryset.filter(user__id=user_id, truck__id=truck_id)
