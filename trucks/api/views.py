@@ -140,8 +140,30 @@ class TruckViewSet(ModelViewSet):
         return Response(data.data)
 
 
-class DashboardView(views.APIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    pass
+class HomePage(views.APIView):
+    def get(self, request, format=None):
+        trucks = Truck.objects.all()
+
+        trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+
+        # User's recent
+        visits = Visit.objects.filter(visitor=self.request.user)[:10]
+        recent = trucks.filter(visits__in=visits).distinct()
+
+        # Favorites
+        favorites = FavoriteTruck.objects.filter(user=self.request.user)
+        favorites = trucks.filter(favorites__in=favorites)
+
+        # There's gotta be a better way to do this lmao
+        tstrending = TruckSerializer(trending, many=True, context={'request': request})
+        tsrecent = TruckSerializer(trending, many=True, context={'request': request})
+        tsfavs = TruckSerializer(trending, many=True, context={'request': request})
+
+        return Response({
+            "trending": tstrending.data,
+            "recent": tsrecent.data,
+            "favorites": tsfavs.data,
+        })
 
 
 class DashboardViewSet(ModelViewSet):

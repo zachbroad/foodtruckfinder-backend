@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from allauth.account.views import PasswordResetView
 from rest_framework import routers
 from grubtrucks.views import index
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 
@@ -20,31 +20,37 @@ router.register(r'feedback', FeedbackViewSet)
 router.register(r'visits', VisitViewSet)
 router.register(r'dashboard', DashboardViewSet)
 
+apipatterns = [
+    *router.urls,
+    # "Home" Page
+    path('home/', HomePage.as_view(), name='home'),
+]
+
 urlpatterns = [
 
-        # Test site
-        path(r'', index, name='index'),
-        path('trucks/', include('trucks.urls'), name='trucks-index'),
+                  # Test site
+                  path(r'', index, name='index'),
+                  path('trucks/', include('trucks.urls'), name='trucks-index'),
 
-        # Account
-        path(r'accounts/', include('allauth.urls', )),
-        path('users/', include('users.urls')),
-        path('users/', include('django.contrib.auth.urls')),
+                  # Account
+                  path('accounts/', include('allauth.urls', )),
+                  path('users/', include('users.urls')),
+                  path('users/', include('django.contrib.auth.urls')),
 
-        # Admin
-        path(r'admin/', admin.site.urls),
+                  # Admin
+                  path(r'admin/', admin.site.urls),
 
-        # Api
-        path(r'api/', include((router.urls, '<int:pk>'), namespace='api-trucks')),
+                  # Api
+                  path(r'api/', include((apipatterns, '<int:pk>'), namespace='api-trucks')),
 
-        # Auth
-        path(r'api-auth/', include('rest_framework.urls')),
-        path(r'rest-auth/', include('rest_auth.urls')),
-        path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
-        path(r'rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
-        path('login-token/', CustomAuthToken.as_view(), name='login-token'),
-        path('validate-token/', ValidateToken.as_view(), name='validate-token'),
-        re_path(r'^static/(?P<path>.*)$', serve,
-                {'document_root': settings.STATIC_ROOT}),
+                  # Auth
+                  path(r'api-auth/', include('rest_framework.urls')),
+                  path(r'rest-auth/', include('rest_auth.urls')),
+                  path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
+                  path(r'rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
+                  path('login-token/', CustomAuthToken.as_view(), name='login-token'),
+                  path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+                  re_path(r'^static/(?P<path>.*)$', serve,
+                          {'document_root': settings.STATIC_ROOT}),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
