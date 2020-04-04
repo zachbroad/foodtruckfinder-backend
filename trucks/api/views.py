@@ -158,9 +158,11 @@ class HomePage(views.APIView):
         tstrending = TruckSerializer(trending, many=True, context={'request': request})
         tsrecent = TruckSerializer(trending, many=True, context={'request': request})
         tsfavs = TruckSerializer(trending, many=True, context={'request': request})
+        tsnew = TruckSerializer(trucks, many=True, context={'request': request})
 
         return Response({
             "trending": tstrending.data,
+            "new": tsnew.data,
             "recent": tsrecent.data,
             "favorites": tsfavs.data,
         })
