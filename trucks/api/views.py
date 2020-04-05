@@ -158,8 +158,8 @@ class HomePage(views.APIView):
 
         # There's gotta be a better way to do this lmao
         tstrending = TruckSerializer(trending, many=True, context={'request': request})
-        tsrecent = TruckSerializer(trending, many=True, context={'request': request})
-        tsfavs = TruckSerializer(trending, many=True, context={'request': request})
+        tsrecent = TruckSerializer(recent, many=True, context={'request': request})
+        tsfavs = TruckSerializer(favorites, many=True, context={'request': request})
         tsnew = TruckSerializer(trucks, many=True, context={'request': request})
 
         return Response({
