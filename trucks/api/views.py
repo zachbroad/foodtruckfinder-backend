@@ -1,7 +1,7 @@
 from django.db.models import Q, F, ExpressionWrapper, Count
 from rest_framework import generics, pagination, permissions, mixins
 from rest_framework import filters as drf_filters
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
@@ -141,6 +141,8 @@ class TruckViewSet(ModelViewSet):
 
 
 class HomePage(views.APIView):
+    permission_classes = (permissions.IsAuthenticated),
+
     def get(self, request, format=None):
         trucks = Truck.objects.all()
 
