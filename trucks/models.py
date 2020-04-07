@@ -133,12 +133,6 @@ class Truck(models.Model):
         super().save(*args, **kwargs)
 
 
-@receiver(post_save, sender=Truck)
-def create_times(sender, instance, created, **kwargs):
-    if created:
-        for i in range(1, 8):
-            OpenningTime.objects.create(truck=instance, weekday=i)
-
 
 @receiver(post_save, sender=Truck)
 def create_menu(sender, instance, created, **kwargs):

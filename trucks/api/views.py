@@ -74,6 +74,7 @@ class TruckViewSet(ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
 
+        title_contains = self.request.query_params.get('title__contains', None)
         tags = self.request.query_params.get('tags', None)
         owner = self.request.query_params.get('owner', None)
 
@@ -91,6 +92,11 @@ class TruckViewSet(ModelViewSet):
 
             qs = sorted(sorted_trucks, key=lambda i: i.distance(lat, lng))
             return qs
+
+        if title_contains is not None:
+            q = Q()
+            q = q | Q(title__contains=title_contains)
+            qs = Truck.objects.filter(q).all()
 
         if tags is not None:
             tags = tags.split(',')
