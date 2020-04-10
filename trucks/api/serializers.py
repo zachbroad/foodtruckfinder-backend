@@ -66,7 +66,7 @@ class CreateMenuItemSerializer(serializers.ModelSerializer):
 
 
 class CreateMenuSerializer(serializers.ModelSerializer):
-    menu_item = CreateMenuItemSerializer(many=True, required=False)
+    menu_items = CreateMenuItemSerializer(many=True, required=False)
 
     class Meta:
         model = MenuItem
