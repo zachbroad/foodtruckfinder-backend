@@ -1,5 +1,7 @@
 from django.db.models import Avg
 from rest_framework import serializers
+from rest_framework.response import Response
+from rest_framework import status
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -74,6 +76,8 @@ class CreateMenuSerializer(serializers.ModelSerializer):
         fields = [
             'menu_items'
         ]
+
+
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -172,10 +176,8 @@ from grubtrucks.util import Base64ImageField
 
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
-    hours_of_operation = OpeningTimeSerializer(many=True, required=False)
     menu = CreateMenuSerializer(many=True, required=False)
-    reviews = ReviewSerializer(many=True, required=False)
-    owner = serializers.CurrentUserDefault()
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
     tags = TagListSerializerField()
     image = Base64ImageField(
         max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
@@ -194,22 +196,33 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            'hours_of_operation',
             'tags',
-            'reviews',
         ]
         read_only_fields = ['pk']
 
-        def create(self, request, *args, **kwargs):
-            is_many = isinstance(request.data, list)
-            if not is_many:
-                return super(TruckViewSet, self).create(request, *args, **kwargs)
-            else:
-                serializer = self.get_serializer(data=request.data, many=True)
-                serializer.is_valid(raise_exception=True)
-                self.perform_create(serializer)
-                headers = self.get_success_headers(serializer.data)
-                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        def create(self, validated_data):
+            menu_data = validated_data.pop('menu')
+
+            truck = Truck.objects.create(**validated_data)
+
+            for data in menu_data:
+                menu_item = MenuItem.objects.create(truck=truck, **data)
+
+
+            return truck
+
+
+
+        # def create(self, request, *args, **kwargs):
+        #     is_many = isinstance(request.data, list)
+        #     if not is_many:
+        #         return super(TruckViewSet, self).create(request, *args, **kwargs)
+        #     else:
+        #         serializer = self.get_serializer(data=request.data, many=True)
+        #         serializer.is_valid(raise_exception=True)
+        #         self.perform_create(serializer)
+        #         headers = self.get_success_headers(serializer.data)
+        #         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
