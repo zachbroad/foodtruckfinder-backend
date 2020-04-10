@@ -167,7 +167,7 @@ from grubtrucks.util import Base64ImageField
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     menu = CreateMenuSerializer(many=True, required=False)
-    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField()
     image = Base64ImageField(
         max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
@@ -190,16 +190,16 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
         ]
         read_only_fields = ['pk']
 
-        def create(self, validated_data):
-            menu_data = validated_data.pop('menu')
+    def create(self, validated_data):
+        menu_data = validated_data.pop('menu')
 
-            truck = Truck.objects.create(**validated_data)
+        truck = Truck.objects.create(**validated_data)
 
-            for data in menu_data:
-                menu_item = MenuItem.objects.create(truck=truck, **data)
+        for data in menu_data:
+            menu_item = MenuItem.objects.create(truck=truck, **data)
 
 
-            return truck
+        return truck
 
 
 
