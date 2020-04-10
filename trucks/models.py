@@ -98,10 +98,6 @@ class Truck(models.Model):
         return self.visits.all()
 
     @property
-    def hours_of_operation(self):
-        return self.hours.all()
-
-    @property
     def reviews(self):
         return self.review.all()
 
@@ -131,27 +127,6 @@ class Truck(models.Model):
             self.geolocation = "{},{}".format(location['lat'], location['lng'])
 
         super().save(*args, **kwargs)
-
-
-
-@receiver(post_save, sender=Truck)
-def create_menu(sender, instance, created, **kwargs):
-    if created:
-        Menu.objects.create(truck=instance, )
-
-
-class OpenningTime(models.Model):
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='hours')
-    weekday = models.IntegerField(choices=WEEKDAYS)
-    from_hour = models.TimeField(default='09:00')
-    to_hour = models.TimeField(default='17:00')
-
-    class Meta:
-        unique_together = ('truck', 'weekday',)
-
-    def __str__(self):
-        return WEEKDAYS[self.weekday - 1][1]
 
 
 class MenuItem(models.Model):

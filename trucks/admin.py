@@ -3,7 +3,7 @@ import json
 from django.contrib import admin
 from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
-from .models import Truck, MenuItem, Menu, OpenningTime, Review, Like, Visit
+from .models import Truck, MenuItem, Menu, Review, Like, Visit
 
 
 class TruckAdmin(admin.ModelAdmin):
@@ -24,8 +24,6 @@ class TruckAdmin(admin.ModelAdmin):
 class MenuItemAdmin(admin.ModelAdmin):
     model = MenuItem
 
-class OpenningTimeAdmin(admin.ModelAdmin):
-    model = OpenningTime
 
 class ReviewAdmin(admin.ModelAdmin):
     model = Review 
@@ -38,7 +36,6 @@ class VisitAdmin(admin.ModelAdmin):
     model = Visit
 
 admin.site.register(Visit, VisitAdmin)
-admin.site.register(OpenningTime, OpenningTimeAdmin)
 admin.site.register(Truck, TruckAdmin)
 admin.site.register(MenuItem, MenuItemAdmin)
 admin.site.register(Review, ReviewAdmin)
