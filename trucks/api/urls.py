@@ -1,5 +1,5 @@
 
-from .views import TruckDetailView, TruckListView, MenuItemDetailView, ReviewsViewSet, VisitViewSet
+from .views import MenuItemViewSet, MenuItemDetailView, ReviewsViewSet, VisitViewSet
 from django.urls import path
 from rest_framework import routers
 
@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'trucks', TruckViewSet)
 router.register(r'reviews', ReviewsViewSet)
 router.regiser(r'visits', VisitViewSet)
-# router.register(r'menu items', MenuItemViewSet)
+router.register(r'menu items', MenuItemViewSet)
 
 urlpatterns = [
     # path('/', TruckListView.as_view(), name='truck-create'),

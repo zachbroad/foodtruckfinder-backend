@@ -50,6 +50,32 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ]
 
 
+class CreateMenuItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuItem
+
+        fields = [
+            'truck',
+            'type',
+            'name',
+            'description',
+            'price',
+            'image',
+
+        ]
+
+
+class CreateMenuSerializer(serializers.ModelSerializer):
+    menu_item = CreateMenuItemSerializer(many=True, required=False)
+
+    class Meta:
+        model = MenuItem
+
+        fields = [
+            'menu_items'
+        ]
+
+
 class MenuSerializer(serializers.ModelSerializer):
     combos = MenuItemSerializer(many=True, required=False)
     entres = MenuItemSerializer(many=True, required=False)
@@ -147,7 +173,7 @@ from grubtrucks.util import Base64ImageField
 
 class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
     hours_of_operation = OpeningTimeSerializer(many=True, required=False)
-    menu = MenuSerializer(many=True, required=False)
+    menu = CreateMenuSerializer(many=True, required=False)
     reviews = ReviewSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     tags = TagListSerializerField()

@@ -8,7 +8,7 @@ from rest_framework import views
 from trucks.models import Truck, MenuItem, Review, Like, Visit
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
-    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer
+    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -17,6 +17,21 @@ class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView C
 
     def get_queryset(self):
         return MenuItem.objects.all()
+
+
+class MenuItemViewSet(ModelViewSet):
+    lookup_field = 'pk'
+    serializer_class = MenuItemSerializer
+    queryset = MenuItem.objects.all()
+
+    filterset_fields = ['truck', 'type', 'name', 'price']
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateMenuItemSerializer
+
+
+        return super().get_serializer_class()
 
 
 class VisitViewSet(ModelViewSet):  # DetailView CreateView FormView
