@@ -139,7 +139,7 @@ class MenuItem(models.Model):
     description = models.CharField(
         max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
     price = models.FloatField(max_length=10)
-    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
+    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=True, blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
 
     def get_absolute_image_url(self):
