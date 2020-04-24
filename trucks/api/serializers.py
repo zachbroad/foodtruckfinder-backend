@@ -228,7 +228,7 @@ class TruckSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
     favorites = serializers.IntegerField(source='num_favorites')
-    tags = TagSerializer(many=True)
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -268,6 +268,13 @@ class TruckSerializer(serializers.ModelSerializer):
         rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
             return rating
+
+    def get_tags(self, instance):
+        tags = Truck.objects.filter(pk=instance.pk)[0].tags.all()
+        tag_titles = []
+        for tag in tags:
+            tag_titles.append(tag.title)
+        return tag_titles
 
 
 class TruckDashboardSerializer(TruckSerializer):
