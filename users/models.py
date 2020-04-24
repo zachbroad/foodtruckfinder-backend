@@ -1,15 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.conf import settings
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 from trucks.models import Truck
-
-from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.template.defaultfilters import slugify
 
 
 class MyAccountManager(BaseUserManager):
@@ -96,11 +92,11 @@ class FavoriteTruck(models.Model):
         return '{} favorited by {}'.format(self.truck.title, self.user.username)
 
 
-
 class SearchTerm(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
     term = models.CharField(max_length=50, blank=False, null=False)
     created = models.DateTimeField(auto_now_add=True)
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

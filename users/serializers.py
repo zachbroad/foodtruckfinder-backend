@@ -1,8 +1,5 @@
 from rest_framework import serializers
 
-from allauth.account.adapter import get_adapter
-from allauth.account.utils import setup_user_email
-
 from rest_auth.registration.serializers import RegisterSerializer
 
 

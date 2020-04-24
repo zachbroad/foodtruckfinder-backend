@@ -1,7 +1,5 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from rest_framework.response import Response
-from rest_framework import status
 
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag
 from users.api.serializers import AccountSerializer
