@@ -34,6 +34,18 @@ TYPE_CHOICES = [
 ]
 
 
+class Tag(models.Model):
+    title = models.CharField(null=False, blank=False, unique=True, max_length=25)
+
+    class Meta:
+        ordering = [
+            'title'
+        ]
+
+    def __str__(self):
+        return self.title
+
+
 class Truck(models.Model):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
@@ -46,6 +58,7 @@ class Truck(models.Model):
                               on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
+    tags = models.ManyToManyField('Tag')
 
     @property
     def num_favorites(self):
@@ -227,3 +240,4 @@ class Visit(models.Model):
 
     class Meta:
         get_latest_by = ('visited')
+

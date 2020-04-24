@@ -3,9 +3,18 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
 
-from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit
+from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag
 from users.api.serializers import AccountSerializer
 
+
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+
+        fields = [
+            'title'
+        ]
 
 
 class VisitSerializer(serializers.ModelSerializer):
@@ -219,6 +228,7 @@ class TruckSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
     favorites = serializers.IntegerField(source='num_favorites')
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Truck
@@ -235,7 +245,7 @@ class TruckSerializer(serializers.ModelSerializer):
             'website',
             'menu',
             # 'visit_history',
-            #'tags',
+            'tags',
             'rating',
             'reviews',
             'favorites',
