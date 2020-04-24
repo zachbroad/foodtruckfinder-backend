@@ -29,8 +29,6 @@ class MenuItemViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return CreateMenuItemSerializer
-
-
         return super().get_serializer_class()
 
 
