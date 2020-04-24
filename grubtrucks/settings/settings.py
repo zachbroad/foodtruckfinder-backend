@@ -28,7 +28,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
-TAGGIT_CASE_INSENSITIVE = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,8 +52,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
-    'taggit',
-    'taggit_serializer',
     'phone_field',
     'django_google_maps',
     'storages',

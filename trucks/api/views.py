@@ -90,7 +90,6 @@ class TruckViewSet(ModelViewSet):
         qs = super().get_queryset()
 
         title_contains = self.request.query_params.get('title__contains', None)
-        tags = self.request.query_params.get('tags', None)
         owner = self.request.query_params.get('owner', None)
 
         geolocation = self.request.query_params.get('geolocation', None)
@@ -113,13 +112,13 @@ class TruckViewSet(ModelViewSet):
             q = q | Q(title__contains=title_contains)
             qs = Truck.objects.filter(q).all()
 
-        if tags is not None:
-            tags = tags.split(',')
-            q = Q()
-            for tag in tags:
-                q = q | Q(tags__name__iexact=tag)
-
-            qs = Truck.objects.filter(q).all()
+        # if tags is not None:
+        #     tags = tags.split(',')
+        #     q = Q()
+        #     for tag in tags:
+        #         q = q | Q(tags__name__iexact=tag)
+        #
+        #     qs = Truck.objects.filter(q).all()
 
         if owner is not None:
             q = Q()

@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-from taggit.managers import TaggableManager
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -45,7 +44,6 @@ class Truck(models.Model):
     geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE)
-    tags = TaggableManager(verbose_name='tags', blank=True)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
 
@@ -103,6 +101,8 @@ class Truck(models.Model):
 
     def __str__(self):
         return self.title
+
+
 
     def save(self, *args, **kwargs):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)

@@ -2,8 +2,6 @@ from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
-from taggit_serializer.serializers import (TagListSerializerField,
-                                           TaggitSerializer)
 
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit
 from users.api.serializers import AccountSerializer
@@ -165,10 +163,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 from grubtrucks.util import Base64ImageField
 
 
-class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
+class CreateTruckSerializer(serializers.ModelSerializer):
     menu = CreateMenuSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
-    tags = TagListSerializerField()
     image = Base64ImageField(
         max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
     )
@@ -186,7 +183,6 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            'tags',
         ]
         read_only_fields = ['pk']
 
@@ -215,11 +211,10 @@ class CreateTruckSerializer(TaggitSerializer, serializers.ModelSerializer):
         #         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
+class TruckSerializer(serializers.ModelSerializer):
     menu = MenuSerializer(many=True, required=False)
     # visit_history = VisitSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
-    tags = TagListSerializerField(allow_null=True, required=False)
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
@@ -240,7 +235,7 @@ class TruckSerializer(TaggitSerializer, serializers.ModelSerializer):
             'website',
             'menu',
             # 'visit_history',
-            'tags',
+            #'tags',
             'rating',
             'reviews',
             'favorites',
