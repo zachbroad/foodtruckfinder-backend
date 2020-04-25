@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
+    'schedule',
 ]
 
 LOGIN_REDIRECT_URL = 'index'
@@ -107,6 +108,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.request"
             ],
         },
     },
