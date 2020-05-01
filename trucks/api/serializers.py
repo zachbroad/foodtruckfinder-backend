@@ -1,6 +1,7 @@
 from django.db.models import Avg
 from rest_framework import serializers
 
+from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag
 from users.api.serializers import AccountSerializer
 
@@ -71,8 +72,6 @@ class CreateMenuSerializer(serializers.ModelSerializer):
         fields = [
             'menu_items'
         ]
-
-
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -167,9 +166,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         return obj.likes.all().filter(is_liked=True).count() - obj.likes.all().filter(is_liked=False).count()
 
 
-from grubtrucks.util import Base64ImageField
-
-
 class CreateTruckSerializer(serializers.ModelSerializer):
     menu = CreateMenuSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
@@ -194,17 +190,13 @@ class CreateTruckSerializer(serializers.ModelSerializer):
         read_only_fields = ['pk']
 
     def create(self, validated_data):
-        menu_data = validated_data.pop('menu')
-
         truck = Truck.objects.create(**validated_data)
 
-        for data in menu_data:
-            menu_item = MenuItem.objects.create(truck=truck, **data)
-
-
+        if validated_data.__contains__('menu'):
+            menu_data = validated_data.pop('menu')
+            for data in menu_data:
+                MenuItem.objects.create(truck=truck, **data)
         return truck
-
-
 
         # def create(self, request, *args, **kwargs):
         #     is_many = isinstance(request.data, list)

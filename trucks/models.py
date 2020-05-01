@@ -112,8 +112,6 @@ class Truck(models.Model):
     def __str__(self):
         return self.title
 
-
-
     def save(self, *args, **kwargs):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
