@@ -234,5 +234,7 @@ class Visit(models.Model):
     visited = models.DateTimeField(auto_now=True)
 
     class Meta:
-        get_latest_by = ('visited')
+        get_latest_by = ('visited',)
 
+    def __str__(self):
+        return f'{self.truck.title} visited by {str(self.visitor.username)} | {self.visited.__str__()}'

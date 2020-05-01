@@ -159,7 +159,7 @@ class TruckViewSet(ModelViewSet):
 
 
 class HomePage(views.APIView):
-    permission_classes = (permissions.IsAuthenticated),
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         trucks = Truck.objects.all()
@@ -175,16 +175,16 @@ class HomePage(views.APIView):
         favorites = trucks.filter(favorites__in=favorites)
 
         # There's gotta be a better way to do this lmao
-        tstrending = TruckSerializer(trending, many=True, context={'request': request})
-        tsrecent = TruckSerializer(recent, many=True, context={'request': request})
-        tsfavs = TruckSerializer(favorites, many=True, context={'request': request})
-        tsnew = TruckSerializer(trucks, many=True, context={'request': request})
+        ts_trending = TruckSerializer(trending, many=True, context={'request': request})
+        ts_recent = TruckSerializer(recent, many=True, context={'request': request})
+        ts_favorites = TruckSerializer(favorites, many=True, context={'request': request})
+        ts_new = TruckSerializer(trucks, many=True, context={'request': request})
 
         return Response({
-            "trending": tstrending.data,
-            "new": tsnew.data,
-            "recent": tsrecent.data,
-            "favorites": tsfavs.data,
+            "trending": ts_trending.data,
+            "new": ts_new.data,
+            "recent": ts_recent.data,
+            "favorites": ts_favorites.data,
         })
 
 

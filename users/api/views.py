@@ -1,16 +1,14 @@
-from django.shortcuts import redirect
 from rest_framework import status
-from rest_framework import mixins, viewsets, permissions, filters, pagination, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
-from django.http import Http404, HttpResponseRedirect
-from django_filters.rest_framework import DjangoFilterBackend
+from django.http import Http404
 from users.models import Account, FavoriteTruck, Feedback
 from .serializers import AccountSerializer, FavoriteTruckSerializer, FeedbackSerializer
+from rest_framework import generics, pagination, permissions
 
 
 class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
@@ -51,7 +49,7 @@ class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
 class AccountRudView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     serializer_class = AccountSerializer
-
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return Account.objects.all()
@@ -97,6 +95,7 @@ class ValidateToken(APIView):
 class AccountViewSet(ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
 
     filterset_fields = ['username', 'email', 'first_name', 'last_name']
     pagination_class = pagination.LimitOffsetPagination

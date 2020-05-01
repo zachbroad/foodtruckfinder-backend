@@ -8,13 +8,20 @@ from .models import Truck, MenuItem, Review, Like, Visit, Tag
 class TruckAdmin(admin.ModelAdmin):
     formfield_overrides = {
         map_fields.AddressField: {
-            'widget': map_widgets.GoogleMapsAddressWidget(attrs={'data-map-type': 'roadmap',
-            'data-autocomplete-options': json.dumps({ 'types': ['geocode',
-                'establishment'], 'componentRestrictions': {
-                  'country': 'us'
-              }
-          })
-      })}
+            'widget': map_widgets.GoogleMapsAddressWidget(
+                attrs={
+                    'data-map-type':
+                        'roadmap', 'data-autocomplete-options':
+                        json.dumps({
+                            'types': [
+                                'geocode',
+                                'establishment'
+                            ],
+                            'componentRestrictions':
+                                {'country': 'us'}
+                        })
+                })
+        }
     }
 
     model = Truck
