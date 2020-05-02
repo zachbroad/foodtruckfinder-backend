@@ -268,12 +268,14 @@ class TruckSerializer(serializers.ModelSerializer):
 
 
 class TruckDashboardSerializer(TruckSerializer):
+    owner = serializers.CurrentUserDefault()
     visits = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
         fields = (
             'pk',
+            'owner',
             'title',
             'image',
             'description',

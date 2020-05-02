@@ -10,6 +10,7 @@ router.register(r'trucks', TruckViewSet)
 router.register(r'reviews', ReviewsViewSet)
 router.regiser(r'visits', VisitViewSet)
 router.register(r'menu items', MenuItemViewSet)
+router.register(r'tags', TagsViewSet)
 
 urlpatterns = [
     # path('/', TruckListView.as_view(), name='truck-create'),

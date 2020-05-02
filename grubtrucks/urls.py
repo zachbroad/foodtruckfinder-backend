@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from allauth.account.views import PasswordResetView
 from rest_framework import routers
 from grubtrucks.views import index
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, TagsViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 
@@ -20,8 +20,9 @@ router.register(r'feedback', FeedbackViewSet)
 router.register(r'visits', VisitViewSet)
 router.register(r'dashboard', DashboardViewSet)
 router.register(r'menu-items', MenuItemViewSet)
+router.register(r'tags', TagsViewSet)
 
-apipatterns = [
+api_patterns = [
     *router.urls,
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
@@ -42,7 +43,7 @@ urlpatterns = [
                   path(r'admin/', admin.site.urls),
 
                   # Api
-                  path(r'api/', include((apipatterns, '<int:pk>'), namespace='api-trucks')),
+                  path(r'api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
 
                   # Auth
                   path(r'api-auth/', include('rest_framework.urls')),

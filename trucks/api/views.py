@@ -5,10 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
-from trucks.models import Truck, MenuItem, Review, Like, Visit
+from trucks.models import Truck, MenuItem, Review, Like, Visit, Tag
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
-    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer
+    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
@@ -196,3 +196,8 @@ class DashboardViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return self.queryset.filter(owner=user)
+
+
+class TagsViewSet(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
