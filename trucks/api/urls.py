@@ -1,6 +1,5 @@
 
-from .views import MenuItemViewSet, MenuItemDetailView, ReviewsViewSet, VisitViewSet
-from django.urls import path
+from .views import MenuItemViewSet, ReviewsViewSet, VisitViewSet, TagsViewSet
 from rest_framework import routers
 
 from trucks.api.views import TruckViewSet
