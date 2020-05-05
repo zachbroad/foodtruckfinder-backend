@@ -30,7 +30,7 @@ class MenuItemViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
             return PatchMenuItemSerializer
-        if self.request.method == 'CREATE':
+        if self.action == 'create':
             return CreateMenuItemSerializer
         return super().get_serializer_class()
 

@@ -88,7 +88,7 @@ class CreateMenuItemSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         menu_item = MenuItem.objects.create(**validated_data)
-        print(menu_item.pk)
+
         return menu_item
 
 
