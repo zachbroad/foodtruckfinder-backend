@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 
-from trucks.api.serializers import TruckSerializer, MenuItemSerializer
 from .models import Truck, MenuItem
 
 

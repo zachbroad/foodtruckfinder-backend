@@ -49,7 +49,30 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ]
 
 
+class PatchMenuItemSerializer(serializers.ModelSerializer):
+    image = Base64ImageField(
+        max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
+    )
+
+    class Meta:
+        model = MenuItem
+
+        fields = [
+            'pk',
+            'type',
+            'name',
+            'description',
+            'price',
+            'image',
+
+        ]
+
+
 class CreateMenuItemSerializer(serializers.ModelSerializer):
+    image = Base64ImageField(
+        max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
+    )
+
     class Meta:
         model = MenuItem
 
@@ -62,6 +85,11 @@ class CreateMenuItemSerializer(serializers.ModelSerializer):
             'image',
 
         ]
+
+    def create(self, validated_data):
+        menu_item = MenuItem.objects.create(**validated_data)
+        print(menu_item.pk)
+        return menu_item
 
 
 class CreateMenuSerializer(serializers.ModelSerializer):
