@@ -1,14 +1,15 @@
+from django.http import Http404
+from rest_framework import generics, pagination, permissions
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
-from django.http import Http404
+
 from users.models import Account, FavoriteTruck, Feedback
 from .serializers import AccountSerializer, FavoriteTruckSerializer, FeedbackSerializer
-from rest_framework import generics, pagination, permissions
 
 
 class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
@@ -104,3 +105,11 @@ class AccountViewSet(ModelViewSet):
 class FeedbackViewSet(ModelViewSet):
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
+
+
+class ProfileView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+        acc = AccountSerializer(request.user, many=False)
+        return Response(data=acc.data)

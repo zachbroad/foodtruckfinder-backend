@@ -1,14 +1,15 @@
+from allauth.account.views import PasswordResetView
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
-from django.conf import settings
-from django.conf.urls.static import static
-
-from allauth.account.views import PasswordResetView
 from rest_framework import routers
+
 from grubtrucks.views import index
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, TagsViewSet
-from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
+    TagsViewSet
+from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
@@ -26,6 +27,7 @@ api_patterns = [
     *router.urls,
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
+    path('profile/', ProfileView.as_view(), name='profile')
 ]
 
 urlpatterns = [
