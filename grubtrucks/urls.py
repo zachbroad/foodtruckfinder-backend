@@ -13,15 +13,15 @@ from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, P
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
-router.register(r'trucks', TruckViewSet)
-router.register(r'users', AccountViewSet)
-router.register(r'reviews', ReviewsViewSet)
+router.register(r'dashboard', DashboardViewSet)
 router.register(r'favorites', FavoritesViewSet)
 router.register(r'feedback', FeedbackViewSet)
-router.register(r'visits', VisitViewSet)
-router.register(r'dashboard', DashboardViewSet)
 router.register(r'menu-items', MenuItemViewSet)
+router.register(r'reviews', ReviewsViewSet)
 router.register(r'tags', TagsViewSet)
+router.register(r'trucks', TruckViewSet)
+router.register(r'users', AccountViewSet)
+router.register(r'visits', VisitViewSet)
 
 api_patterns = [
     *router.urls,

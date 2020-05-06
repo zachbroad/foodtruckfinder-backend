@@ -45,7 +45,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'image',
-
+            'featured',
         ]
 
 
@@ -64,7 +64,7 @@ class PatchMenuItemSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'image',
-
+            'featured',
         ]
 
 
@@ -83,7 +83,7 @@ class CreateMenuItemSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'image',
-
+            'featured',
         ]
 
     def create(self, validated_data):
@@ -240,7 +240,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
 
 
 class TruckSerializer(serializers.ModelSerializer):
-    menu = MenuSerializer(many=True, required=False)
+    menu = MenuItemSerializer(many=True, required=False, source='items')
     # visit_history = VisitSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     reviews = ReviewSerializer(many=True)
@@ -263,7 +263,6 @@ class TruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            # 'visit_history',
             'tags',
             'rating',
             'reviews',
@@ -297,6 +296,7 @@ class TruckSerializer(serializers.ModelSerializer):
 
 
 class TruckDashboardSerializer(TruckSerializer):
+    menu = MenuItemSerializer(many=True, required=False, source='items')
     owner = serializers.CurrentUserDefault()
     visits = serializers.SerializerMethodField()
 
