@@ -7,7 +7,7 @@ from trucks.api.views import TruckViewSet
 router = routers.DefaultRouter()
 router.register(r'trucks', TruckViewSet)
 router.register(r'reviews', ReviewsViewSet)
-router.regiser(r'visits', VisitViewSet)
+router.register(r'visits', VisitViewSet)
 router.register(r'menu items', MenuItemViewSet)
 router.register(r'tags', TagsViewSet)
 

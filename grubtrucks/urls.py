@@ -1,31 +1,33 @@
+from allauth.account.views import PasswordResetView
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
-from django.conf import settings
-from django.conf.urls.static import static
-
-from allauth.account.views import PasswordResetView
 from rest_framework import routers
+
 from grubtrucks.views import index
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, TagsViewSet
-from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
+    TagsViewSet
+from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
-router.register(r'trucks', TruckViewSet)
-router.register(r'users', AccountViewSet)
-router.register(r'reviews', ReviewsViewSet)
+router.register(r'dashboard', DashboardViewSet)
 router.register(r'favorites', FavoritesViewSet)
 router.register(r'feedback', FeedbackViewSet)
-router.register(r'visits', VisitViewSet)
-router.register(r'dashboard', DashboardViewSet)
 router.register(r'menu-items', MenuItemViewSet)
+router.register(r'reviews', ReviewsViewSet)
 router.register(r'tags', TagsViewSet)
+router.register(r'trucks', TruckViewSet)
+router.register(r'users', AccountViewSet)
+router.register(r'visits', VisitViewSet)
 
 api_patterns = [
     *router.urls,
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
+    path('profile/', ProfileView.as_view(), name='profile')
 ]
 
 urlpatterns = [

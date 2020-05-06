@@ -162,7 +162,7 @@ class TruckViewSet(ModelViewSet):
 
 
 class HomePage(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get(self, request, format=None):
         trucks = Truck.objects.all()
