@@ -1,5 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
+import re
 
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag
@@ -10,6 +11,7 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
 
         fields = [
+            'pk',
             'title'
         ]
 
@@ -73,8 +75,10 @@ class CreateMenuItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MenuItem
+        read_only_fields = ('pk',)
 
         fields = [
+            'pk',
             'truck',
             'type',
             'name',
