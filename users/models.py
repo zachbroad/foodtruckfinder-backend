@@ -1,11 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db.models.signals import post_save
 from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
+
 from trucks.models import Truck
-from django.dispatch import receiver
 
 
 class MyAccountManager(BaseUserManager):
@@ -65,6 +66,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def search_history(self):
         return self.search_terms.all()
 
+    @property
+    def trucks(self):
+        return Truck.objects.filter(owner=self).all()
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
@@ -84,7 +89,7 @@ class FavoriteTruck(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='favorites')
     created = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         unique_together = ('user', 'truck')
 

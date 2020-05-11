@@ -181,7 +181,7 @@ class HomePage(views.APIView):
         ts_trending = TruckSerializer(trending, many=True, context={'request': request})
         ts_recent = TruckSerializer(recent, many=True, context={'request': request})
         ts_favorites = TruckSerializer(favorites, many=True, context={'request': request})
-        ts_new = TruckSerializer(trucks, many=True, context={'request': request})
+        ts_new = TruckSerializer(trucks.order_by("-pk"), many=True, context={'request': request})
 
         return Response({
             "trending": ts_trending.data,

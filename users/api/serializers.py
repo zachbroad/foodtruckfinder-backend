@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from users.models import Account, SearchTerm, FavoriteTruck, Feedback
 
 
@@ -40,8 +41,10 @@ class SearchTermSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    from trucks.api.serializers import TruckSerializer
     search_history = SearchTermSerializer(many=True, required=False)
     favorite_trucks = FavoriteTruckSerializer(many=True, required=False)
+    trucks = TruckSerializer(many=True)
 
     class Meta:
         model = Account
@@ -53,7 +56,9 @@ class AccountSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'search_history',
+            'trucks',
             'favorite_trucks'
-
         )
         read_only_fields = ['pk']
+
+

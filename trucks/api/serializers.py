@@ -3,11 +3,9 @@ from rest_framework import serializers
 
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag
-from users.api.serializers import AccountSerializer
 
 
 class TagSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Tag
 
@@ -166,9 +164,21 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    class BasicAccountSerializer(serializers.ModelSerializer):
+        class Meta:
+            from users.models import Account
+            model = Account
+            fields = (
+                'pk',
+                'username',
+                'first_name',
+                'last_name',
+            )
+            read_only_fields = ['pk']
+
     total_likes = serializers.SerializerMethodField()
     truck = ReviewTruckSerializer()
-    reviewer = AccountSerializer()
+    reviewer = BasicAccountSerializer()
     rating = serializers.IntegerField()
 
     class Meta:
@@ -201,6 +211,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
     image = Base64ImageField(
         max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
     )
+    geolocation = serializers.CharField(required=False)
 
     class Meta:
         model = Truck

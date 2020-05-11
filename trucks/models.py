@@ -45,7 +45,7 @@ class Tag(models.Model):
 
 class Truck(models.Model):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     description = models.CharField(
         max_length=500, blank=True, default='Sorry, this truck has no description')
@@ -55,7 +55,7 @@ class Truck(models.Model):
                               on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
-    tags = models.ManyToManyField('Tag')
+    tags = models.ManyToManyField('Tag', null=True, blank=True)
 
     @property
     def num_favorites(self):
@@ -116,7 +116,7 @@ class Truck(models.Model):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
-        if self.address == "None" or self.address is None:
+        if self.address is None and self.geolocation is not None:
             points = self.geolocation.split(',')
             lat = points[0]
             lng = points[1]
@@ -129,10 +129,12 @@ class Truck(models.Model):
             country_abbr = address_components[5]['short_name']
             self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
 
-        if self.geolocation == "None" or self.geolocation is None or self.geolocation == "":
+        try:
             resp = gmaps.geocode(self.address)
             location = resp[0]['geometry']['location']
             self.geolocation = "{},{}".format(location['lat'], location['lng'])
+        except Exception:
+            pass
 
         super().save(*args, **kwargs)
 
@@ -147,7 +149,7 @@ class MenuItem(models.Model):
     description = models.CharField(
         max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
     price = models.FloatField(max_length=10)
-    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=True, blank=True,
+    image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
                               default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
     featured = models.BooleanField(default=False)
 
