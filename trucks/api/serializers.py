@@ -230,8 +230,9 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
+            'live',
         ]
-        read_only_fields = ['pk', 'live']
+        read_only_fields = ['pk',]
 
     def create(self, validated_data):
         truck = Truck.objects.create(**validated_data)
@@ -284,7 +285,7 @@ class TruckSerializer(serializers.ModelSerializer):
             'favorites',
             'live',
         ]
-        read_only_fields = ['pk']
+        read_only_fields = ['pk', 'rating', 'distance']
 
     def get_distance(self, instance):
         try:
