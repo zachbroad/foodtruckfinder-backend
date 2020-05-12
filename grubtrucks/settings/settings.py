@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-    'schedule',
 ]
 
 LOGIN_REDIRECT_URL = 'index'
