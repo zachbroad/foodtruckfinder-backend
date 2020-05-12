@@ -231,7 +231,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'website',
             'menu',
         ]
-        read_only_fields = ['pk']
+        read_only_fields = ['pk', 'live']
 
     def create(self, validated_data):
         truck = Truck.objects.create(**validated_data)
@@ -282,6 +282,7 @@ class TruckSerializer(serializers.ModelSerializer):
             'rating',
             'reviews',
             'favorites',
+            'live',
         ]
         read_only_fields = ['pk']
 
@@ -334,6 +335,7 @@ class TruckDashboardSerializer(TruckSerializer):
             'reviews',
             'favorites',
             'visits',
+            'live',
         )
 
         read_only_fields = (

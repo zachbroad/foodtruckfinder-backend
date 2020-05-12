@@ -55,7 +55,9 @@ class Truck(models.Model):
                               on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
-    tags = models.ManyToManyField('Tag', null=True, blank=True)
+    tags = models.ManyToManyField('Tag', blank=True)
+    live = models.BooleanField(default=False, blank=True, null=False)
+
 
     @property
     def num_favorites(self):
@@ -116,7 +118,7 @@ class Truck(models.Model):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
-        if self.address is None and self.geolocation is not None:
+        if self.geolocation is not None:
             points = self.geolocation.split(',')
             lat = points[0]
             lng = points[1]
