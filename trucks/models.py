@@ -118,7 +118,7 @@ class Truck(models.Model):
         gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
-        if self.geolocation is not None:
+        if self.address is None and self.geolocation is not None:
             points = self.geolocation.split(',')
             lat = points[0]
             lng = points[1]
@@ -132,9 +132,10 @@ class Truck(models.Model):
             self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
 
         try:
-            resp = gmaps.geocode(self.address)
-            location = resp[0]['geometry']['location']
-            self.geolocation = "{},{}".format(location['lat'], location['lng'])
+            if geolocation is None:
+                resp = gmaps.geocode(self.address)
+                location = resp[0]['geometry']['location']
+                self.geolocation = "{},{}".format(location['lat'], location['lng'])
         except Exception:
             pass
 
