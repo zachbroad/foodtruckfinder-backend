@@ -2,7 +2,6 @@ import os
 
 from django.shortcuts import render
 from django.core.mail import send_mail
-
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
@@ -21,3 +20,4 @@ def index(request):
     template = "index.html"
     context = {}
     return render(request, template, context)
+

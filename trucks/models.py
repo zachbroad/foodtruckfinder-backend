@@ -58,7 +58,6 @@ class Truck(models.Model):
     tags = models.ManyToManyField('Tag', blank=True)
     live = models.BooleanField(default=False, blank=True, null=False)
 
-
     @property
     def num_favorites(self):
         return self.favorites.count()

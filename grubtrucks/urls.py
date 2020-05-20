@@ -56,7 +56,7 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve,
           {'document_root': settings.STATIC_ROOT}),
 
-    # Payments
-    path('^payments/', include('payments.urls')),
+    #dj-stripe
+    path("stripe/", include("djstripe.urls", namespace="djstripe")),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
