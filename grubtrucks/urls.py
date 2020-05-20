@@ -31,30 +31,32 @@ api_patterns = [
 ]
 
 urlpatterns = [
+    # Test site
+    path(r'', index, name='index'),
+    path('trucks/', include('trucks.urls'), name='trucks-index'),
 
-                  # Test site
-                  path(r'', index, name='index'),
-                  path('trucks/', include('trucks.urls'), name='trucks-index'),
+    # Account
+    path('accounts/', include('allauth.urls', )),
+    path('users/', include('users.urls')),
+    path('users/', include('django.contrib.auth.urls')),
 
-                  # Account
-                  path('accounts/', include('allauth.urls', )),
-                  path('users/', include('users.urls')),
-                  path('users/', include('django.contrib.auth.urls')),
+    # Admin
+    path(r'admin/', admin.site.urls),
 
-                  # Admin
-                  path(r'admin/', admin.site.urls),
+    # Api
+    path(r'api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
 
-                  # Api
-                  path(r'api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
+    # Auth
+    path(r'api-auth/', include('rest_framework.urls')),
+    path(r'rest-auth/', include('rest_auth.urls')),
+    path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
+    path(r'rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
+    path('login-token/', CustomAuthToken.as_view(), name='login-token'),
+    path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+    re_path(r'^static/(?P<path>.*)$', serve,
+          {'document_root': settings.STATIC_ROOT}),
 
-                  # Auth
-                  path(r'api-auth/', include('rest_framework.urls')),
-                  path(r'rest-auth/', include('rest_auth.urls')),
-                  path(r'rest-auth/registration/', include('rest_auth.registration.urls')),
-                  path(r'rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
-                  path('login-token/', CustomAuthToken.as_view(), name='login-token'),
-                  path('validate-token/', ValidateToken.as_view(), name='validate-token'),
-                  re_path(r'^static/(?P<path>.*)$', serve,
-                          {'document_root': settings.STATIC_ROOT}),
+    # Payments
+    path('^payments/', include('payments.urls')),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

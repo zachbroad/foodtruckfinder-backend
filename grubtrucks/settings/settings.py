@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # local
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
+    'paymentmethods.apps.PaymentmethodsConfig',
 
     # 3rd party
 
@@ -55,7 +56,15 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
+    'payments',
 ]
+
+# django-payments
+PAYMENT_HOST = 'localhost:8000'
+PAYMENT_USES_SSL = False
+PAYMENT_MODEL = 'paymentmethods.Payment'
+PAYMENT_VARIANTS = {
+    'default': ('payments.dummy.DummyProvider', {})}
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'

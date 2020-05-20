@@ -2,8 +2,6 @@ import os
 
 from django.shortcuts import render
 from django.core.mail import send_mail
-# from grubtrucks.settings.production import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
-
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
@@ -18,7 +16,6 @@ def registration(request, email):
     recipients = ['brandongevat@gmail.com', email]
 
     send_mail(subject, message, email_from, recipients, host, password,)
-
 
 def index(request):
     template = "index.html"
