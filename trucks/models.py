@@ -88,9 +88,6 @@ class Truck(models.Model):
     def distance(self, lat, lng):
         return Truck.distance_raw(float(lat), float(lng), float(self.geolocation.lat), float(self.geolocation.lon))
 
-    def get_short_description(self):
-        return self.description[0:255] + "..."
-
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
 
@@ -131,7 +128,7 @@ class Truck(models.Model):
             self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
 
         try:
-            if geolocation is None:
+            if self.geolocation is None:
                 resp = gmaps.geocode(self.address)
                 location = resp[0]['geometry']['location']
                 self.geolocation = "{},{}".format(location['lat'], location['lng'])
