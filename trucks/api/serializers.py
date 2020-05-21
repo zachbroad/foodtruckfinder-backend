@@ -170,8 +170,8 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class BasicAccountSerializer(serializers.ModelSerializer):
         class Meta:
-            from users.models import Account
-            model = Account
+            from users.models import User
+            model = User
             fields = (
                 'pk',
                 'username',

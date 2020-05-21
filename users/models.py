@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from trucks.models import Truck
 
 
-class MyAccountManager(BaseUserManager):
+class MyUserManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, phone, password=None):
         if not email:
             raise ValueError("Users must have an email address")
@@ -45,7 +45,7 @@ class MyAccountManager(BaseUserManager):
         return user
 
 
-class Account(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=30)
@@ -73,7 +73,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
-    objects = MyAccountManager()
+    objects = MyUserManager()
 
     def __str__(self):
         return self.username

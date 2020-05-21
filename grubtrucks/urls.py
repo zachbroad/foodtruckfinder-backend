@@ -55,8 +55,4 @@ urlpatterns = [
     path('validate-token/', ValidateToken.as_view(), name='validate-token'),
     re_path(r'^static/(?P<path>.*)$', serve,
           {'document_root': settings.STATIC_ROOT}),
-
-    #dj-stripe
-    path("stripe/", include("djstripe.urls", namespace="djstripe")),
-
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

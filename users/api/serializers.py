@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from users.models import Account, SearchTerm, FavoriteTruck, Feedback
+from users.models import User, SearchTerm, FavoriteTruck, Feedback
 
 
 class FavoriteTruckSerializer(serializers.ModelSerializer):
@@ -47,7 +47,7 @@ class AccountSerializer(serializers.ModelSerializer):
     trucks = TruckSerializer(many=True)
 
     class Meta:
-        model = Account
+        model = User
         fields = (
             'pk',
             'username',

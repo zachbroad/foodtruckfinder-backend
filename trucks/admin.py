@@ -6,6 +6,7 @@ from .models import Truck, MenuItem, Review, Like, Visit, Tag
 
 
 class TruckAdmin(admin.ModelAdmin):
+    exclude = ('live',)
     formfield_overrides = {
         map_fields.AddressField: {
             'widget': map_widgets.GoogleMapsAddressWidget(

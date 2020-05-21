@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # local
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
+    'events.apps.EventsConfig',
 
     # 3rd party
 
@@ -55,14 +56,21 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-    'djstripe',
+    #'djstripe',
 ]
 
+#dj-stripe vars
+# STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
+# STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
+# STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
+# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
+# STRIPE_LIVE_MODE = False  # Change to True in production
+# DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-AUTH_USER_MODEL = 'users.Account'
+AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",

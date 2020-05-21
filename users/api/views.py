@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from users.models import Account, FavoriteTruck, Feedback
+from users.models import User, FavoriteTruck, Feedback
 from .serializers import AccountSerializer, FavoriteTruckSerializer, FeedbackSerializer
 
 
@@ -53,7 +53,7 @@ class AccountRudView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        return Account.objects.all()
+        return User.objects.all()
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -95,7 +95,7 @@ class ValidateToken(APIView):
 
 class AccountViewSet(ModelViewSet):
     serializer_class = AccountSerializer
-    queryset = Account.objects.all()
+    queryset = User.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
 
     filterset_fields = ['username', 'email', 'first_name', 'last_name']
