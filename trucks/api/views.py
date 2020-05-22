@@ -79,6 +79,9 @@ class ReviewsViewSet(ModelViewSet):
             return Response("Invalid data for LikeSerializer")
 
 
+# TODO live create view
+#   only allow owner to go live and within x miles/feet
+#   unqiue live objects for time periods
 class LiveViewSet(ModelViewSet):
     serializer_class = LiveSerializer
     queryset = Live.objects.all()

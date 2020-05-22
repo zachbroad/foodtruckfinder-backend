@@ -257,7 +257,6 @@ class Live(models.Model):
     end_time = models.DateTimeField()
 
     @property
-    # TODO if current_time < end_time calculate live_time by current_time - start_time else end_time - start_time
     def live_time(self):
         f_mat = '%H:%M:%S'
         start = datetimefield_to_datetime(self.start_time)
