@@ -1,10 +1,14 @@
 import googlemaps
 from django.conf import settings
+from datetime import datetime
 from django.core import validators
 from django.db import models
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
+
+
+
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -56,7 +60,6 @@ class Truck(models.Model):
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
-    live = models.BooleanField(default=False, blank=True, null=False)
 
     @property
     def num_favorites(self):
@@ -107,18 +110,22 @@ class Truck(models.Model):
     def reviews(self):
         return self.review.all()
 
+    @property
+    def live(self):
+        return self.live_objects.filter(current=True)
+
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+        g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
         if self.address is None and self.geolocation is not None:
             points = self.geolocation.split(',')
             lat = points[0]
             lng = points[1]
-            resp = gmaps.reverse_geocode((float(lat), float(lng)))
+            resp = g_maps.reverse_geocode((float(lat), float(lng)))
             address_components = resp[0]['address_components']
             house_number = address_components[0]['long_name']
             street_name = address_components[1]['long_name']
@@ -129,7 +136,7 @@ class Truck(models.Model):
 
         try:
             if self.geolocation is None:
-                resp = gmaps.geocode(self.address)
+                resp = g_maps.geocode(self.address)
                 location = resp[0]['geometry']['location']
                 self.geolocation = "{},{}".format(location['lat'], location['lng'])
         except Exception:
@@ -240,3 +247,12 @@ class Visit(models.Model):
 
     def __str__(self):
         return f'{self.truck.title} visited by {str(self.visitor.username)} | {self.visited.__str__()}'
+
+
+class Live(models.Model):
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
+    start_time = models.DateTimeField(auto_now_add=True, )
+    end_time = models.DateTimeField()
+
+    def __str__(self):
+        return f'{self.start_time} ----------> + {self.end_time}'
