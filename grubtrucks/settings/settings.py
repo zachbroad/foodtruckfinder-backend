@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
 
     # 3rd party
-
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',

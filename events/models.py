@@ -24,11 +24,11 @@ class Event(models.Model):
     geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
     truck = models.ManyToManyField(Truck)
     frequency = models.IntegerField(choices=RECURRENCE_CHOICES)
-    startTime = models.TimeField('Start Time')
-    endTime = models.TimeField('End Time')
-    startDate = models.DateField('Start Date')
+    start_time = models.TimeField('Start Time')
+    end_time = models.TimeField('End Time')
+    start_date = models.DateField('Start Date')
 
-    # TODO default endDate to ~ 2 years (or some timeframe) after startDate >
+    # TODO default endDate to ~ 2 years (or some time-frame) after startDate ->
     #  so user doesn't destroy db with millions at once
     endDate = models.DateField('End Date')
     cancelledDate = models.DateField('Cancelled Date', blank=True, null=True)
