@@ -5,14 +5,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import views
-from trucks.models import Truck, MenuItem, Review, Like, Visit, Tag
+from trucks.models import Truck, Live, MenuItem, Review, Like, Visit, Tag
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer,\
-    PatchMenuItemSerializer
+    PatchMenuItemSerializer, LiveSerializer
 
 
-class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):  # DetailView CreateView FormView
+class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     serializer_class = MenuItemSerializer
 
@@ -35,7 +35,7 @@ class MenuItemViewSet(ModelViewSet):
         return super().get_serializer_class()
 
 
-class VisitViewSet(ModelViewSet):  # DetailView CreateView FormView
+class VisitViewSet(ModelViewSet):
     lookup_field = 'pk'
     serializer_class = VisitSerializer
     queryset = Visit.objects.all()
@@ -77,6 +77,11 @@ class ReviewsViewSet(ModelViewSet):
 
         else:
             return Response("Invalid data for LikeSerializer")
+
+
+class LiveViewSet(ModelViewSet):
+    serializer_class = LiveSerializer
+    queryset = Live.objects.all()
 
 
 class TruckViewSet(ModelViewSet):

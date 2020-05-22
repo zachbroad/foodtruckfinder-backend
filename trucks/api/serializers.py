@@ -4,21 +4,17 @@ from datetime import datetime
 
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
-
-
-
-def juxtapose(dt):
-    return dt.year * 10000000000 + dt.month * 100000000 + dt.day * 1000000 + 10000 * dt.hour + 100 * dt.minute + 1 * dt.second
+from util.time import juxtapose
 
 
 class LiveSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Live
 
         fields = [
             'start_time',
             'end_time',
+            'live_time'
         ]
 
 

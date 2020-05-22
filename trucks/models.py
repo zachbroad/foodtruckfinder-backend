@@ -1,6 +1,8 @@
+from datetime import datetime
+import time
 import googlemaps
 from django.conf import settings
-from datetime import datetime
+from util.time import juxtapose, datetimefield_to_datetime
 from django.core import validators
 from django.db import models
 from django_google_maps import fields as map_fields
@@ -253,6 +255,21 @@ class Live(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
     start_time = models.DateTimeField(auto_now_add=True, )
     end_time = models.DateTimeField()
+
+    @property
+    # TODO if current_time < end_time calculate live_time by current_time - start_time else end_time - start_time
+    def live_time(self):
+        f_mat = '%H:%M:%S'
+        start = datetimefield_to_datetime(self.start_time)
+        end = datetimefield_to_datetime(self.end_time)
+        now = datetime.utcnow()
+        if juxtapose(now) < juxtapose(end):
+            sec = (now-start).total_seconds()
+
+            return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
+        else:
+            sec = (end-start).total_seconds()
+            return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
