@@ -5,9 +5,6 @@ from datetime import datetime
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
 
-def datetimefield_to_datetime(dtf):
-    return datetime(year=dtf.year, month=dtf.month, day=dtf.day, hour=dtf.hour, minute=dtf.minute,
-                    second=dtf.second)
 
 
 def juxtapose(dt):
@@ -334,9 +331,9 @@ class TruckSerializer(serializers.ModelSerializer):
 
     def get_live(self, instance):
         live = Live.objects.get(truck__id=instance.pk)
-        jux_start_time = juxtapose(datetimefield_to_datetime(live.start_time))
+        jux_start_time = juxtapose(live.start_time)
         jux_now = juxtapose(datetime.utcnow())
-        jux_end_time = juxtapose(datetimefield_to_datetime(live.end_time))
+        jux_end_time = juxtapose(live.end_time)
         print(f'{jux_start_time}      |       {jux_now}     |      {jux_end_time} ')
         return jux_start_time < jux_now < jux_end_time
 
