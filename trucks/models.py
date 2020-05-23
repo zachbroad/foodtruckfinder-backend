@@ -278,7 +278,7 @@ class Live(models.Model):
     def clean(self):
         if self.end_time < timezone.now():
             raise ValidationError('Start time must be before end time')
-        elif Live.objects.filter(truck__id=self.truck.pk, start_time__range=[timezone.now(), self.end_time], end_time__range=[timezone.now(), self.end_time]).exists():
+        elif Live.objects.filter(Q(start_time_lte=timezone.now(), end_time_gte=timezone.now()) | Q() & Q(truck__id=self.truck.pk) ).exists():
                 raise ValidationError('You are already live')
 
 
