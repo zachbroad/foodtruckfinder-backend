@@ -10,16 +10,21 @@ from util.time import juxtapose
 class LiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Live
+        truck = serializers.SerializerMethodField()
 
         fields = [
+            'truck',
             'start_time',
             'end_time',
             'live_time'
         ]
 
+    def truck(self, obj):
+        return obj.pk
+
     def validate(self, data):
         if timezone.now() < data['end_time']:
-            if Live.objects.filter(truck=data['truck'], start_time__lte=timezone.now(), end_time__gte=data['end_time']).exists():
+            if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'], end_time__lte=data['end_time'])) & Q(truck__id=data['truck'])).exists():
                 raise serializers.ValidationError('You are already live')
             return data
         else:

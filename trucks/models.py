@@ -5,6 +5,7 @@ from django.conf import settings
 from util.time import juxtapose, datetimefield_to_datetime
 from django.core import validators
 from django.db import models
+from django.db.models import Q
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
@@ -278,7 +279,7 @@ class Live(models.Model):
     def clean(self):
         if self.end_time < timezone.now():
             raise ValidationError('Start time must be before end time')
-        elif Live.objects.filter(Q(start_time_lte=timezone.now(), end_time_gte=timezone.now()) | Q() & Q(truck__id=self.truck.pk) ).exists():
+        elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) & Q(truck__id=self.truck.pk)).exists():
                 raise ValidationError('You are already live')
 
 
