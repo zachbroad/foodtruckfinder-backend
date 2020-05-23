@@ -8,8 +8,7 @@ from django.db import models
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-
-
+from django.utils import timezone
 
 
 WEEKDAYS = [
@@ -114,12 +113,13 @@ class Truck(models.Model):
 
     @property
     def live(self):
-        return self.live_objects.filter(current=True)
+        return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
+
         g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
         # Check if address not given when geolocation is
@@ -264,11 +264,21 @@ class Live(models.Model):
         now = datetime.utcnow()
         if juxtapose(now) < juxtapose(end):
             sec = (now-start).total_seconds()
-
             return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
         else:
             sec = (end-start).total_seconds()
             return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
+
+    @property
+    def is_live(self):
+        try:
+            live = Live.objects.get(truck__id=truck.pk)
+            jux_start_time = juxtapose(live.start_time)
+            jux_now = juxtapose(datetime.utcnow())
+            jux_end_time = juxtapose(live.end_time)
+            return jux_start_time < jux_now < jux_end_time
+        except Live.DoesNotExist:
+            return False
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'

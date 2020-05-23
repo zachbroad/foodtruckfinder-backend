@@ -242,7 +242,6 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            'live',
         ]
         read_only_fields = ['pk', 'live']
 
@@ -277,7 +276,6 @@ class TruckSerializer(serializers.ModelSerializer):
     favorites = serializers.IntegerField(source='num_favorites')
     tags = serializers.SerializerMethodField()
 
-    live = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -299,7 +297,7 @@ class TruckSerializer(serializers.ModelSerializer):
             'favorites',
             'live',
         ]
-        read_only_fields = ['pk', 'rating', 'distance']
+        read_only_fields = ['pk', 'rating', 'distance', 'live']
 
     def get_distance(self, instance):
         try:
@@ -325,13 +323,7 @@ class TruckSerializer(serializers.ModelSerializer):
             tag_titles.append(tag.title)
         return tag_titles
 
-    def get_live(self, instance):
-        live = Live.objects.get(truck__id=instance.pk)
-        jux_start_time = juxtapose(live.start_time)
-        jux_now = juxtapose(datetime.utcnow())
-        jux_end_time = juxtapose(live.end_time)
-        print(f'{jux_start_time}      |       {jux_now}     |      {jux_end_time} ')
-        return jux_start_time < jux_now < jux_end_time
+
 
 
 class TruckDashboardSerializer(TruckSerializer):
