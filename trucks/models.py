@@ -2,7 +2,6 @@ from datetime import datetime
 import time
 import googlemaps
 from django.conf import settings
-from util.time import juxtapose, datetimefield_to_datetime
 from django.core import validators
 from django.db import models
 from django.db.models import Q

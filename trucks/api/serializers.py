@@ -4,7 +4,6 @@ from datetime import datetime
 
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
-from util.time import juxtapose
 
 
 class LiveSerializer(serializers.ModelSerializer):
