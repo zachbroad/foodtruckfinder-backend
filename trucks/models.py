@@ -9,7 +9,7 @@ from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
-
+import math
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -76,8 +76,6 @@ class Truck(models.Model):
 
     @staticmethod
     def distance_raw(lat, lng, lat2, lng2):
-        import math
-
         delta_lat = math.radians(lat2 - lat)
         delta_lng = math.radians(lng2 - lng)
         radius = 6371
@@ -86,7 +84,6 @@ class Truck(models.Model):
             * math.cos(math.radians(lat2)) * math.sin(delta_lng / 2) * math.sin(delta_lng / 2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         d = radius * c
-
         return d
 
     def distance(self, lat, lng):
@@ -115,9 +112,6 @@ class Truck(models.Model):
     def live(self):
         return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
 
-    def __str__(self):
-        return self.title
-
     def save(self, *args, **kwargs):
 
         g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
@@ -145,6 +139,11 @@ class Truck(models.Model):
             pass
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
 
 
 class MenuItem(models.Model):
@@ -262,7 +261,7 @@ class Live(models.Model):
         start = datetimefield_to_datetime(self.start_time)
         end = datetimefield_to_datetime(self.end_time)
         now = datetime.utcnow()
-        if juxtapose(now) < juxtapose(end):
+        if now.total_seconds() < end.total_seconds():
             sec = (now-start).total_seconds()
             return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
         else:
@@ -272,13 +271,16 @@ class Live(models.Model):
     @property
     def is_live(self):
         try:
-            live = Live.objects.get(truck__id=truck.pk)
-            jux_start_time = juxtapose(live.start_time)
-            jux_now = juxtapose(datetime.utcnow())
-            jux_end_time = juxtapose(live.end_time)
-            return jux_start_time < jux_now < jux_end_time
+            return self.start_time.total_seconds() < datetime.utcnow().total_seconds() < self.end_time.total_seconds()
         except Live.DoesNotExist:
             return False
+
+    def clean(self):
+        if self.end_time < timezone.now():
+            raise ValidationError('Start time must be before end time')
+        elif Live.objects.filter(truck__id=self.truck.pk, start_time__range=[timezone.now(), self.end_time], end_time__range=[timezone.now(), self.end_time]).exists():
+                raise ValidationError('You are already live')
+
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'

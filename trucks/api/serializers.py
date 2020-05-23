@@ -17,6 +17,14 @@ class LiveSerializer(serializers.ModelSerializer):
             'live_time'
         ]
 
+    def validate(self, data):
+        if timezone.now() < data['end_time']:
+            if Live.objects.filter(truck=data['truck'], start_time__lte=timezone.now(), end_time__gte=data['end_time']).exists():
+                raise serializers.ValidationError('You are already live')
+            return data
+        else:
+            raise serializers.ValidationError('Can not have end time before the start time')
+
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
