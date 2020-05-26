@@ -143,8 +143,6 @@ class Truck(models.Model):
         return self.title
 
 
-
-
 class MenuItem(models.Model):
     type = models.IntegerField(choices=TYPE_CHOICES)
 
@@ -284,7 +282,6 @@ class Live(models.Model):
                                   Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
                                  Q(truck__id=self.truck.pk)).exists():
             raise ValidationError('You are already live')
-
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
