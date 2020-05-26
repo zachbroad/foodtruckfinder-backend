@@ -10,9 +10,8 @@ router.register(r'visits', VisitViewSet)
 router.register(r'menu items', MenuItemViewSet)
 router.register(r'tags', TagsViewSet)
 router.register(r'lives', LiveViewSet)
+router.register(r'live', TruckLiveViewSet)
 
 urlpatterns = [
-    # path('/', TruckListView.as_view(), name='truck-create'),
-    # path('<int:pk>/', TruckDetailView.as_view(), name='truck-rud'),
 ]
 

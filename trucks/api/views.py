@@ -95,8 +95,8 @@ class TruckLiveViewSet(views.APIView):
     queryset = Live.objects.all()
     permissions = permissions.IsAuthenticated
 
-    def get(self, request):
-        queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id=self.kwargs['truck_id'])))
+    def get(self, request, *args, **kwargs):
+        queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id=self.kwargs['truck'])))
         serializer = LiveSerializer
         data = serializer(queryset, many=False, context={'request': request})
         return Response(data.data)
