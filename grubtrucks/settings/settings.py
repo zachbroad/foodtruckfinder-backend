@@ -177,8 +177,7 @@ GOOGLE_MAPS_API_KEY = 'AIzaSyA8kKFG0-n_lV-xNBld3iJjLu2DP34w--I'
 
 LANGUAGE_CODE = 'en-us'
 
-# had issues with DateTimeField using UTC and our server using Eastern ('American/Cancun')
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 

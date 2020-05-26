@@ -17,12 +17,12 @@ class Event(models.Model):
     )
 
     title = models.CharField(max_length=120)
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_organizer')
     description = models.CharField(
         max_length=500, blank=True, default='Sorry, this truck has no description')
     address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
     geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
-    truck = models.ManyToManyField(Truck)
+    truck = models.ManyToManyField(Truck, related_name='events')
     frequency = models.IntegerField(choices=RECURRENCE_CHOICES)
     start_time = models.TimeField('Start Time')
     end_time = models.TimeField('End Time')

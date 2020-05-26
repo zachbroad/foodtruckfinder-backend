@@ -1,7 +1,7 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from datetime import datetime
-
+from datetime import timezone
+from django.db.models import Q
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
 
@@ -15,7 +15,8 @@ class LiveSerializer(serializers.ModelSerializer):
             'truck',
             'start_time',
             'end_time',
-            'live_time'
+            'live_time',
+            'live'
         ]
 
     def truck(self, obj):
@@ -334,8 +335,6 @@ class TruckSerializer(serializers.ModelSerializer):
         for tag in tags:
             tag_titles.append(tag.title)
         return tag_titles
-
-
 
 
 class TruckDashboardSerializer(TruckSerializer):

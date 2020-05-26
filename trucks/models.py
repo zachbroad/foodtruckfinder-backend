@@ -258,28 +258,32 @@ class Live(models.Model):
     @property
     def live_time(self):
         f_mat = '%H:%M:%S'
-        start = datetimefield_to_datetime(self.start_time)
-        end = datetimefield_to_datetime(self.end_time)
-        now = datetime.utcnow()
-        if now.total_seconds() < end.total_seconds():
+        start = self.start_time
+        end = self.end_time
+        now = timezone.now()
+        if now < end:
             sec = (now-start).total_seconds()
-            return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
+            return '{}'.format(time.strftime(f_mat, time.gmtime(sec)))
         else:
             sec = (end-start).total_seconds()
-            return '{} hours'.format(time.strftime(f_mat, time.gmtime(sec)))
+            return '{}'.format(time.strftime(f_mat, time.gmtime(sec)))
 
     @property
-    def is_live(self):
+    def live(self):
         try:
-            return self.start_time.total_seconds() < datetime.utcnow().total_seconds() < self.end_time.total_seconds()
-        except Live.DoesNotExist:
-            return False
+            why = self.start_time < timezone.now() < self.end_time
+            return why
+        except Exception as e:
+            print(e)
+            if e == Live.doesNotExist:
+                return False
+        return False
 
     def clean(self):
         if self.end_time < timezone.now():
             raise ValidationError('Start time must be before end time')
         elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) & Q(truck__id=self.truck.pk)).exists():
-                raise ValidationError('You are already live')
+            raise ValidationError('You are already live')
 
 
     def __str__(self):
