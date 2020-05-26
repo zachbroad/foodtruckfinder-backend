@@ -90,16 +90,15 @@ class LiveViewSet(ModelViewSet):
     filterset_fields = ['truck']
 
 
-class TruckLiveViewSet(ModelViewSet):
+class TruckLiveViewSet(views.APIView):
     serializer_class = LiveSerializer
-    queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id='truck:pk')))
+    queryset = Live.objects.all()
     permissions = permissions.IsAuthenticated
 
-    @action(detail=False, methods=["GET"])
     def get(self, request):
-        qs = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id='truck:pk')))
+        queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id=self.kwargs['truck_id'])))
         serializer = LiveSerializer
-        data = serializer(many=False, context={'request': request})
+        data = serializer(queryset, many=False, context={'request': request})
         return Response(data.data)
 
 

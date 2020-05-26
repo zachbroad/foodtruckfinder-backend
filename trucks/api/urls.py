@@ -1,4 +1,4 @@
-from .views import MenuItemViewSet, ReviewsViewSet, VisitViewSet, TagsViewSet, LiveViewSet, TruckViewSet
+from .views import MenuItemViewSet, ReviewsViewSet, VisitViewSet, TagsViewSet, LiveViewSet, TruckViewSet, TruckLiveViewSet
 from rest_framework import routers
 from django.urls import path
 
@@ -14,6 +14,5 @@ router.register(r'lives', LiveViewSet)
 urlpatterns = [
     # path('/', TruckListView.as_view(), name='truck-create'),
     # path('<int:pk>/', TruckDetailView.as_view(), name='truck-rud'),
-    path('<truck:pk>/live', LiveViewSet.as_view(), name='live')
 ]
 

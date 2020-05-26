@@ -6,9 +6,8 @@ from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
 from rest_framework import routers
 from grubtrucks.views import index
-from trucks.api import urls
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet
+    TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
 
@@ -29,7 +28,7 @@ api_patterns = [
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    urls.urlpatterns,
+    path(r'<trucks-index>/?P(<truck_id>\d+)/live', TruckLiveViewSet.as_view(), name='trucks-live')
 ]
 
 urlpatterns = [
