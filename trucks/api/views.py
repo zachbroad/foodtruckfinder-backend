@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db.models import Q, F, Count
 from rest_framework import generics, pagination, permissions
 from rest_framework import filters as drf_filters
@@ -80,13 +82,25 @@ class ReviewsViewSet(ModelViewSet):
 
 
 # TODO only allow owner to go live and within x miles/feet
-
 class LiveViewSet(ModelViewSet):
     serializer_class = LiveSerializer
     queryset = Live.objects.all()
     permissions = permissions.IsAuthenticated
 
     filterset_fields = ['truck']
+
+
+class TruckLiveViewSet(ModelViewSet):
+    serializer_class = LiveSerializer
+    queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id='truck:pk')))
+    permissions = permissions.IsAuthenticated
+
+    @action(detail=False, methods=["GET"])
+    def get(self, request):
+        qs = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id='truck:pk')))
+        serializer = LiveSerializer
+        data = serializer(many=False, context={'request': request})
+        return Response(data.data)
 
 
 class TruckViewSet(ModelViewSet):

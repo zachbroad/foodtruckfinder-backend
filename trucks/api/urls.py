@@ -14,6 +14,6 @@ router.register(r'lives', LiveViewSet)
 urlpatterns = [
     # path('/', TruckListView.as_view(), name='truck-create'),
     # path('<int:pk>/', TruckDetailView.as_view(), name='truck-rud'),
-    path('<truck:id>/live', LiveViewSet.as_view(), name='live')
+    path('<truck:pk>/live', LiveViewSet.as_view(), name='live')
 ]
 

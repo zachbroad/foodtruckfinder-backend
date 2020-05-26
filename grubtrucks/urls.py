@@ -6,6 +6,7 @@ from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
 from rest_framework import routers
 from grubtrucks.views import index
+from trucks.api import urls
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
@@ -27,7 +28,8 @@ api_patterns = [
     *router.urls,
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
-    path('profile/', ProfileView.as_view(), name='profile')
+    path('profile/', ProfileView.as_view(), name='profile'),
+    urls.urlpatterns,
 ]
 
 urlpatterns = [
