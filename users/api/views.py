@@ -84,7 +84,6 @@ class ValidateToken(APIView):
 
     def post(self, request, *args, **kwargs):
         token = self.request.data['token']
-
         token_obj = Token.objects.filter(key=token).first()
 
         if token_obj:

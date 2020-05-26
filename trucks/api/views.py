@@ -1,11 +1,11 @@
 from django.utils import timezone
-
 from django.db.models import Q, F, Count
 from rest_framework import generics, pagination, permissions
 from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.exceptions import ValidationError
 from rest_framework import views
 from trucks.models import Truck, Live, MenuItem, Review, Like, Visit, Tag
 from users.models import FavoriteTruck
@@ -66,7 +66,8 @@ class ReviewsViewSet(ModelViewSet):
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
         if serializer.is_valid():
-            existing_like = Like.objects.filter(liked_by=self.request.user).filter(review_id=pk)
+            existing_like = Like.objects.filter(liked_by=self.request.user)\
+                .filter(review_id=pk)
             if existing_like.exists():
                 obj: Like = existing_like.first()
                 obj.is_liked = serializer.data['is_liked']
@@ -96,9 +97,28 @@ class TruckLiveViewSet(views.APIView):
     permissions = permissions.IsAuthenticated
 
     def get(self, request, *args, **kwargs):
-        queryset = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) & Q(truck__id=self.kwargs['truck'])))
         serializer = LiveSerializer
-        data = serializer(queryset, many=False, context={'request': request})
+        try:
+            live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
+                                     Q(truck__id=self.kwargs['truck'])))
+            data = serializer(live, many=False, context={'request': request}, partial=True)
+            data.save()
+        except Live.DoesNotExist:
+            raise ValidationError('Truck currently not live')
+
+    def partial_update(self, request, *args, **kwargs):
+        # TODO PATCH
+        serializer = LiveSerializer
+        try:
+            live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
+                                     Q(truck__id=self.kwargs['truck'])))
+            if request.user.pk == live.truck.owner:
+                data = serializer(live, many=False, context={'request': request}, partial=True)
+                data.is_valid(raise_exception=True)
+                data.save()
+        except Live.DoesNotExist:
+            raise ValidationError('You are not live')
+
         return Response(data.data)
 
 

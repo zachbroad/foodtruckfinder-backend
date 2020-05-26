@@ -1,4 +1,3 @@
-from datetime import datetime
 import time
 import googlemaps
 from django.conf import settings
@@ -274,15 +273,16 @@ class Live(models.Model):
             why = self.start_time < timezone.now() < self.end_time
             return why
         except Exception as e:
-            print(e)
-            if e == Live.doesNotExist:
+            if e == Live.DoesNotExist:
                 return False
         return False
 
     def clean(self):
         if self.end_time < timezone.now():
             raise ValidationError('Start time must be before end time')
-        elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) & Q(truck__id=self.truck.pk)).exists():
+        elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) |
+                                  Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
+                                 Q(truck__id=self.truck.pk)).exists():
             raise ValidationError('You are already live')
 
 
