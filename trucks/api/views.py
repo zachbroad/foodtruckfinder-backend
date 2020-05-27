@@ -12,7 +12,9 @@ from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer,\
     PatchMenuItemSerializer, LiveSerializer
-
+from datetime import datetime
+from rest_framework.mixins import UpdateModelMixin
+from dateutil import parser
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
@@ -91,35 +93,36 @@ class LiveViewSet(ModelViewSet):
     filterset_fields = ['truck']
 
 
-class TruckLiveViewSet(views.APIView):
+class TruckLiveViewSet(generics.UpdateAPIView):
     serializer_class = LiveSerializer
     queryset = Live.objects.all()
     permissions = permissions.IsAuthenticated
 
+    def get_object(self, *args, **kwargs):
+        return Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
+                          Q(truck__id=self.kwargs['truck'])))
+
     def get(self, request, *args, **kwargs):
         serializer = LiveSerializer
         try:
-            live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
-                                     Q(truck__id=self.kwargs['truck'])))
+            live = self.get_object()
             data = serializer(live, many=False, context={'request': request}, partial=True)
-            data.save()
         except Live.DoesNotExist:
             raise ValidationError('Truck currently not live')
+        return Response(data.data)
 
     def partial_update(self, request, *args, **kwargs):
-        # TODO PATCH
-        serializer = LiveSerializer
+        data = request.data
+
         try:
-            live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
-                                     Q(truck__id=self.kwargs['truck'])))
-            if request.user.pk == live.truck.owner:
-                data = serializer(live, many=False, context={'request': request}, partial=True)
-                data.is_valid(raise_exception=True)
-                data.save()
+            live = self.get_object()
+            dt = parser.parse(data.get('end_time', live.end_time))
+            live.end_time = dt
+            live.save()
         except Live.DoesNotExist:
             raise ValidationError('You are not live')
-
-        return Response(data.data)
+        serializer = LiveSerializer(live, many=False, context={'request': request}, partial=True)
+        return Response(serializer.data)
 
 
 class TruckViewSet(ModelViewSet):

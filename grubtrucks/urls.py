@@ -28,7 +28,7 @@ api_patterns = [
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path(r'trucks/<truck>/live', TruckLiveViewSet.as_view(), name='trucks-live')
+    path('trucks/<truck>/live', TruckLiveViewSet.as_view(), name='trucks-live')
 ]
 
 urlpatterns = [

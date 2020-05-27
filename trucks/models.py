@@ -191,7 +191,7 @@ class Menu(models.Model):
 
 class Review(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
     rating = models.IntegerField(verbose_name='truck_rating',
                                  validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
     description = models.CharField(max_length=500, blank=True, null=True)
@@ -237,7 +237,7 @@ class Like(models.Model):
 
 class Visit(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
-    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='visited_by')
     visited = models.DateTimeField(auto_now=True)
 
     class Meta:
