@@ -12,7 +12,7 @@ from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer,\
     PatchMenuItemSerializer, LiveSerializer
-from datetime import datetime
+import datetime
 from rest_framework.mixins import UpdateModelMixin
 from dateutil import parser
 
@@ -92,6 +92,31 @@ class LiveViewSet(ModelViewSet):
 
     filterset_fields = ['truck']
 
+    def create(self, validated_data):
+
+        start_time = timezone.now()
+        data = validated_data.data.copy()
+        try:
+            currently_live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
+                                           Q(truck__id=data['truck'])))
+            if currently_live.count() > 0:
+                raise ValidationError('You are currently live')
+        except Live.DoesNotExist:
+            pass
+
+        truck = Truck.objects.get(pk=data.pop('truck')[0])
+        end_time = data.get('end_time', None)
+        if end_time is not None:
+            end_time = parser.parse(end_time)
+            data.pop('end_time')
+        else:
+            end_time = start_time + datetime.timedelta(hours=1)
+        live = Live.objects.create(truck=truck, end_time=end_time, **data)
+        live.save()
+        live_serialized = self.serializer_class(live)
+        return Response(live_serialized.data)
+
+
 
 class TruckLiveViewSet(generics.UpdateAPIView):
     serializer_class = LiveSerializer
@@ -111,13 +136,21 @@ class TruckLiveViewSet(generics.UpdateAPIView):
             raise ValidationError('Truck currently not live')
         return Response(data.data)
 
+    # TODO if end_time is none set end_time to timezone.now()
     def partial_update(self, request, *args, **kwargs):
         data = request.data
 
         try:
             live = self.get_object()
-            dt = parser.parse(data.get('end_time', live.end_time))
-            live.end_time = dt
+
+            end_time = data.get('end_time', None)
+            if end_time is not None:
+                end_time = parser.parse(end_time)
+                data.pop('end_time')
+            else:
+                end_time = timezone.now()
+
+            live.end_time = end_time
             live.save()
         except Live.DoesNotExist:
             raise ValidationError('You are not live')
