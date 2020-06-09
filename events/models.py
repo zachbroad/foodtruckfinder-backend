@@ -30,7 +30,7 @@ class Event(models.Model):
 
     # TODO default endDate to ~ 2 years (or some time-frame) after startDate ->
     #  so user doesn't destroy db with millions at once
-    endDate = models.DateField('End Date')
+    end_date = models.DateField('End Date')
     cancelledDate = models.DateField('Cancelled Date', blank=True, null=True)
 
     def save(self, *args, **kwargs):

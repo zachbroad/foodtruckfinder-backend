@@ -40,7 +40,7 @@ class SearchTermSerializer(serializers.ModelSerializer):
         )
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     from trucks.api.serializers import TruckSerializer
     search_history = SearchTermSerializer(many=True, required=False)
     favorite_trucks = FavoriteTruckSerializer(many=True, required=False)

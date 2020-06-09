@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import User, FavoriteTruck, Feedback
-from .serializers import AccountSerializer, FavoriteTruckSerializer, FeedbackSerializer
+from .serializers import UserSerializer, FavoriteTruckSerializer, FeedbackSerializer
 
 
 class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
@@ -49,7 +49,7 @@ class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
 
 class AccountRudView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
-    serializer_class = AccountSerializer
+    serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
@@ -64,7 +64,7 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        profile = AccountSerializer(user, many=False)
+        profile = UserSerializer(user, many=False)
         return Response({
             'token': token.key,
             'username': user.username,
@@ -93,7 +93,7 @@ class ValidateToken(APIView):
 
 
 class AccountViewSet(ModelViewSet):
-    serializer_class = AccountSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -110,5 +110,5 @@ class ProfileView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
-        acc = AccountSerializer(request.user, many=False)
+        acc = UserSerializer(request.user, many=False)
         return Response(data=acc.data)

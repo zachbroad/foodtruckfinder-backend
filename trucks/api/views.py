@@ -16,6 +16,7 @@ import datetime
 from rest_framework.mixins import UpdateModelMixin
 from dateutil import parser
 
+
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     serializer_class = MenuItemSerializer
@@ -161,7 +162,6 @@ class TruckLiveViewSet(generics.UpdateAPIView):
 class TruckViewSet(ModelViewSet):
     serializer_class = TruckSerializer
     queryset = Truck.objects.all()
-
     filter_backends = (drf_filters.SearchFilter,)
     search_fields = ('title',)
     pagination_class = pagination.LimitOffsetPagination
@@ -169,7 +169,8 @@ class TruckViewSet(ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
 
-        title_contains = self.request.query_params.get('title__contains', None)
+        tag_startswith = self.request.query_params.get('tags__title__startswith', None)
+        title_startswith = self.request.query_params.get('title__startswith', None)
         owner = self.request.query_params.get('owner', None)
 
         geolocation = self.request.query_params.get('geolocation', None)
@@ -185,12 +186,16 @@ class TruckViewSet(ModelViewSet):
                     sorted_trucks.append(truck)
 
             qs = sorted(sorted_trucks, key=lambda i: i.distance(lat, lng))
-            return qs
 
-        if title_contains is not None:
-            q = Q()
-            q = q | Q(title__contains=title_contains)
-            qs = Truck.objects.filter(q).all()
+        if tag_startswith is not None:
+           qs = (Truck.objects.filter(tags__title__startswith=tag_startswith).all())
+
+        if title_startswith is not None:
+            qs = Truck.objects.filter(title__startswith=title_startswith).all()
+
+        if title_startswith is not None and tag_startswith is not None:
+            q = Q(Q(title__startswith=title_startswith) | Q(tags__title__startswith=tag_startswith))
+            qs = Truck.objects.filter(q)
 
         # if tags is not None:
         #     tags = tags.split(',')
@@ -207,6 +212,32 @@ class TruckViewSet(ModelViewSet):
             qs = Truck.objects.filter(q).all()
 
         return qs
+
+    def partial_update(self, request, *args, **kwargs):
+        data = request.data
+        tag_objs = []
+
+        try:
+            truck = self.get_object()
+            tags = data.get('tags', None)
+            if tags is not None:
+                new_tags = tags.split(',')
+                for tag in new_tags:
+                    print(new_tags)
+                    if len(tag) > 1:
+                        new_tag = Tag.objects.get(title=tag)
+                        print(new_tag)
+                        tag_objs.append(new_tag)
+
+            truck.tags.set(tag_objs)
+            print(truck.tags)
+            truck.save()
+        except Truck.DoesNotExist:
+            raise ValidationError('Truck doesn\'t exist')
+        except Tag.DoesNotExist:
+            raise ValidationError('Tag doesn\'t exist')
+        serializer = TruckSerializer(truck, many=False, context={'request': request}, partial=True)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

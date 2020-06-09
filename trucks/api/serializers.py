@@ -330,7 +330,7 @@ class TruckSerializer(serializers.ModelSerializer):
             return rating
 
     def get_tags(self, instance):
-        tags = Truck.objects.filter(pk=instance.pk)[0].tags.all()
+        tags = Truck.objects.get(pk=instance.pk).tags.all()
         tag_titles = []
         for tag in tags:
             tag_titles.append(tag.title)
