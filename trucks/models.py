@@ -50,7 +50,7 @@ class Tag(models.Model):
 class Truck(models.Model):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
-                              default='../media/uploads/trucks/profile-pictures/truck_logo_placeholder.png')
+                              default='../media/assets/truck_logo_placeholder.png')
     description = models.CharField(
         max_length=500, blank=True, default='Sorry, this truck has no description')
     address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
