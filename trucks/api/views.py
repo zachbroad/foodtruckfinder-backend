@@ -314,3 +314,16 @@ class DashboardViewSet(ModelViewSet):
 class TagsViewSet(ModelViewSet):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
+    pagination_class = pagination.LimitOffsetPagination
+
+    def get_queryset(self):
+        qs = Tag.objects.all()
+
+        featured = self.request.query_params.get('featured', None)
+        print(featured)
+
+        if featured is not None:
+
+            qs = Tag.objects.filter(featured=featured).all()
+
+        return qs

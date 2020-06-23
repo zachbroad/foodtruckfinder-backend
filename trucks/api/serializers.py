@@ -37,7 +37,9 @@ class TagSerializer(serializers.ModelSerializer):
 
         fields = [
             'pk',
-            'title'
+            'title',
+            'featured',
+            'icon',
         ]
 
 

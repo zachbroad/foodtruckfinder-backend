@@ -36,7 +36,10 @@ TYPE_CHOICES = [
 
 
 class Tag(models.Model):
+
     title = models.CharField(null=False, blank=False, unique=True, max_length=25)
+    featured = models.BooleanField(default=False, blank=True)
+    icon = models.ImageField(default=None, null=True, blank=True, upload_to='uploads/tags/icons')
 
     class Meta:
         ordering = [
@@ -51,12 +54,10 @@ class Truck(models.Model):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/assets/truck_logo_placeholder.png')
-    description = models.CharField(
-        max_length=500, blank=True, default='Sorry, this truck has no description')
+    description = models.CharField(max_length=500, blank=True, default='Sorry, this truck has no description')
     address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
     geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
