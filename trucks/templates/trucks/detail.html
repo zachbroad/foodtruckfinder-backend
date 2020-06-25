@@ -1,13 +1,65 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
 
 
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card m-3">
 
-<h1>{{ truck.title }}</h1>
-<p>{{ truck.description }}</p>
-<img src="{{ truck.image.url }}">As</src>
+                    <div class="d-flex justify-content-between align-items-center m-3">
+                        <h1>{{ truck.title }}</h1>
+
+                        <div>
+                            {% if truck.rating %}
+                                <p>{{ truck.rating }}</p>
+                            {% else %}
+                                <p>no rating</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <img class="card-img-bottom" src="{{ truck.image.url }}"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col d-flex flex-row justify-content-between">
+                <div>
+                    <h2 class="mb-0">Reviews</h2>
+                    <small class="text-muted">{{ truck.reviews.count }} reviews</small>
+                </div>
+
+                <img src="{% static 'open-iconic-master/png/plus.png' %}" alt="" width="44" height="44">
+            </div>
+        </div>
+        {% for review in truck.reviews.all %}
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between">
+                    <span>
+                        <h5>
+                            {{ review.reviewer.first_name }}
+                            {{ review.reviewer.last_name }}
+                        <small class="font-weight-bold text-uppercase text-muted">
+                        (@{{ review.reviewer.username }})
+                        </small>
+                        </h5>
+                    </span>
+                    <span class="bg-dark p-2 text-white font-weight-bold">
+                        {{ review.rating|default_if_none:"no rating" }}
+                    </span>
+                </div>
+                <p class="card-body">
+                    {{ review.description|default_if_none:"" }}
+                </p>
+            </div>
+        {% endfor %}
+
+
+    </div>
+
 
 {% endblock %}

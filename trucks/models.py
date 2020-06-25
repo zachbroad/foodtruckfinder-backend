@@ -1,14 +1,15 @@
+import math
 import time
+
 import googlemaps
 from django.conf import settings
 from django.core import validators
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Avg
+from django.utils import timezone
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-from django.utils import timezone
-import math
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -36,7 +37,6 @@ TYPE_CHOICES = [
 
 
 class Tag(models.Model):
-
     title = models.CharField(null=False, blank=False, unique=True, max_length=25)
     featured = models.BooleanField(default=False, blank=True)
     icon = models.ImageField(default=None, null=True, blank=True, upload_to='uploads/tags/icons')
@@ -61,6 +61,14 @@ class Truck(models.Model):
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
+
+    @property
+    def rating(self):
+        rating = Review.objects.filter(truck=self).all().aggregate(Avg('rating'))['rating__avg']
+        if rating is not None:
+            return rating
+        else:
+            return None
 
     @property
     def num_favorites(self):
@@ -260,10 +268,10 @@ class Live(models.Model):
         end = self.end_time
         now = timezone.now()
         if now < end:
-            sec = (now-start).total_seconds()
+            sec = (now - start).total_seconds()
             return '{}'.format(time.strftime(f_mat, time.gmtime(sec)))
         else:
-            sec = (end-start).total_seconds()
+            sec = (end - start).total_seconds()
             return '{}'.format(time.strftime(f_mat, time.gmtime(sec)))
 
     @property

@@ -3,29 +3,40 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+    <div class="container text-left">
+        {% if all_trucks %}
+            <h3>Trucks near you</h3>
+            <p>Your location</p>
+            {% for truck in all_trucks %}
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-3">
+                            <div class="card-attr" style="text-decoration: none; color:white;">
+                                <img class="card-img-top" src="{{ truck.image.url }}"
+                                     alt="{{ truck.title }}'s image not found.">
+                            </div>
+                            <a href="{% url 'trucks:detail' truck.pk %}">
+                                <div class="card-header d-flex justify-content-between">
+                                    <h5>
+                                        {{ truck.title }}
+                                    </h5>
 
+                                    <div>
+                                        {% if truck.rating %}
+                                            <p>{{ truck.rating }}</p>
+                                        {% else %}
+                                            <p>no rating</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
 
-{% if all_trucks %}
-    <h3 style="text-align:center;">All of our currently available trucks:</h3>
-    <ul>
-        {% for truck in all_trucks %}
-        <div class="card text-white bg-dark mb-3" style="max-width: 18rem; text-decoration: none;">
-        <a href="{% url 'trucks:detail' truck.pk %}">
-            <div class="card-attr" style="text-decoration: none; color:white;">
-            <div class="card-header">{{ truck.title }}</div>
-            <div class="card-body">
-                <p class="card-text">{{ truck.get_short_description }}</p>
-                <img class="card-img-bottom" src="{{ truck.image.url }}" alt="{{ truck.title }}'s image not found.">
-            </div>
-            </div>
-        </a>
-        </div>
-    </ul>
-{% endfor %}
-
-
-{% else %}
-    <h3> Sorry, we dont have any trucks!</h3>
-{% endif %}
-
+        {% else %}
+            <h3> Sorry, we dont have any trucks!</h3>
+        {% endif %}
+    </div>
 {% endblock %}
