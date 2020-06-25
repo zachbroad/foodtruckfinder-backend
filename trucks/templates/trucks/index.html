@@ -7,9 +7,9 @@
         {% if all_trucks %}
             <h3>Trucks near you</h3>
             <p>Your location</p>
-            {% for truck in all_trucks %}
-                <div class="row">
-                    <div class="col">
+            <div class="row">
+                {% for truck in all_trucks %}
+                    <div class="col-sm-12 col-md-6 col-lg-4">
                         <div class="card mb-3">
                             <div class="card-attr" style="text-decoration: none; color:white;">
                                 <img class="card-img-top" src="{{ truck.image.url }}"
@@ -32,8 +32,8 @@
                             </a>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
 
         {% else %}
             <h3> Sorry, we dont have any trucks!</h3>
