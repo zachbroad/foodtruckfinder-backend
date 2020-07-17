@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
+    'fcm_django',
     #'djstripe',
 ]
 
@@ -65,6 +66,13 @@ INSTALLED_APPS = [
 # STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
 # STRIPE_LIVE_MODE = False  # Change to True in production
 # DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": 'FCM Django',
+        "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
+        "ONE_DEVICE_PER_USER": False,
+        "DELETE_INACTIVE_DEVICES": True,
+}
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
