@@ -55,10 +55,10 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-    #'djstripe',
+    # 'djstripe',
 ]
 
-#dj-stripe vars
+# dj-stripe vars
 # STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
 # STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
 # STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
@@ -86,9 +86,9 @@ SITE_ID = 1
 # )
 
 # TEMPLATE_DIRS = (
-# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-# Always use forward slashes, even on Windows.
-# Don't forget to use absolute paths, not relative paths.
+# # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+# # Always use forward slashes, even on Windows.
+# # Don't forget to use absolute paths, not relative paths.
 #     os.path.join(BASE_DIR, 'templates'),
 # )
 
@@ -108,7 +108,9 @@ ROOT_URLCONF = 'grubtrucks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -190,6 +192,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
