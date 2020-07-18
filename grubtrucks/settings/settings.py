@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_google_maps',
     'storages',
     # 'djstripe',
+    'fcm_django',
 ]
 
 # dj-stripe vars
@@ -65,6 +66,13 @@ INSTALLED_APPS = [
 # STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
 # STRIPE_LIVE_MODE = False  # Change to True in production
 # DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": 'FCM Django',
+        "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
+        "ONE_DEVICE_PER_USER": False,
+        "DELETE_INACTIVE_DEVICES": True,
+}
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
@@ -130,7 +138,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
