@@ -55,11 +55,11 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-    # 'djstripe',
-    'fcm_django',
+    'fcm_django'
+    #'djstripe',
 ]
 
-# dj-stripe vars
+#dj-stripe vars
 # STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
 # STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
 # STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
@@ -68,10 +68,9 @@ INSTALLED_APPS = [
 # DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint
 
 FCM_DJANGO_SETTINGS = {
-    "APP_VERBOSE_NAME": 'FCM Django',
-        "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
-        "ONE_DEVICE_PER_USER": False,
-        "DELETE_INACTIVE_DEVICES": True,
+    "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": True,
 }
 
 LOGIN_REDIRECT_URL = 'index'
@@ -94,9 +93,9 @@ SITE_ID = 1
 # )
 
 # TEMPLATE_DIRS = (
-# # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-# # Always use forward slashes, even on Windows.
-# # Don't forget to use absolute paths, not relative paths.
+# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
 #     os.path.join(BASE_DIR, 'templates'),
 # )
 
@@ -116,9 +115,7 @@ ROOT_URLCONF = 'grubtrucks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -200,9 +197,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
