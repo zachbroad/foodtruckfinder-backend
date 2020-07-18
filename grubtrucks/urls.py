@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework import routers
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
@@ -22,6 +23,7 @@ router.register(r'trucks', TruckViewSet)
 router.register(r'users', AccountViewSet)
 router.register(r'visits', VisitViewSet)
 router.register(r'lives', LiveViewSet)
+router.register(r'devices', FCMDeviceAuthorizedViewSet)
 
 api_patterns = [
     *router.urls,
