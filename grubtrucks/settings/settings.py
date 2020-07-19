@@ -4,7 +4,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
-GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\gdal300.dll'
+GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + \
+    r'env\lib\site-packages\osgeo\gdal300.dll'
 
 # Quick-start development settings - unsuitable for production
 
@@ -56,7 +57,11 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
+<<<<<<< HEAD
+    'fcm_django',
+=======
     'fcm_django'
+>>>>>>> 26a28e2e5337fac973a0378a59d6339fc2a633ee
     # 'djstripe',
 ]
 
