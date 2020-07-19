@@ -270,7 +270,7 @@ class Visit(models.Model):
 
 class Live(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
-    start_time = models.DateTimeField(auto_now_add=True, )
+    start_time = models.DateTimeField(default=timezone.now(), blank=True)
     end_time = models.DateTimeField()
 
     @property
@@ -299,6 +299,15 @@ class Live(models.Model):
     def clean(self):
         if self.end_time < self.start_time:
             raise ValidationError('Start time must be before end time')
+        if timezone.now() < self.end_time:
+            lives = Live.objects.filter((Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
+            editing = lives[0].pk == self.pk
+            if lives.exists() and not editing:
+                raise ValidationError('You are already live, or will be live during this time')
+        else:
+            raise ValidationError('Can not have end time before the start time')
+
+
         
         super(Live, self).clean()
 
