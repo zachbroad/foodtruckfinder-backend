@@ -4,8 +4,6 @@ from rest_framework.viewsets import ModelViewSet
 # Create your views here.
 from catering.api.serializers import CaterRequestSerializer
 from catering.models import CaterRequest
-from trucks.api.serializers import TruckSerializer
-from trucks.models import Truck
 
 
 class CateringViewSet(ModelViewSet):
@@ -16,23 +14,15 @@ class CateringViewSet(ModelViewSet):
     # permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        if self.action == 'list':
-            return Truck.objects.filter(available_for_catering=True).all()
-
-        return super().get_queryset()
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return TruckSerializer
-
-        return super().get_serializer_class()
+        if self.action == 'retrieve' or self.action == 'list':
+            return CaterRequest.objects.filter(truck__owner_id=self.request.user).all()
 
     def get_permissions(self):
-        if self.action == 'list' or self.action == 'create':
-            self.permission_classes = (permissions.AllowAny,)
-        elif self.action == 'destroy' or self.action == 'update':
+        if self.action == 'destroy' or self.action == 'update':
             self.permission_classes = (permissions.IsAdminUser,)
-        else:
+        if self.action == 'retrieve' or self.action == 'list':
             self.permission_classes = (permissions.IsAuthenticated,)
+        else:
+            self.permission_classes = (permissions.AllowAny,)
 
         return [permission() for permission in self.permission_classes]
