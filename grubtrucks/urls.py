@@ -27,7 +27,11 @@ router.register(r'visits', VisitViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register(r'events', EventViewSet)
+<<<<<<< HEAD
 router.register(r'catering', CateringViewSet)
+=======
+router.register(r'caters', EventViewSet)
+>>>>>>> ecaad379b3d9195396ea858502bc201696c435eb
 
 api_patterns = [
     *router.urls,

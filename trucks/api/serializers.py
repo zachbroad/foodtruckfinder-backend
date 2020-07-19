@@ -5,7 +5,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from grubtrucks.util import Base64ImageField
-from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
+from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
 
 
 class LiveSerializer(serializers.ModelSerializer):
@@ -26,7 +26,14 @@ class LiveSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if timezone.now() < data['end_time']:
+<<<<<<< HEAD
             if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'], end_time__lte=data['end_time'])) & Q(truck__id=data['truck'])).exists():
+=======
+            if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'],
+                                                                                                        end_time__lte=data[
+                                                                                                            'end_time'])) & Q(
+                    truck__id=data['truck'])).exists():
+>>>>>>> ecaad379b3d9195396ea858502bc201696c435eb
                 raise serializers.ValidationError('You are already live, or will be live during this time')
             return data
         else:
@@ -157,7 +164,7 @@ class LikeSerializer(serializers.ModelSerializer):
     liked_by = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = Like
+        model = ReviewLike
 
         read_only_fields = (
             'pk',

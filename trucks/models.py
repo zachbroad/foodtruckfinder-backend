@@ -1,5 +1,6 @@
 import math
 import time
+
 import googlemaps
 from django.conf import settings
 from django.core import validators
@@ -11,16 +12,13 @@ from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
 
 
-
 class ModelLocation(models.Model):
     class Meta:
-        abstract=True
+        abstract = True
 
     address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
     geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
 
-
-    
     def save(self, *args, **kwargs):
 
         g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
@@ -48,7 +46,6 @@ class ModelLocation(models.Model):
             pass
 
         super().save(*args, **kwargs)
-    
 
 
 WEEKDAYS = [
@@ -95,7 +92,7 @@ class Truck(ModelLocation):
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/assets/truck_logo_placeholder.png')
     description = models.CharField(max_length=500, blank=True, default='Sorry, this truck has no description')
-    
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
@@ -162,8 +159,6 @@ class Truck(ModelLocation):
     @property
     def live(self):
         return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
-
-
 
     def __str__(self):
         return self.title
@@ -248,9 +243,9 @@ class Review(models.Model):
         return self.likes.all().filter(is_liked=False)
 
 
-class Like(models.Model):
-    is_liked = models.BooleanField(null=False, blank=False)
+class ReviewLike(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    is_liked = models.BooleanField(null=False, blank=False)
     liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
 
     def __str__(self):
@@ -302,12 +297,16 @@ class Live(models.Model):
         return False
 
     def clean(self):
-        if self.end_time < timezone.now():
+        if self.end_time < self.start_time:
             raise ValidationError('Start time must be before end time')
-        elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) |
-                                  Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
-                                 Q(truck__id=self.schedule.truck.pk)).exists():
-            raise ValidationError('You are already live')
+        
+        super(Live, self).clean()
+
+        # TODO fix this
+        # elif Live.objects.filter((Q(start_time__lte=self.start_time, end_time__gte=timezone.now()) |
+        #                           Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
+        #                          Q(truck__id=self.truck.pk)).exists():
+        #     raise ValidationError('You are already live')
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
