@@ -12,6 +12,7 @@ from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, Dashboa
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
 from events.api.views import EventViewSet
+from catering.api.views import CateringViewSet
 
 router = routers.DefaultRouter()
 router.register(r'dashboard', DashboardViewSet)
@@ -26,7 +27,7 @@ router.register(r'visits', VisitViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register(r'events', EventViewSet)
-router.register(r'catering', EventViewSet)
+router.register(r'catering', CateringViewSet)
 
 api_patterns = [
     *router.urls,
