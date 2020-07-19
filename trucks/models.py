@@ -311,7 +311,3 @@ class Live(models.Model):
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
-<<<<<<< HEAD
-
-=======
->>>>>>> c729d35d40bddcd953ec65252ef0a02a1015e25b
