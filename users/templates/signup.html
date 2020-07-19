@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <h2>Create a Grubtrucks account</h2>
+                <form method="POST" class="form-group">
+                    {% csrf_token %}
+                    <div>
+                        <label>
+                            Username
+                            <input type="text" name="username" class="input-lg form-control"/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Email
+                            <input type="text" name="email" class="input-lg form-control"/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Password
+                            <input type="password" name="password" class="input-lg form-control"/>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
