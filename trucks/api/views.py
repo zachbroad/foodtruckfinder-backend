@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import ValidationError
 from rest_framework import views
-from trucks.models import Truck, Live, MenuItem, Review, Like, Visit, Tag
+from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer,\
@@ -69,15 +69,15 @@ class ReviewsViewSet(ModelViewSet):
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
         if serializer.is_valid():
-            existing_like = Like.objects.filter(liked_by=self.request.user)\
+            existing_like = ReviewLike.objects.filter(liked_by=self.request.user)\
                 .filter(review_id=pk)
             if existing_like.exists():
-                obj: Like = existing_like.first()
+                obj: ReviewLike = existing_like.first()
                 obj.is_liked = serializer.data['is_liked']
                 ls = LikeSerializer(obj)
                 return Response(ls.data)
             else:
-                l = Like.objects.create(**serializer.data, liked_by=self.request.user, review_id=pk)
+                l = ReviewLike.objects.create(**serializer.data, liked_by=self.request.user, review_id=pk)
                 ls = LikeSerializer(l)
                 return Response(ls.data)
 

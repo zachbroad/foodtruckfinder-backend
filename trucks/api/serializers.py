@@ -5,7 +5,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from grubtrucks.util import Base64ImageField
-from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
+from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
 
 
 class LiveSerializer(serializers.ModelSerializer):
@@ -160,7 +160,7 @@ class LikeSerializer(serializers.ModelSerializer):
     liked_by = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = Like
+        model = ReviewLike
 
         read_only_fields = (
             'pk',

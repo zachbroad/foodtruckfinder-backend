@@ -1,8 +1,10 @@
 import json
+
 from django.contrib import admin
-from django_google_maps import widgets as map_widgets
 from django_google_maps import fields as map_fields
-from .models import Truck, MenuItem, Review, Like, Visit, Tag, Live
+from django_google_maps import widgets as map_widgets
+
+from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live
 
 
 class TruckAdmin(admin.ModelAdmin):
@@ -25,27 +27,151 @@ class TruckAdmin(admin.ModelAdmin):
         }
     }
 
+    list_display = (
+        'title',
+        'owner',
+        'address',
+        'phone',
+        'website',
+        'available_for_catering'
+    )
+
+    list_filter = (
+        'available_for_catering',
+    )
+
+    search_fields = (
+        'title',
+        'owner',
+        'address',
+        'phone',
+        'website',
+    )
+
     model = Truck
 
 
 class TagAdmin(admin.ModelAdmin):
     model = Tag
 
+    list_display = (
+        'title',
+        'featured',
+        'icon',
+    )
+
+    list_filter = (
+        'featured',
+    )
+
+    sortable_by = (
+        'title',
+        'featured',
+    )
+
 
 class MenuItemAdmin(admin.ModelAdmin):
     model = MenuItem
 
+    list_display = (
+        'truck',
+        'name',
+        'description',
+        'price',
+        'featured',
+    )
+
+    list_filter = (
+        'truck',
+        'featured',
+    )
+
+    search_fields = (
+        'truck',
+        'name',
+        'description',
+    )
+
+    sortable_by = (
+        'price',
+        'featured',
+    )
+
 
 class ReviewAdmin(admin.ModelAdmin):
-    model = Review 
+    model = Review
+
+    list_display = (
+        'truck',
+        'reviewer',
+        'rating',
+        'description',
+        'post_created',
+        'post_edited',
+    )
 
 
-class LikeAdmin(admin.ModelAdmin):
-    model = Like
+class ReviewLikeAdmin(admin.ModelAdmin):
+    model = ReviewLike
+
+    list_display = (
+        'truck',
+        'liked_by',
+        'is_liked',
+    )
+
+    search_fields = (
+        'liked_by',
+        "truck",
+    )
+
+    list_filter = (
+        'is_liked',
+    )
+
+    def truck(self, obj):
+        return obj.review.truck
 
 
 class VisitAdmin(admin.ModelAdmin):
     model = Visit
+
+    list_display = (
+        'truck',
+        'visitor',
+        'visited',
+    )
+
+    list_filter = (
+        'visited',
+    )
+
+    search_fields = (
+        'visitor',
+    )
+
+    sortable_by = (
+        'truck',
+        'visited',
+    )
+
+
+class LiveAdmin(admin.ModelAdmin):
+    model = Live
+
+    list_display = (
+        'truck',
+        'start_time',
+        'end_time',
+        'live',
+        'live_time'
+    )
+
+    search_fields = (
+        'truck',
+    )
+
+    date_hierarchy = 'start_time'
 
 
 admin.site.register(Tag, TagAdmin)
@@ -53,5 +179,5 @@ admin.site.register(Visit, VisitAdmin)
 admin.site.register(Truck, TruckAdmin)
 admin.site.register(MenuItem, MenuItemAdmin)
 admin.site.register(Review, ReviewAdmin)
-admin.site.register(Like, LikeAdmin)
-admin.site.register(Live)
+admin.site.register(ReviewLike, ReviewLikeAdmin)
+admin.site.register(Live, LiveAdmin)

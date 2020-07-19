@@ -46,11 +46,11 @@ class MyUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
+    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    phone = PhoneField(default='555-555-5555')
+    phone = PhoneField(blank=True, null=True, default=None)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
@@ -99,8 +99,11 @@ class FavoriteTruck(models.Model):
 
 class SearchTerm(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
-    term = models.CharField(max_length=50, blank=False, null=False)
-    created = models.DateTimeField(auto_now_add=True)
+    term = models.CharField(max_length=128, blank=False, null=False)
+    searched_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '"{}" searched by {} on {}'.format(self.term, self.user, self.searched_on)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -113,5 +116,7 @@ class Feedback(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='feedback')
     description = models.CharField(max_length=999, blank=False, null=False)
     image = models.ImageField(blank=True, null=True)
-    checked = models.BooleanField(blank=True, default=False)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('created',)
