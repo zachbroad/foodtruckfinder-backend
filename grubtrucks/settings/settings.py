@@ -4,7 +4,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
-GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\gdal300.dll'
+GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + \
+    r'env\lib\site-packages\osgeo\gdal300.dll'
 
 # Quick-start development settings - unsuitable for production
 
@@ -55,11 +56,11 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-    'fcm_django'
-    #'djstripe',
+    'fcm_django',
+    # 'djstripe',
 ]
 
-#dj-stripe vars
+# dj-stripe vars
 # STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
 # STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
 # STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
@@ -135,7 +136,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
