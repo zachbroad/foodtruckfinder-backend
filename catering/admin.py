@@ -20,6 +20,10 @@ class CaterRequestAdmin(admin.ModelAdmin):
         'duration',
     )
 
+    list_filter = (
+        'when',
+    )
+
     date_hierarchy = 'when'
 
     def when(self, obj):
