@@ -1,6 +1,5 @@
 import math
 import time
-
 import googlemaps
 from django.conf import settings
 from django.core import validators
@@ -10,6 +9,47 @@ from django.utils import timezone
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
+
+
+
+class ModelLocation(models.Model):
+    class Meta:
+        abstract=True
+
+    address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
+    geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
+
+
+    
+    def save(self, *args, **kwargs):
+
+        g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+
+        # Check if address not given when geolocation is
+        if self.address is None and self.geolocation is not None:
+            points = self.geolocation.split(',')
+            lat = points[0]
+            lng = points[1]
+            resp = g_maps.reverse_geocode((float(lat), float(lng)))
+            address_components = resp[0]['address_components']
+            house_number = address_components[0]['long_name']
+            street_name = address_components[1]['long_name']
+            city_name = address_components[2]['long_name']
+            state_abbr = address_components[4]['short_name']
+            country_abbr = address_components[5]['short_name']
+            self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
+
+        try:
+            if self.geolocation is None:
+                resp = g_maps.geocode(self.address)
+                location = resp[0]['geometry']['location']
+                self.geolocation = "{},{}".format(location['lat'], location['lng'])
+        except Exception:
+            pass
+
+        super().save(*args, **kwargs)
+    
+
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -50,18 +90,20 @@ class Tag(models.Model):
         return self.title
 
 
-class Truck(models.Model):
+class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/assets/truck_logo_placeholder.png')
     description = models.CharField(max_length=500, blank=True, default='Sorry, this truck has no description')
-    address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
-    geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
+    
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
     available_for_catering = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
 
     @property
     def rating(self):
@@ -121,33 +163,7 @@ class Truck(models.Model):
     def live(self):
         return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
 
-    def save(self, *args, **kwargs):
 
-        g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-
-        # Check if address not given when geolocation is
-        if self.address is None and self.geolocation is not None:
-            points = self.geolocation.split(',')
-            lat = points[0]
-            lng = points[1]
-            resp = g_maps.reverse_geocode((float(lat), float(lng)))
-            address_components = resp[0]['address_components']
-            house_number = address_components[0]['long_name']
-            street_name = address_components[1]['long_name']
-            city_name = address_components[2]['long_name']
-            state_abbr = address_components[4]['short_name']
-            country_abbr = address_components[5]['short_name']
-            self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
-
-        try:
-            if self.geolocation is None:
-                resp = g_maps.geocode(self.address)
-                location = resp[0]['geometry']['location']
-                self.geolocation = "{},{}".format(location['lat'], location['lng'])
-        except Exception:
-            pass
-
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -290,8 +306,12 @@ class Live(models.Model):
             raise ValidationError('Start time must be before end time')
         elif Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) |
                                   Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
-                                 Q(truck__id=self.truck.pk)).exists():
+                                 Q(truck__id=self.schedule.truck.pk)).exists():
             raise ValidationError('You are already live')
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
+<<<<<<< HEAD
+
+=======
+>>>>>>> c729d35d40bddcd953ec65252ef0a02a1015e25b

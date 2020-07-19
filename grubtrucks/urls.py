@@ -6,13 +6,12 @@ from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework import routers
-
-from catering.views import CateringViewSet
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
+from events.api.views import EventViewSet
 
 router = routers.DefaultRouter()
 router.register(r'dashboard', DashboardViewSet)
@@ -26,7 +25,8 @@ router.register(r'users', AccountViewSet)
 router.register(r'visits', VisitViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
-router.register(r'caters', CateringViewSet)
+router.register(r'events', EventViewSet)
+router.register(r'catering', EventViewSet)
 
 api_patterns = [
     *router.urls,
