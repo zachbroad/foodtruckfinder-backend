@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
     'events.apps.EventsConfig',
+    'catering.apps.CateringConfig',
 
     # 3rd party
     'rest_framework',
@@ -56,7 +57,11 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
+<<<<<<< HEAD
     'fcm_django',
+=======
+    'fcm_django'
+>>>>>>> 26a28e2e5337fac973a0378a59d6339fc2a633ee
     # 'djstripe',
 ]
 
@@ -116,7 +121,9 @@ ROOT_URLCONF = 'grubtrucks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
