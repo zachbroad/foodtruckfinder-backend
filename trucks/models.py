@@ -294,3 +294,5 @@ class Live(models.Model):
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
+
+

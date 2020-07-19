@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
     'events.apps.EventsConfig',
+    'catering.apps.CateringConfig',
 
     # 3rd party
     'rest_framework',
