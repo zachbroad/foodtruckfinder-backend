@@ -57,12 +57,8 @@ INSTALLED_APPS = [
     'phone_field',
     'django_google_maps',
     'storages',
-<<<<<<< HEAD
-    'fcm_django'
-    # 'djstripe',
-=======
     'fcm_django',
->>>>>>> c729d35d40bddcd953ec65252ef0a02a1015e25b
+    # 'djstripe',
 ]
 
 # dj-stripe vars
