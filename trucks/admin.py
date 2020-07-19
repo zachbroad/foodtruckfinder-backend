@@ -110,6 +110,22 @@ class ReviewAdmin(admin.ModelAdmin):
         'post_edited',
     )
 
+    list_filter = (
+        'post_created',
+        'rating',
+    )
+
+    sortable_by = (
+        'post_created',
+        'rating',
+    )
+
+    search_fields = (
+        'description',
+        'reviewer',
+        'truck',
+    )
+
 
 class ReviewLikeAdmin(admin.ModelAdmin):
     model = ReviewLike
