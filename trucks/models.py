@@ -61,6 +61,7 @@ class Truck(models.Model):
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
+    available_for_catering = models.BooleanField(default=False)
 
     @property
     def rating(self):
@@ -294,5 +295,3 @@ class Live(models.Model):
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
-
-

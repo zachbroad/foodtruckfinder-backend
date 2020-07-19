@@ -1,7 +1,9 @@
-from django.db.models import Avg
-from rest_framework import serializers
 from datetime import timezone
+
+from django.db.models import Avg
 from django.db.models import Q
+from rest_framework import serializers
+
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, Like, Visit, Tag, Live
 
@@ -24,7 +26,10 @@ class LiveSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if timezone.now() < data['end_time']:
-            if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'], end_time__lte=data['end_time'])) & Q(truck__id=data['truck'])).exists():
+            if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'],
+                                                                                                        end_time__lte=data[
+                                                                                                            'end_time'])) & Q(
+                    truck__id=data['truck'])).exists():
                 raise serializers.ValidationError('You are already live')
             return data
         else:
@@ -257,6 +262,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
+            'available_for_catering',
         ]
         read_only_fields = ['pk', 'live']
 
@@ -291,7 +297,6 @@ class TruckSerializer(serializers.ModelSerializer):
     favorites = serializers.IntegerField(source='num_favorites')
     tags = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Truck
         fields = [
@@ -311,6 +316,7 @@ class TruckSerializer(serializers.ModelSerializer):
             'reviews',
             'favorites',
             'live',
+            'available_for_catering',
         ]
         read_only_fields = ['pk', 'rating', 'distance', 'live']
 

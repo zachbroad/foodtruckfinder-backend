@@ -12,6 +12,8 @@ class CaterRequestSerializer(ModelSerializer):
             'email',
             'details',
             'truck',
+
+            'when',
             'duration',
         )
 
