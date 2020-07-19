@@ -25,7 +25,7 @@ class LiveSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if timezone.now() < data['end_time']:
             if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'], end_time__lte=data['end_time'])) & Q(truck__id=data['truck'])).exists():
-                raise serializers.ValidationError('You are already live')
+                raise serializers.ValidationError('You are already live, or will be live during this time')
             return data
         else:
             raise serializers.ValidationError('Can not have end time before the start time')
