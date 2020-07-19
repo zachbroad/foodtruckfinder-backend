@@ -12,8 +12,9 @@ class CaterRequestAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name',
         'email',
+        'details',
+        'name',
         'truck',
         'when',
         'duration',
