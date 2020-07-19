@@ -100,6 +100,7 @@ class Truck(ModelLocation):
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
+    available_for_catering = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -310,4 +311,7 @@ class Live(models.Model):
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
+<<<<<<< HEAD
 
+=======
+>>>>>>> c729d35d40bddcd953ec65252ef0a02a1015e25b

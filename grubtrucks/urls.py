@@ -26,6 +26,7 @@ router.register(r'visits', VisitViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
 router.register(r'events', EventViewSet)
+router.register(r'catering', EventViewSet)
 
 api_patterns = [
     *router.urls,
