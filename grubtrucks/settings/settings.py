@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django_google_maps',
     'storages',
     'fcm_django',
+    'crispy_forms',
     # 'djstripe',
 ]
 
