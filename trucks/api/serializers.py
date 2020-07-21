@@ -25,15 +25,18 @@ class LiveSerializer(serializers.ModelSerializer):
         return obj.pk
 
     def validate(self, data):
+        print(self.initial_data)
         if timezone.now() < data['end_time']:
-            if Live.objects.filter((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) | Q(start_time__lte=data['end_time'],
-                                                                                                        end_time__lte=data[
-                                                                                                            'end_time'])) & Q(
-                    truck__id=data['truck'])).exists():
-                raise serializers.ValidationError('You are already live, or will be live during this time')
+            lives = Live.objects.filter(
+                (Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
+            editing = lives[0].pk == self.pk
+            if lives.exists() and not editing:
+                raise serializers.ValidationError(
+                    'You are already live, or will be live during this time')
             return data
         else:
-            raise serializers.ValidationError('Can not have end time before the start time')
+            raise serializers.ValidationError(
+                'Can not have end time before the start time')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -333,7 +336,8 @@ class TruckSerializer(serializers.ModelSerializer):
         return None
 
     def get_rating(self, instance):
-        rating = Review.objects.filter(truck=instance).all().aggregate(Avg('rating'))['rating__avg']
+        rating = Review.objects.filter(truck=instance).all(
+        ).aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
             return rating
 

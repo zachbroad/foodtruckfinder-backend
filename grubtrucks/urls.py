@@ -12,6 +12,7 @@ from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, Dashboa
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
 from events.api.views import EventViewSet
+from catering.api.views import CateringViewSet
 
 router = routers.DefaultRouter()
 router.register(r'dashboard', DashboardViewSet)
