@@ -6,13 +6,13 @@ from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework import routers
+
+from events.api.views import EventViewSet
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
-from events.api.views import EventViewSet
-from catering.api.views import CateringViewSet
 
 router = routers.DefaultRouter()
 router.register(r'dashboard', DashboardViewSet)
@@ -38,28 +38,29 @@ api_patterns = [
 ]
 
 urlpatterns = [
-    # Test site
-    path('', index, name='index'),
-    path('trucks/', include('trucks.urls'), name='trucks-index'),
+                  # Test site
+                  path('', index, name='index'),
 
-    # Account
-    path('accounts/', include('allauth.urls', )),
-    path('users/', include('users.urls')),
-    path('users/', include('django.contrib.auth.urls')),
+                  # Account
+                  path('accounts/', include('allauth.urls')),
+                  path('users/', include('users.urls')),
+                  path('users/', include('django.contrib.auth.urls')),
 
-    # Admin
-    path('admin/', admin.site.urls),
+                  path('trucks/', include(('trucks.urls', 'trucks'), namespace='trucks')),
 
-    # Api
-    path('api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
+                  # Admin
+                  path('admin/', admin.site.urls),
 
-    # Auth
-    path('api-auth/', include('rest_framework.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
-    path('login-token/', CustomAuthToken.as_view(), name='login-token'),
-    path('validate-token/', ValidateToken.as_view(), name='validate-token'),
-    re_path('^static/(?P<path>.*)$', serve,
-          {'document_root': settings.STATIC_ROOT}),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  # Api
+                  # path('api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
+
+                  # Auth
+                  path('api-auth/', include('rest_framework.urls')),
+                  path('rest-auth/', include('rest_auth.urls')),
+                  path('rest-auth/registration/', include('rest_auth.registration.urls')),
+                  path('rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
+                  path('login-token/', CustomAuthToken.as_view(), name='login-token'),
+                  path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+                  re_path('^static/(?P<path>.*)$', serve,
+                          {'document_root': settings.STATIC_ROOT}),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

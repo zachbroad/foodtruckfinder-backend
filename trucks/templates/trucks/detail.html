@@ -44,7 +44,9 @@
                             {{ review.reviewer.first_name }}
                             {{ review.reviewer.last_name }}
                         <small class="font-weight-bold text-uppercase text-muted">
+                            <a href="{% url 'users:detail' review.reviewer.username %}">
                         (@{{ review.reviewer.username }})
+                            </a>
                         </small>
                         </h5>
                     </span>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Viewing {{ user.username }}'s profile
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>{{ user.username }}'s profile</h2>
+                <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                <p>Member for {{ user.date_joined|timesince }} days</p>
+                <p>Last active {{ user.last_login|date }}</p>
+
+                <ul>
+                    {% for truck in user.trucks.all %}
+                        <li>
+                            <a href="{% url 'trucks:detail' truck.pk %}">{{ truck.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

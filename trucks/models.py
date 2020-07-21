@@ -6,10 +6,10 @@ from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.db.models import Q, Avg
-from django.utils import timezone
 from django_google_maps import fields as map_fields
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
+from django.utils import timezone
 
 
 class ModelLocation(models.Model):
@@ -270,7 +270,7 @@ class Visit(models.Model):
 
 class Live(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
-    start_time = models.DateTimeField(default=timezone.now(), blank=True)
+    start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField()
 
     @property
@@ -307,8 +307,6 @@ class Live(models.Model):
         else:
             raise ValidationError('Can not have end time before the start time')
 
-
-        
         super(Live, self).clean()
 
         # TODO fix this
