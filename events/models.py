@@ -16,7 +16,7 @@ class Event(ModelLocation):
     end_time = models.DateTimeField()
 
 
-    cancelledDate = models.DateField('Cancelled Date', blank=True, null=True)
+    cancelled_date = models.DateField('Cancelled Date', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
