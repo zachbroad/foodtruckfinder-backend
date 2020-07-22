@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from fcm_django.models import FCMDevice
 
 
 class Announcement(models.Model):
@@ -10,6 +13,14 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@receiver(post_save, sender=Announcement)
+def notify_on_announcement_creation(sender, instance, created, **kwargs):
+    if created:
+        devices = FCMDevice.objects.all()
+        devices.send_message(data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high"},
+                             title=instance.title, body=instance.description, icon="icon_notif")
 
 
 class AnnouncementImage(models.Model):
