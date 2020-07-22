@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('start_time', models.TimeField(verbose_name='Start Time')),
                 ('end_time', models.TimeField(verbose_name='End Time')),
                 ('start_date', models.DateField(verbose_name='Start Date')),
-                ('endDate', models.DateField(verbose_name='End Date')),
+                ('end_date', models.DateField(verbose_name='End Date')),
                 ('cancelledDate', models.DateField(blank=True, null=True, verbose_name='Cancelled Date')),
             ],
         ),

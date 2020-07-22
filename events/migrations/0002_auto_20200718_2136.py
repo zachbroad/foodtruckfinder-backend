@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='event',
-            name='endDate',
+            name='end_date',
         ),
         migrations.RemoveField(
             model_name='event',
