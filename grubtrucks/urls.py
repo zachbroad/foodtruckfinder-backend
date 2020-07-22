@@ -7,6 +7,8 @@ from django.urls import path, include, re_path
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework import routers
 
+from announcements.api.views import AnnouncementViewSet
+from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
@@ -15,19 +17,20 @@ from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, P
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
+router.register(r'announcements', AnnouncementViewSet)
+router.register(r'caters', CateringViewSet)
 router.register(r'dashboard', DashboardViewSet)
+router.register(r'devices', FCMDeviceAuthorizedViewSet)
+router.register(r'events', EventViewSet)
 router.register(r'favorites', FavoritesViewSet)
 router.register(r'feedback', FeedbackViewSet)
+router.register(r'lives', LiveViewSet)
 router.register(r'menu-items', MenuItemViewSet)
 router.register(r'reviews', ReviewsViewSet)
 router.register(r'tags', TagsViewSet)
 router.register(r'trucks', TruckViewSet)
 router.register(r'users', AccountViewSet)
 router.register(r'visits', VisitViewSet)
-router.register(r'lives', LiveViewSet)
-router.register(r'devices', FCMDeviceAuthorizedViewSet)
-router.register(r'events', EventViewSet)
-router.register(r'caters', EventViewSet)
 
 api_patterns = [
     *router.urls,
@@ -52,7 +55,7 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
 
                   # Api
-                  # path('api/', include((api_patterns, '<int:pk>'), namespace='api-trucks')),
+                  path('api/', include((api_patterns, '<int:pk>'), namespace='api')),
 
                   # Auth
                   path('api-auth/', include('rest_framework.urls')),

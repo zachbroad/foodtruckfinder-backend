@@ -40,25 +40,26 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # local
+    'announcements.apps.AnnouncementsConfig',
+    'catering.apps.CateringConfig',
+    'events.apps.EventsConfig',
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
-    'events.apps.EventsConfig',
-    'catering.apps.CateringConfig',
 
     # 3rd party
-    'rest_framework',
-    'rest_framework.authtoken',
-    'django_filters',
-    'rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'rest_auth.registration',
-    'phone_field',
-    'django_google_maps',
-    'storages',
-    'fcm_django',
     'crispy_forms',
+    'django_filters',
+    'django_google_maps',
+    'fcm_django',
+    'phone_field',
+    'rest_auth',
+    'rest_auth.registration',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'storages',
     # 'djstripe',
 ]
 
@@ -88,7 +89,6 @@ AUTHENTICATION_BACKENDS = [
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
-
 
 # TEMPLATE_DIRS = (
 # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

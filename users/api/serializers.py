@@ -36,7 +36,7 @@ class SearchTermSerializer(serializers.ModelSerializer):
         fields = (
             'user',
             'term',
-            'created'
+            'searched_on'
         )
 
 
