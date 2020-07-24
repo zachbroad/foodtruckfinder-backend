@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block title %}
     Signup
@@ -7,31 +8,32 @@
 {% block content %}
     <div class="container py-5">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-6 col-md-8 col-sm-12 mx-auto card p-3">
                 <h2>Create a Grubtrucks account</h2>
                 <form method="POST" class="form-group">
                     {% csrf_token %}
-                    <div>
-                        <label>
-                            Username
-                            <input type="text" name="username" class="input-lg form-control"/>
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Email
-                            <input type="text" name="email" class="input-lg form-control"/>
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            Password
-                            <input type="password" name="password" class="input-lg form-control"/>
-                        </label>
-                    </div>
+                    {{ form|crispy }}
+{#                    <div>#}
+{#                        <label>#}
+{#                            Username#}
+{#                            <input type="text" name="username" class="input-lg form-control"/>#}
+{#                        </label>#}
+{#                    </div>#}
+{#                    <div>#}
+{#                        <label>#}
+{#                            Email#}
+{#                            <input type="text" name="email" class="input-lg form-control"/>#}
+{#                        </label>#}
+{#                    </div>#}
+{#                    <div>#}
+{#                        <label>#}
+{#                            Password#}
+{#                            <input type="password" name="password" class="input-lg form-control"/>#}
+{#                        </label>#}
+{#                    </div>#}
 
-                    <button type="submit" class="btn btn-primary">Register</button>
-                    <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+                    <button type="submit" class="btn btn-success">Register</button>
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-secondary">Login to an existing account</a>
                 </form>
             </div>
         </div>

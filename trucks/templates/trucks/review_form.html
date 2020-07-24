@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+    New review for {{ object.truck.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>
+                    New review for <a href="{% url 'trucks:detail' truck.pk %}">{{ truck.title }}</a>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-outline-primary">Submit review</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

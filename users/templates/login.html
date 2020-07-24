@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block title %}
     Login
@@ -7,34 +8,14 @@
 {% block content %}
     <div class="container py-5">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-6 col-md-8 col-sm-12 mx-auto card p-3">
                 <h2>Login</h2>
                 <form method="POST" class="form-group">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <div>
-
-                            <label>
-                                Username
-                                <input type="text" name="login" class="input-lg form-control"/>
-                            </label>
-                        </div>
-                        <div>
-                            <label>
-                                Password
-                                <input type="password" name="password" class="input-lg form-control"/>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-check">
-                        <label>
-                            <input type="checkbox" name="remember" class="form-check-input"/>
-                            Remember me
-                        </label>
-                    </div>
+                    {{ form|crispy }}
 
                     <button type="submit" class="btn btn-primary">Login</button>
-                    <a href="{% url 'signup' %}" class="btn btn-secondary">Create account</a>
+                    <a href="{% url 'users:signup' %}" class="btn btn-secondary">Create account</a>
                 </form>
             </div>
         </div>

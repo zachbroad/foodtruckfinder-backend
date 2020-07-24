@@ -21,7 +21,7 @@ class AnnouncementImageSerializer(serializers.ModelSerializer):
 
 
 class AnnouncementSerializer(ModelSerializer):
-    images = AnnouncementImageSerializer(many=True)
+    images = AnnouncementImageSerializer(many=True, required=False, allow_null=True)
 
     class Meta:
         model = Announcement

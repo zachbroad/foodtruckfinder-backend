@@ -49,7 +49,7 @@ urlpatterns = [
                   path('users/', include('users.urls')),
                   path('users/', include('django.contrib.auth.urls')),
 
-                  path('trucks/', include(('trucks.urls', 'trucks'), namespace='trucks')),
+                  path('trucks/', include('trucks.urls')),
 
                   # Admin
                   path('admin/', admin.site.urls),
