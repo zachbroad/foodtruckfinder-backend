@@ -4,10 +4,11 @@ from catering.models import CaterRequest
 
 
 class CaterRequestSerializer(ModelSerializer):
-
     class Meta:
         model = CaterRequest
         fields = (
+            'id',
+
             'name',
             'email',
             'details',
@@ -16,4 +17,3 @@ class CaterRequestSerializer(ModelSerializer):
             'when',
             'duration',
         )
-

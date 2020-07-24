@@ -25,4 +25,4 @@ class CateringViewSet(ModelViewSet):
         else:
             self.permission_classes = (permissions.AllowAny,)
 
-        return [permission() for permission in self.permission_classes]
+        return super().get_permissions()

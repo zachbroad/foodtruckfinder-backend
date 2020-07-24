@@ -26,6 +26,7 @@ class AnnouncementSerializer(ModelSerializer):
     class Meta:
         model = Announcement
         fields = [
+            'id',
             'title',
             'description',
             'posted_on',
