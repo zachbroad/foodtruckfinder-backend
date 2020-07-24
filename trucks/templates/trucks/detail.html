@@ -31,7 +31,7 @@
                     <small class="text-muted">{{ truck.reviews.count }} reviews</small>
                 </div>
 
-                <a href="">
+                <a href="{% url 'trucks:new-review' truck.id %}">
                     <img src="{% static 'open-iconic-master/svg/plus.svg' %}" alt="" width="44" height="44">
                 </a>
             </div>

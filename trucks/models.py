@@ -175,10 +175,10 @@ class Menu(models.Model):
 
 class Review(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(verbose_name='truck_rating',validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
+    description = models.TextField(max_length=2500, blank=True, null=True)
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
-    rating = models.IntegerField(verbose_name='truck_rating',
-                                 validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
-    description = models.CharField(max_length=500, blank=True, null=True)
+
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
 
