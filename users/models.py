@@ -58,18 +58,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    @property
-    def favorites(self):
-        return self.favorite_trucks.all()
-
-    @property
-    def search_history(self):
-        return self.search_terms.all()
-
-    @property
-    def trucks(self):
-        return Truck.objects.filter(owner=self).all()
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
@@ -78,11 +66,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    @property
+    def favorites(self):
+        return self.favorite_trucks.all()
+
+    @property
+    def is_truck_owner(self):
+        return Truck.objects.filter(owner=self).exists()
+
+    @property
+    def trucks(self):
+        return Truck.objects.filter(owner=self).all()
+
+    @property
+    def search_history(self):
+        return self.search_terms.all()
+
     def has_perm(self, perm, obj=None):
         return self.is_superuser
 
     def had_module_perms(self, app_label):
         return True
+
 
 
 class FavoriteTruck(models.Model):

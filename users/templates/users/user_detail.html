@@ -7,21 +7,35 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col">
-                <h2>{{ user.username }}'s profile</h2>
-                <h4>{{ user.first_name }} {{ user.last_name }}</h4>
-                <p>Member for {{ user.date_joined|timesince }} days</p>
-                <p>Last active {{ user.last_login|date }}</p>
+            <div class="col-sm-12 col-md-6 col-lg-5 m-2 p-3 card">
+                <div class="d-flex justify-content-between align-content-center align-items-center">
+                    <div class="align-self-start">
+                        <h2 class="p-0 m-0">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h2>
+                        <h4 class="text-muted">@{{ user.username }}</h4>
+                    </div>
 
-                <ul>
-                    {% for truck in user.trucks.all %}
-                        <li>
-                            <a href="{% url 'trucks:detail' truck.pk %}">{{ truck.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                    <div class="text-right">
+                        <p class="m-0 p-0">Member for {{ user.date_joined|timesince }} days</p>
+                        <p class="m-0 p-0">Last active {{ user.last_login|date }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    {% if user.is_truck_owner|capfirst %}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3>{{ user.first_name|capfirst }}'s trucks</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for truck in user.trucks.all %}
+                    {% include 'trucks/truck_card.html' with truck=truck %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
