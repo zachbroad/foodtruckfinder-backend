@@ -40,6 +40,15 @@ class ReviewCreate(generic.CreateView):
         context['truck'] = Truck.objects.filter(id=self.kwargs.get('truck_id')).first()
         return context
 
+    def form_valid(self, form):
+        truck = Truck.objects.filter(id=self.kwargs.get('truck_id')).first()
+        reviewer = self.request.user
+
+        form.instance.truck = truck
+        form.instance.reviewer = reviewer
+
+        return super(ReviewCreate, self).form_valid(form)
+
 
 from django.views import View
 
