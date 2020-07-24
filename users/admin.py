@@ -102,3 +102,4 @@ admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(FavoriteTruck, FavoriteTruckAdmin)
 admin.site.register(SearchTerm, SearchTermAdmin)
 admin.site.register(User, UserAdmin)
+

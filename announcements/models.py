@@ -11,8 +11,6 @@ class Announcement(models.Model):
     posted_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
 
-    external_link = models.URLField()
-
     class Meta:
         ordering = ('-posted_on',)
 

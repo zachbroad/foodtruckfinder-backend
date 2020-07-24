@@ -16,6 +16,11 @@ class AnnouncementAdmin(admin.ModelAdmin):
         'edited_on',
     ]
 
+    search_fields = [
+        'title',
+        'description',
+    ]
+
     sortable_by = [
         'posted_on',
         'edited_on',

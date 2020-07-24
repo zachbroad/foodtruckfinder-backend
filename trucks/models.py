@@ -1,52 +1,15 @@
 import math
 import time
 
-import googlemaps
 from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.db.models import Q, Avg
-from django_google_maps import fields as map_fields
+from django.utils import timezone
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-from django.utils import timezone
 
-
-class ModelLocation(models.Model):
-    class Meta:
-        abstract = True
-
-    address = map_fields.AddressField(max_length=200, blank=True, null=True, verbose_name='address')
-    geolocation = map_fields.GeoLocationField(max_length=100, blank=True, null=True, verbose_name='geolocation')
-
-    def save(self, *args, **kwargs):
-
-        g_maps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-
-        # Check if address not given when geolocation is
-        if self.address is None and self.geolocation is not None:
-            points = self.geolocation.split(',')
-            lat = points[0]
-            lng = points[1]
-            resp = g_maps.reverse_geocode((float(lat), float(lng)))
-            address_components = resp[0]['address_components']
-            house_number = address_components[0]['long_name']
-            street_name = address_components[1]['long_name']
-            city_name = address_components[2]['long_name']
-            state_abbr = address_components[4]['short_name']
-            country_abbr = address_components[5]['short_name']
-            self.address = "{} {}, {}, {}, {}".format(house_number, street_name, city_name, state_abbr, country_abbr)
-
-        try:
-            if self.geolocation is None:
-                resp = g_maps.geocode(self.address)
-                location = resp[0]['geometry']['location']
-                self.geolocation = "{},{}".format(location['lat'], location['lng'])
-        except Exception:
-            pass
-
-        super().save(*args, **kwargs)
-
+from util.models import ModelLocation
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -91,7 +54,7 @@ class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/assets/truck_logo_placeholder.png')
-    description = models.CharField(max_length=500, blank=True, default='Sorry, this truck has no description')
+    description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')

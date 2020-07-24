@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
+    'util.apps.UtilConfig',
 
     # 3rd party
     'allauth',
