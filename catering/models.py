@@ -14,7 +14,7 @@ class CaterRequest(models.Model):
     duration = models.FloatField()
 
     class Meta:
-        ordering = ('when',)
+        ordering = ('-when',)
 
     def __str__(self):
         return 'Cater request by {} for truck {} at {} for {} hours'.format(self.name, self.truck, self.when, self.duration)

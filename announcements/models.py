@@ -12,7 +12,7 @@ class Announcement(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('posted_on',)
+        ordering = ('-posted_on',)
 
     def __str__(self):
         return self.title
