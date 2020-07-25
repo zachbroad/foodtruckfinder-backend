@@ -25,7 +25,7 @@ class Event(ModelLocation):
 
 class CancelledEventManager(models.Manager):
     def get_query_set(self):
-        return self.filter(cancelledDate__isnull=False)
+        return self.filter(cancelled_date__isnull=False)
 
 
 class CancelledEvent(Event):
