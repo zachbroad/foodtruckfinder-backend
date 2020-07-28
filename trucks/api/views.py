@@ -221,16 +221,12 @@ class TruckViewSet(ModelViewSet):
             truck = self.get_object()
             tags = data.get('tags', None)
             if tags is not None:
-                new_tags = tags.split(',')
-                for tag in new_tags:
-                    print(new_tags)
+                for tag in tags:
                     if len(tag) > 1:
-                        new_tag = Tag.objects.get(title=tag)
-                        print(new_tag)
+                        new_tag = Tag.objects.get(title=tag['pk'])
                         tag_objs.append(new_tag)
 
             truck.tags.set(tag_objs)
-            print(truck.tags)
             truck.save()
         except Truck.DoesNotExist:
             raise ValidationError('Truck doesn\'t exist')

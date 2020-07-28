@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
 GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + \
-                    r'env\lib\site-packages\osgeo\gdal300.dll'
+    r'env\lib\site-packages\osgeo\gdal300.dll'
 
 # Quick-start development settings - unsuitable for production
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
     'util.apps.UtilConfig',
+    'notifications.apps.NotificationsConfig',
 
     # 3rd party
     'allauth',

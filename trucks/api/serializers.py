@@ -187,9 +187,7 @@ class ReviewTruckSerializer(serializers.ModelSerializer):
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):
-    reviewer = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    reviewer = serializers.CurrentUserDefault()
 
     class Meta:
         model = Review
@@ -201,6 +199,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
             'description',
         ]
 
+    
 
 class ReviewSerializer(serializers.ModelSerializer):
     class BasicAccountSerializer(serializers.ModelSerializer):

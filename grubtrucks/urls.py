@@ -15,9 +15,11 @@ from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, Dashboa
     TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
 from users.api.views import CustomAuthToken, ValidateToken
+from notifications.api.views import NotificationViewSet
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
+router.register(r'notifications', NotificationViewSet, basename='Notifications')
 router.register(r'caters', CateringViewSet)
 router.register(r'dashboard', DashboardViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
