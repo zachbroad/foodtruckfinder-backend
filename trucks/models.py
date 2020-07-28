@@ -1,6 +1,7 @@
 import math
 import time
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.conf import settings
 from django.core import validators
 from django.db import models
@@ -8,6 +9,7 @@ from django.db.models import Q, Avg
 from django.utils import timezone
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
+from notifications.models import Notification
 
 from util.models import ModelLocation
 
@@ -234,7 +236,8 @@ class Visit(models.Model):
 class Live(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField()
+    end_time = models.DateTimeField() 
+
 
     @property
     def live_time(self):
@@ -280,3 +283,11 @@ class Live(models.Model):
 
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
+
+
+@receiver(post_save, sender=Live)
+def notify_on_live_creation(sender, instance, created, **kwargs):
+    if created:
+        notif = Notification.objects.create(title='{} went live!'.format(instance.truck.title), description='{} went live, and plans to be live until {}'.format(
+            instance.truck.title, instance.end_time), user=instance.truck.owner, route='/trucks/profile/{}'.format(instance.truck.pk))
+        notif.save()

@@ -25,7 +25,6 @@ class LiveSerializer(serializers.ModelSerializer):
         return obj.pk
 
     def validate(self, data):
-        print(self.initial_data)
         if timezone.now() < data['end_time']:
             lives = Live.objects.filter(
                 (Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
@@ -33,6 +32,8 @@ class LiveSerializer(serializers.ModelSerializer):
             if lives.exists() and not editing:
                 raise serializers.ValidationError(
                     'You are already live, or will be live during this time')
+
+            
             return data
         else:
             raise serializers.ValidationError(
@@ -199,7 +200,6 @@ class CreateReviewSerializer(serializers.ModelSerializer):
             'description',
         ]
 
-    
 
 class ReviewSerializer(serializers.ModelSerializer):
     class BasicAccountSerializer(serializers.ModelSerializer):

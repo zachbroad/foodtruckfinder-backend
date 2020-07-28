@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from users.models import User 
+from fcm_django.models import FCMDevice
 
 class Notification(models.Model):
     title = models.CharField(max_length=250)
@@ -9,7 +9,7 @@ class Notification(models.Model):
     route = models.CharField(max_length=250, null=True, blank=True)
     webview_route = models.URLField(null=True, blank=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     posted_on = models.DateTimeField(auto_now_add=True)
 
 
@@ -20,5 +20,5 @@ class Notification(models.Model):
 def notify_on_notification_creation(sender, instance, created, **kwargs):
     if created:
         devices = FCMDevice.objects.all()
-        devices.send_message(data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high", "route": sender.route, "webview_route": sender.webview_route},
+        devices.send_message(data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high", "route": instance.route, "webview_route": instance.webview_route},
                             title=instance.title, body=instance.description, icon="icon_notif")

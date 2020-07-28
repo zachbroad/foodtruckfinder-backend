@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+    user = serializers.CurrentUserDefault()
+
     class Meta:
         model = Notification
         fields = [
@@ -10,4 +12,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'posted_on',
+            'user',
+            'route',
+            'webview_route',
         ]

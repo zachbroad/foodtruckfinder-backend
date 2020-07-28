@@ -10,10 +10,10 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         try:
-            notifications = Notification.objects.get(user=user)
+            notifications = Notification.objects.filter(user=user.pk)
+            return notifications
         except Notification.DoesNotExist:
             raise exceptions.NotFound('No notifications found')
-        return 
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'update':
