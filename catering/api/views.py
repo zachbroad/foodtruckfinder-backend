@@ -1,7 +1,6 @@
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
 from catering.api.serializers import CaterRequestSerializer
 from catering.models import CaterRequest
 

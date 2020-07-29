@@ -275,12 +275,6 @@ class Live(models.Model):
 
         super(Live, self).clean()
 
-        # TODO fix this
-        # elif Live.objects.filter((Q(start_time__lte=self.start_time, end_time__gte=timezone.now()) |
-        #                           Q(start_time__lte=self.end_time, end_time__lte=self.end_time)) &
-        #                          Q(truck__id=self.truck.pk)).exists():
-        #     raise ValidationError('You are already live')
-
     def __str__(self):
         return f'{self.start_time} ----------> + {self.end_time}'
 

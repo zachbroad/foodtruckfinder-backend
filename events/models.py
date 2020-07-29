@@ -14,7 +14,6 @@ class Event(ModelLocation):
 
     cancelled_date = models.DateField('Cancelled Date', blank=True, null=True)
 
-    # GenericImage.objects.filter(content_object=self).all()
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -33,14 +32,3 @@ class CancelledEvent(Event):
         proxy = True
 
     objects = CancelledEventManager()
-
-# class PaidLessonManager(models.Manager):
-#     def get_query_set(self):
-#         return self.filter(paidDate__isnull=False)
-#
-#
-# class PaidEvent(Event):
-#     class Meta:
-#           proxy = True
-#
-#     objects = PaidLessonManager()
