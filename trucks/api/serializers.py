@@ -264,6 +264,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
+            'tags',
             'available_for_catering',
         ]
         read_only_fields = ['pk', 'live']

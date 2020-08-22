@@ -316,7 +316,6 @@ class TagsViewSet(ModelViewSet):
         qs = Tag.objects.all()
 
         featured = self.request.query_params.get('featured', None)
-        print(featured)
 
         if featured is not None:
 
