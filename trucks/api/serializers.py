@@ -271,11 +271,29 @@ class CreateTruckSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         truck = Truck.objects.create(**validated_data)
+        data = validated_data
+        tag_objs = []
 
-        if validated_data.__contains__('menu'):
-            menu_data = validated_data.pop('menu')
-            for data in menu_data:
-                MenuItem.objects.create(truck=truck, **data)
+        try:
+            truck = self.get_object()
+            tags = data.get('tags', None)
+            if tags is not None:
+                for tag in tags:
+                    if len(tag) > 1:
+                        new_tag = Tag.objects.get(title=tag['pk'])
+                        tag_objs.append(new_tag)
+
+            truck.tags.set(tag_objs)
+            truck.save()
+        except Truck.DoesNotExist:
+            raise ValidationError('Truck doesn\'t exist')
+        except Tag.DoesNotExist:
+            raise ValidationError('Tag doesn\'t exist')
+        
+        if data.__contains__('menu'):
+            menu_data = data.pop('menu')
+            for item in menu_data:
+                MenuItem.objects.create(truck=truck, **item)
         return truck
 
         # def create(self, request, *args, **kwargs):
