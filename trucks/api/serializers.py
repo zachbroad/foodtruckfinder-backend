@@ -264,7 +264,6 @@ class CreateTruckSerializer(serializers.ModelSerializer):
             'phone',
             'website',
             'menu',
-            'tags',
             'available_for_catering',
         ]
         read_only_fields = ['pk', 'live']
@@ -272,24 +271,7 @@ class CreateTruckSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         truck = Truck.objects.create(**validated_data)
         data = validated_data
-        tag_objs = []
 
-        try:
-            truck = self.get_object()
-            tags = data.get('tags', None)
-            if tags is not None:
-                for tag in tags:
-                    if len(tag) > 1:
-                        new_tag = Tag.objects.get(title=tag['pk'])
-                        tag_objs.append(new_tag)
-
-            truck.tags.set(tag_objs)
-            truck.save()
-        except Truck.DoesNotExist:
-            raise ValidationError('Truck doesn\'t exist')
-        except Tag.DoesNotExist:
-            raise ValidationError('Tag doesn\'t exist')
-        
         if data.__contains__('menu'):
             menu_data = data.pop('menu')
             for item in menu_data:
