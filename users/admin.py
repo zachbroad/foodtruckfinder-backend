@@ -75,6 +75,8 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'phone',
+        'profile_picture',
+        'biography',
         'date_joined',
         'last_login',
         'is_admin',

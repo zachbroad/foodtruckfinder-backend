@@ -58,6 +58,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    profile_picture = models.ImageField(null=True, blank=True, default='/assets/grubtruck.png')
+    biography = models.TextField(max_length=1000, blank=True, null=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 

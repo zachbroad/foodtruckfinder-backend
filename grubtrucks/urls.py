@@ -13,7 +13,7 @@ from events.api.views import EventViewSet
 from grubtrucks.views import index
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet
-from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileView
+from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 from notifications.api.views import NotificationViewSet
 
@@ -32,13 +32,13 @@ router.register(r'reviews', ReviewsViewSet)
 router.register(r'tags', TagsViewSet)
 router.register(r'trucks', TruckViewSet)
 router.register(r'users', AccountViewSet)
+router.register(r'profile', ProfileViewSet)
 router.register(r'visits', VisitViewSet)
 
 api_patterns = [
     *router.urls,
     # "Home" Page
     path('home/', HomePage.as_view(), name='home'),
-    path('profile/', ProfileView.as_view(), name='profile'),
     path('trucks/<truck>/live', TruckLiveViewSet.as_view(), name='trucks-live')
 ]
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from grubtrucks.util import Base64ImageField
 from users.models import User, SearchTerm, FavoriteTruck, Feedback
 
 
@@ -45,6 +46,9 @@ class UserSerializer(serializers.ModelSerializer):
     search_history = SearchTermSerializer(many=True, required=False)
     favorite_trucks = FavoriteTruckSerializer(many=True, required=False)
     trucks = TruckSerializer(many=True)
+    profile_picture = Base64ImageField(
+        max_length=None, use_url=True, required=False, allow_empty_file=False, allow_null=True
+    )
 
     class Meta:
         model = User
@@ -57,7 +61,10 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'search_history',
             'trucks',
-            'favorite_trucks'
+            'favorite_trucks',
+            
+            'profile_picture',
+            'biography',
         )
         read_only_fields = ['pk']
 

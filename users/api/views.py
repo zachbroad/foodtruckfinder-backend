@@ -106,9 +106,12 @@ class FeedbackViewSet(ModelViewSet):
     queryset = Feedback.objects.all()
 
 
-class ProfileView(APIView):
+class ProfileViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    pagination_class = None
 
-    def get(self, request, format=None):
-        acc = UserSerializer(request.user, many=False)
-        return Response(data=acc.data)
+    def get_queryset(self):
+        return User.objects.filter(username=self.request.user.username)
+
