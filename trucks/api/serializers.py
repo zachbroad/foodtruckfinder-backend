@@ -374,6 +374,7 @@ class TruckDashboardSerializer(TruckSerializer):
             'favorites',
             'visits',
             'live',
+            'available_for_catering',
         )
 
         read_only_fields = (
