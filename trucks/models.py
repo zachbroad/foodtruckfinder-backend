@@ -39,9 +39,11 @@ TYPE_CHOICES = [
 
 
 class Tag(models.Model):
-    title = models.CharField(null=False, blank=False, unique=True, max_length=25)
+    title = models.CharField(null=False, blank=False,
+                             unique=True, max_length=25)
     featured = models.BooleanField(default=False, blank=True)
-    icon = models.ImageField(default=None, null=True, blank=True, upload_to='uploads/tags/icons')
+    icon = models.ImageField(default=None, null=True,
+                             blank=True, upload_to='uploads/tags/icons')
 
     class Meta:
         ordering = [
@@ -54,11 +56,13 @@ class Tag(models.Model):
 
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, 
-                              default='../media/assets/truck_logo_placeholder.png')
-    description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
+                              default='assets/truck_logo_placeholder.png')
+    description = models.TextField(
+        max_length=3000, blank=True, default='Sorry, this truck has no description')
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
@@ -69,7 +73,8 @@ class Truck(ModelLocation):
 
     @property
     def rating(self):
-        rating = Review.objects.filter(truck=self).all().aggregate(Avg('rating'))['rating__avg']
+        rating = Review.objects.filter(truck=self).all(
+        ).aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
             return rating
         else:
@@ -176,10 +181,13 @@ class Menu(models.Model):
 
 
 class Review(models.Model):
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField(verbose_name='truck_rating',validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
+    truck = models.ForeignKey(
+        Truck, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(verbose_name='truck_rating', validators=[
+                                 validators.MinValueValidator(0), validators.MaxValueValidator(5)])
     description = models.TextField(max_length=2500, blank=True, null=True)
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
 
     post_created = models.DateTimeField(auto_now_add=True)
     post_edited = models.DateTimeField(auto_now=True)
@@ -192,7 +200,8 @@ class Review(models.Model):
 
     def clean(self):
         if self.rating < 0 or self.rating > 5:
-            raise ValidationError("Invalid rating. Value must be between 0 and 5.")
+            raise ValidationError(
+                "Invalid rating. Value must be between 0 and 5.")
         super()
 
     def save(self, *args, **kwargs):
@@ -209,9 +218,11 @@ class Review(models.Model):
 
 
 class ReviewLike(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='likes')
     is_liked = models.BooleanField(null=False, blank=False)
-    liked_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
+    liked_by = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_by')
 
     def __str__(self):
         if self.is_liked:
@@ -222,8 +233,10 @@ class ReviewLike(models.Model):
 
 
 class Visit(models.Model):
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='visits')
-    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='visited_by')
+    truck = models.ForeignKey(
+        Truck, on_delete=models.CASCADE, related_name='visits')
+    visitor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='visited_by')
     visited = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -234,10 +247,10 @@ class Visit(models.Model):
 
 
 class Live(models.Model):
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
+    truck = models.ForeignKey(
+        Truck, on_delete=models.CASCADE, related_name='live_objects')
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField() 
-
+    end_time = models.DateTimeField()
 
     @property
     def live_time(self):
@@ -266,12 +279,15 @@ class Live(models.Model):
         if self.end_time < self.start_time:
             raise ValidationError('Start time must be before end time')
         if timezone.now() < self.end_time:
-            lives = Live.objects.filter((Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
+            lives = Live.objects.filter(
+                (Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
             editing = lives[0].pk == self.pk
             if lives.exists() and not editing:
-                raise ValidationError('You are already live, or will be live during this time')
+                raise ValidationError(
+                    'You are already live, or will be live during this time')
         else:
-            raise ValidationError('Can not have end time before the start time')
+            raise ValidationError(
+                'Can not have end time before the start time')
 
         super(Live, self).clean()
 
