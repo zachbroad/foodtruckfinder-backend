@@ -54,7 +54,7 @@ class Tag(models.Model):
 
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
+    image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, 
                               default='../media/assets/truck_logo_placeholder.png')
     description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
 

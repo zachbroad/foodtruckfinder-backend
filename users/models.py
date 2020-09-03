@@ -51,14 +51,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     phone = PhoneField(blank=True, null=True, default=None)
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    date_joined = models.DateTimeField(
+        verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    profile_picture = models.ImageField(null=True, blank=True, default='/assets/grubtruck.png')
+    profile_picture = models.ImageField(
+        upload_to='uploads/user/profile-pictures', blank=True, default='/assets/grubtruck.png')
     biography = models.TextField(max_length=1000, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
@@ -93,8 +95,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class FavoriteTruck(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='favorites')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
+    truck = models.ForeignKey(
+        Truck, on_delete=models.CASCADE, related_name='favorites')
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -105,7 +109,8 @@ class FavoriteTruck(models.Model):
 
 
 class SearchTerm(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='search_terms')
     term = models.CharField(max_length=128, blank=False, null=False)
     searched_on = models.DateTimeField(auto_now_add=True)
 
@@ -120,7 +125,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 class Feedback(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='feedback')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, related_name='feedback')
     description = models.CharField(max_length=999, blank=False, null=False)
     image = models.ImageField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
