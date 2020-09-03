@@ -25,7 +25,7 @@ ROOT_URLCONF = 'grubtrucks.urls'
 # MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE
 
 STATICFILES_DIRS = (
-    os.path.join('../{},', BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, '../media/static'),
 )
 
 # from whitenoise.storage import CompressedManifestStaticFilesStorage
