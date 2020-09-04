@@ -216,12 +216,18 @@ class TruckViewSet(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         data = request.data
         tag_objs = []
+        menu_objs = []
 
         try:
             truck = self.get_object()
             tags = data.get('tags', None)
             title = data.get('title', None)
             description = data.get('description', None)
+            menu = data.get('menu', None)
+            phone = data.get('phone', None)
+            website = data.get('website', None)
+            geolocation = data.get('geolocation', None)
+            catering = data.get('catering', None)
 
 
             if tags is not None:
@@ -231,12 +237,30 @@ class TruckViewSet(ModelViewSet):
                         tag_objs.append(new_tag)
             truck.tags.set(tag_objs)
 
+            if menu is not None:
+                for item in menu:
+                    new_item = MenuItem.objects.get(pk=menu['pk'])
+                    menu_objs.append(new_item)
+            truck.tags.set(menu_objs)
+
 
             if title is not None:
                 truck.title = title
 
             if description is not None:
                 truck.description = description
+            
+            if phone is not None:
+                truck.phone = phone
+
+            if website is not None:
+                truck.website = website
+
+            if geolocation is not None:
+                truck.geolocation = geolocation
+
+            if catering is not None:
+                truck.catering = catering
 
             truck.save()
         except Truck.DoesNotExist:
@@ -244,6 +268,7 @@ class TruckViewSet(ModelViewSet):
         except Tag.DoesNotExist:
             raise ValidationError('Tag doesn\'t exist')
         serializer = TruckSerializer(truck, many=False, context={'request': request}, partial=True)
+        print(serializer.data)
         return Response(serializer.data)
 
     def get_serializer_class(self):
