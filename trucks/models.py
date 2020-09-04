@@ -1,16 +1,18 @@
 import math
 import time
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.db.models import Q, Avg
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
+from django_property_filter import PropertyFilterSet, PropertyBooleanFilter
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-from notifications.models import Notification
 
+from notifications.models import Notification
 from util.models import ModelLocation
 
 WEEKDAYS = [
@@ -129,6 +131,14 @@ class Truck(ModelLocation):
         return self.title
 
 
+class TruckManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().all()
+
+    def get_live(self):
+        return super().get_queryset().all()
+
+
 class MenuItem(models.Model):
     type = models.IntegerField(choices=TYPE_CHOICES)
 
@@ -177,7 +187,7 @@ class Menu(models.Model):
 
 class Review(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField(verbose_name='truck_rating',validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
+    rating = models.IntegerField(verbose_name='truck_rating', validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
     description = models.TextField(max_length=2500, blank=True, null=True)
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
 
@@ -236,8 +246,7 @@ class Visit(models.Model):
 class Live(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='live_objects')
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField() 
-
+    end_time = models.DateTimeField()
 
     @property
     def live_time(self):
@@ -282,6 +291,8 @@ class Live(models.Model):
 @receiver(post_save, sender=Live)
 def notify_on_live_creation(sender, instance, created, **kwargs):
     if created:
-        notif = Notification.objects.create(title='{} went live!'.format(instance.truck.title), description='{} went live, and plans to be live until {}'.format(
-            instance.truck.title, instance.end_time), user=instance.truck.owner, route='/trucks/profile/{}'.format(instance.truck.pk))
+        notif = Notification.objects.create(title='{} went live!'.format(instance.truck.title),
+                                            description='{} went live, and plans to be live until {}'.format(
+                                                instance.truck.title, instance.end_time), user=instance.truck.owner,
+                                            route='/trucks/profile/{}'.format(instance.truck.pk))
         notif.save()

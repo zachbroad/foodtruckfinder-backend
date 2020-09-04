@@ -1,5 +1,5 @@
 from django.utils import timezone
-from django.db.models import Q, F, Count
+from django.db.models import Q, F, Count, Exists
 from rest_framework import generics, pagination, permissions
 from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
@@ -284,6 +284,7 @@ class HomePage(views.APIView):
         favorites = trucks.filter(favorites__in=favorites)
 
         # There's gotta be a better way to do this lmao
+        # ts_live = TruckFilterSet(request.GET, queryset=trucks)
         ts_trending = TruckSerializer(trending, many=True, context={'request': request})
         ts_recent = TruckSerializer(recent, many=True, context={'request': request})
         ts_favorites = TruckSerializer(favorites, many=True, context={'request': request})
@@ -294,6 +295,7 @@ class HomePage(views.APIView):
             "new": ts_new.data,
             "recent": ts_recent.data,
             "favorites": ts_favorites.data,
+            # "live": ts_live.data,
         })
 
 
