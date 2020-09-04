@@ -221,6 +221,7 @@ class TruckViewSet(ModelViewSet):
             truck = self.get_object()
             tags = data.get('tags', None)
             title = data.get('title', None)
+            description = data.get('description', None)
 
 
             if tags is not None:
@@ -233,7 +234,10 @@ class TruckViewSet(ModelViewSet):
 
             if title is not None:
                 truck.title = title
-                
+
+            if description is not None:
+                truck.description = description
+
             truck.save()
         except Truck.DoesNotExist:
             raise ValidationError('Truck doesn\'t exist')
