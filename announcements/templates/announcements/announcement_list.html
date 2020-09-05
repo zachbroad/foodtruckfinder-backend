@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Events near you
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col py-3">
+                <h2>Grubtrucks News</h2>
+                <span>Sorted by most recent</span>
+            </div>
+        </div>
+        <div class="row">
+            {% for announcement in announcement_list %}
+                <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <a href="{% url 'announcements:detail' announcement.id %}">
+                                {{ announcement.title }}
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ announcement.description }}</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <span><strong>{{ announcement.posted_on }}</strong></span>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
