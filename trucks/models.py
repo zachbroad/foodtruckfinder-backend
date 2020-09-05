@@ -57,7 +57,7 @@ class Tag(models.Model):
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
-                              default='../media/assets/truck_logo_placeholder.png')
+                              default='/assets/truck_logo_placeholder.png')
     description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -150,7 +150,7 @@ class MenuItem(models.Model):
         max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
-                              default='../media/assets/truck_logo_placeholder.png')
+                              default='/assets/truck_logo_placeholder.png')
     featured = models.BooleanField(default=False)
 
     def get_absolute_image_url(self):
