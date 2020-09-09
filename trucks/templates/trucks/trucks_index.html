@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container text-left">
+        {% if all_trucks %}
+            <h3>Trucks near you</h3>
+            <p>Your location</p>
+            <div class="row">
+                {% for truck in all_trucks %}
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="card mb-3">
+                            <div class="card-attr" style="text-decoration: none; color:white;">
+                                <img class="card-img-top" src="{{ truck.image.url }}"
+                                     alt="{{ truck.title }}'s image not found.">
+                            </div>
+                            <a href="{% url 'trucks:detail' truck.pk %}">
+                                <div class="card-header d-flex justify-content-between">
+                                    <h5>
+                                        {{ truck.title }}
+                                    </h5>
+
+                                    <div>
+                                        {% if truck.rating %}
+                                            <p>{{ truck.rating }}</p>
+                                        {% else %}
+                                            <p>no rating</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <h3> Sorry, we dont have any trucks!</h3>
+        {% endif %}
+    </div>
+{% endblock %}

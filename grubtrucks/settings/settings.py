@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'crispy_forms',
     'django_filters',
+    'django_property_filter',
+
     'django_google_maps',
     'fcm_django',
     'phone_field',

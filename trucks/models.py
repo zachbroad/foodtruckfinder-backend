@@ -54,6 +54,14 @@ class Tag(models.Model):
         return self.title
 
 
+class TruckManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().all()
+
+    def get_live(self):
+        return super().get_queryset().all()
+        
+
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True,
