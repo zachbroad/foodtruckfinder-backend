@@ -1,13 +1,23 @@
+{% load static %}
 <footer class="bg-primary text-white py-5 container-fluid">
     <div class="container">
-
-
         <div class="row">
-            <div class="col-3">
+            <div class="col-sm-12 col-md-5 pb-sm-2">
                 <h5>Grubtrucks</h5>
                 <span>Find food trucks near you and stay connected. Grow your food truck business with our community and analytic tools. For food truck lovers and owners.</span>
+                <div class=" d-flex align-items-center mr-auto justify-content-start">
+                    <div class="">
+                        <img src="{% static 'appstore.svg' %}"
+                             alt="Download Grubtrucks on the App Store."/>
+                    </div>
+                    <div class="">
+                        <img src="{% static 'google-play-badge.png' %}"
+                             width="150"
+                             alt="Google Play and the Google Play logo are trademarks of Google LLC."/>
+                    </div>
+                </div>
             </div>
-            <div class="col-3">
+            <div class="col-sm-12 col-md-3 pb-sm-2">
                 <h5>Explore</h5>
                 <ul class="list-unstyled">
                     <li>
@@ -27,7 +37,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-3">
+            <div class="col-sm-12 col-md-4 pb-sm-2">
                 <h5>Follow us on social media!</h5>
                 <div class="d-flex flex-column justify-content-between">
                     <a class="text-white" href="https://www.twitter.com/grubtrucksapp">Twitter</a>
