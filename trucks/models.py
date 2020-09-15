@@ -1,6 +1,7 @@
 import math
 import time
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.conf import settings
 from django.core import validators
 from django.db import models
@@ -57,7 +58,7 @@ class Tag(models.Model):
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
-                              default='/assets/truck_logo_placeholder.png')
+                              default='../media/assets/truck_logo_placeholder.png')
     description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
