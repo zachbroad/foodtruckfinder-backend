@@ -9,7 +9,7 @@
 
     <div class="container py-3">
         <div class="row">
-            <div class="col-7">
+            <div class="col" style="max-width: 560px;">
                 <h2>What is Grubtrucks?</h2>
                 <p>
                     Find food trucks near you and stay connected. Grow your food truck business with our community and
@@ -57,7 +57,7 @@
             </div>
             <div class="row">
                 {% for truck in trucks %}
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-4 col-sm-6 py-2">
                         {% include 'trucks/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}
@@ -76,7 +76,7 @@
         {#            </div>#}
         {#        </div>#}
         <iframe id="map"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q=South Florida"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q=Florida"
                 width="100%" height="480" frameborder="0" style="border:0" allowfullscreen></iframe>
     </div>
 
