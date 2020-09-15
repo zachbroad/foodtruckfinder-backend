@@ -20,6 +20,16 @@
                     </div>
                     <img class="card-img-bottom" src="{{ truck.image.url }}"/>
                     <div class="card-footer">
+                        <a href="tel:{{ truck.phone }}" class="btn btn-info">Call</a>
+                        {% if truck.address != None %}
+                            <a href="https://www.google.com/maps?q={{ truck.address }}"
+                               class="btn btn-success">Directions</a>
+                        {% elif truck.geolocation != None %}
+                            <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
+                               class="btn btn-success">Directions</a>
+                        {% else %}
+                            unavailable
+                        {% endif %}
                         <div class="btn btn-danger">Favorite</div>
                         {% if truck.available_for_catering %}
                             <div class="btn btn-primary">Book Catering</div>
@@ -28,7 +38,52 @@
                 </div>
             </div>
 
-            <div class="col-md-4 col-sm-12">
+
+            <div class="col">
+                <div class="card my-3">
+                    <div class="card-header"><h4>Truck Info</h4></div>
+                    <ul class="list-group">
+
+                        <li class="list-group-item">
+                            <h6 class="mb-1">Address</h6>
+                            <a href="https://www.google.com/maps?q={{ truck.address }}">{{ truck.address }}</a>
+                        </li>
+
+                        <li class="list-group-item">
+                            <h6 class="mb-1">Phone Number</h6>
+                            <a href="tel:{{ truck.phone }}">{{ truck.phone }}</a>
+                        </li>
+
+                        <li class="list-group-item">
+                            <h6 class="mb-1">
+                                Catering
+                            </h6>
+                            {% if truck.available_for_catering %}
+                                Available for catering
+                            {% else %}
+                                Not available for catering
+                            {% endif %}
+                        </li>
+
+                        <li class="list-group-item">
+                            <h6 class="mb-1">Owner</h6>
+                            <a href="{% url 'users:detail' truck.owner.username %}">{{ truck.owner.first_name }} {{ truck.owner.last_name }}
+                                <span class="text-muted">(@{{ truck.owner.username }})</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
                 <div class="row">
                     <div class="col">
 
@@ -70,52 +125,7 @@
                         </div>
                     </div>
                 </div>
-                {#                <div class="row">#}
-                {#                    <div class="list-group">#}
-                {#                        {% for review in truck.reviews.all %}#}
-                {#                            <div class="card mb-3">#}
-                {#                                <div class="card-header d-flex justify-content-between">#}
-                {#                    <span>#}
-                {#                        <h5>#}
-                {#                            {{ review.reviewer.first_name }}#}
-                {#                            {{ review.reviewer.last_name }}#}
-                {#                        <small class="font-weight-bold text-uppercase text-muted">#}
-                {#                            <a href="{% url 'users:detail' review.reviewer.username %}">#}
-                {#                        (@{{ review.reviewer.username }})#}
-                {#                            </a>#}
-                {#                        </small>#}
-                {#                        </h5>#}
-                {#                    </span>#}
-                {#                                    <span class="bg-dark p-2 text-white font-weight-bold">#}
-                {#                        {{ review.rating|default_if_none:"no rating" }}#}
-                {#                    </span>#}
-                {#                                </div>#}
-                {#                                <p class="card-body">#}
-                {#                                    {{ review.description|default_if_none:"" }}#}
-                {#                                </p>#}
-                {#                            </div>#}
-                {#                        {% endfor %}#}
-                {#                    </div>#}
-                {##}
-                {#                </div>#}
             </div>
-
-            {#            <div class="row mb-2">#}
-            {#                <div class="col d-flex flex-row justify-content-between">#}
-            {#                    <div>#}
-            {#                        <h2 class="mb-0">Reviews</h2>#}
-            {#                        <small class="text-muted">{{ truck.reviews.count }} reviews</small>#}
-            {#                    </div>#}
-            {##}
-            {#                    <a href="{% url 'trucks:new-review' truck.id %}">#}
-            {#                        <img src="{% static 'open-iconic-master/svg/plus.svg' %}" alt="" width="44" height="44">#}
-            {#                    </a>#}
-            {#                </div>#}
-            {#            </div>#}
         </div>
-
-
     </div>
-
-
 {% endblock %}

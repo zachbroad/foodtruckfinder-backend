@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
+{% load socialaccount %}
 
 {% block title %}
     Signup
@@ -13,27 +14,17 @@
                 <form method="POST" class="form-group">
                     {% csrf_token %}
                     {{ form|crispy }}
-{#                    <div>#}
-{#                        <label>#}
-{#                            Username#}
-{#                            <input type="text" name="username" class="input-lg form-control"/>#}
-{#                        </label>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <label>#}
-{#                            Email#}
-{#                            <input type="text" name="email" class="input-lg form-control"/>#}
-{#                        </label>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <label>#}
-{#                            Password#}
-{#                            <input type="password" name="password" class="input-lg form-control"/>#}
-{#                        </label>#}
-{#                    </div>#}
 
                     <button type="submit" class="btn btn-success">Register</button>
-                    <a href="{% url 'users:login' %}" class="btn btn-outline-secondary">Login to an existing account</a>
+                    <a href="{% url 'users:login' %}" class="">Login to an existing account</a>
+
+                    <br/>
+                    <div class="py-1"></div>
+
+                    <a class="btn btn-info" href="{% provider_login_url "facebook" method="oauth2" %}">Login with
+                        Facebook</a>
+                    <a class="btn btn-success" href="{% provider_login_url "google" method="oauth2" %}">Login with
+                        Google</a>
                 </form>
             </div>
         </div>
