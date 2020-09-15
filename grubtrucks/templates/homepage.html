@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
@@ -8,8 +9,12 @@
 
     <div class="container py-3">
         <div class="row">
-            <div class="col">
+            <div class="col-7">
                 <h2>What is Grubtrucks?</h2>
+                <p>
+                    Find food trucks near you and stay connected. Grow your food truck business with our community and
+                    analytic tools. For food truck lovers and owners.
+                </p>
             </div>
         </div>
 
@@ -22,7 +27,8 @@
                 </p>
                 <ul>
                     <li>Traffic analytics</li>
-                    <li>Manage your menu & identify trends</li>
+                    <li>Send notifications to your fans</li>
+                    <li>Manage your menu & identify trends (underperforming items, best sellers, etc.)</li>
                     <li>Go Live - notify all your followers when you open up</li>
                 </ul>
             </div>
@@ -34,25 +40,44 @@
                 <ul>
                     <li>Find food trucks near you</li>
                     <li>Follow your favorite trucks and be notified when they go live</li>
+                    <li>Leave feedback, interact with truck owners, and share your Grub history</li>
+                    <li>Verified food trucks are guaranteed to be open-for-business at their stated location &ndash; never waste your time visiting a closed food truck again</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid bg-dark py-5">
+
+    <div class="container-fluid bg-dark py-3">
         <div class="container text-white">
-            <div class="row">
+            <div class="row py-2">
                 <div class="col">
                     <h2>Trending on Grubtrucks</h2>
                 </div>
             </div>
             <div class="row">
                 {% for truck in trucks %}
-                    <div class="col-lg-3">
+                    <div class="col-md-4 col-sm-3">
                         {% include 'trucks/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}
             </div>
         </div>
     </div>
+
+
+
+    <div class="container-fluid bg-secondary p-0 m-0">
+        {#        <div class="container text-black">#}
+        {#            <div class="row py-2">#}
+        {#                <div class="col">#}
+        {#                    <h2>Trending on Grubtrucks</h2>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        <iframe id="map"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q=South Florida"
+                width="100%" height="480" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
+{% load socialaccount %}
 
 {% block title %}
     Login
@@ -14,12 +15,17 @@
                     {% csrf_token %}
                     {{ form|crispy }}
 
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    
-                    {% load socialaccount %}
-                    <a href="{% provider_login_url "facebook" method="oauth2" %}">Facebook OAuth2</a>
-                    <a href="{% provider_login_url "google" method="oauth2"%}"> Google OAuth2</a>
-                    <a href="{% url 'users:signup' %}" class="btn btn-secondary">Create account</a>
+                    <div class="">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <a href="{% url 'users:signup' %}" class="btn btn-secondary">Create account</a>
+
+                        <br/>
+                        <div class="py-1"></div>
+
+                        <a class="btn btn-info" href="{% provider_login_url "facebook" method="oauth2" %}">Login with Facebook</a>
+                        <a class="btn btn-success" href="{% provider_login_url "google" method="oauth2" %}">Login with Google</a>
+                    </div>
+
                 </form>
             </div>
         </div>
