@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+    hi
+{% endblock %}
+
+
+{% block content2 %}
     <div class="container">
         <div class="row">
             <div class="col py-3">
@@ -14,24 +19,28 @@
         </div>
         <div class="row">
             {% for event in event_list %}
-                <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <a href="{% url 'events:detail' event.id %}">
-                                {{ event.title }}
-                            </a>
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <p>{{ event.description }}</p>
-                    </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="event-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <a href="{% url 'events:detail' event.id %}">
+                                        {{ event.title }}
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ event.description }}</p>
+                            </div>
 
-                    <div class="card-footer">
-                        <span>Start: <strong>{{ event.start_time }}</strong></span>
-                        <br/>
-                        <span>End: <strong>{{ event.end_time }}</strong></span>
-                    </div>
+                            <div class="card-footer">
+                                <span>Start: <strong>{{ event.start_time }}</strong></span>
+                                <br/>
+                                <span>End: <strong>{{ event.end_time }}</strong></span>
+                            </div>
 
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
 
