@@ -30,36 +30,44 @@
 
             <div class="col-md-4 col-sm-12">
                 <div class="row">
-                    <div class="card my-3">
-                        <div class="card-header">
-                            <h4>Upcoming events</h4>
-                        </div>
-                        <div class="card-body">
-                            Sorry, this truck has no upcoming events.
+                    <div class="col">
+
+                        <div class="card my-3">
+                            <div class="card-header">
+                                <h4>Upcoming events</h4>
+                            </div>
+                            <div class="card-body">
+                                Sorry, this truck has no upcoming events.
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row card">
-                    <h3 class="card-header">Reviews</h3>
-                    <div class="list-group">
-                        {% for review in truck.reviews.all %}
-                            <a href="{% url 'trucks:reviews' truck.id %}"
-                               class="list-group-item list-group-item-action flex-column align-items-start active">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
-                                    <span>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+
+                            <h3 class="card-header">Reviews</h3>
+                            <div class="list-group">
+                                {% for review in truck.reviews.all %}
+                                    <a href="{% url 'trucks:reviews' truck.id %}"
+                                       class="list-group-item list-group-item-action flex-column align-items-start active">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
+                                            <span>
                                     <i class="fa fa-clock-o"></i>
                                     <small>{{ review.post_created|timesince }} ago</small>
                                     </span>
-                                </div>
-                                <p class="mb-1">{{ review.description }}</p>
-                                <small>Donec id elit non mi porta.</small>
-                            </a>
-                        {% endfor %}
+                                        </div>
+                                        <p class="mb-1">{{ review.description }}</p>
+                                        <small>Donec id elit non mi porta.</small>
+                                    </a>
+                                {% endfor %}
 
-                    </div>
-                    <div class="card-footer">
-                        <a href="{% url 'trucks:reviews' truck.id %}" class="float-right">view all reviews</a>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'trucks:reviews' truck.id %}" class="float-right">view all reviews</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {#                <div class="row">#}
