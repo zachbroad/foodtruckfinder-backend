@@ -6,7 +6,7 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-8">
+            <div class="col-md-8 col-sm-12">
                 <div class="card my-3">
                     <div class="d-flex justify-content-between align-items-center m-3">
                         <h3>{{ truck.title }}</h3>
@@ -28,52 +28,83 @@
                 </div>
             </div>
 
-            <div class="col-4">
-                <div class="card my-3">
-                    <div class="card-header">
-                        <h4>Upcoming events</h4>
-                    </div>
-                    <div class="card-body">
-                        Sorry, this truck has no upcoming events.
+            <div class="col-md-4 col-sm-12">
+                <div class="row">
+                    <div class="card my-3">
+                        <div class="card-header">
+                            <h4>Upcoming events</h4>
+                        </div>
+                        <div class="card-body">
+                            Sorry, this truck has no upcoming events.
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col d-flex flex-row justify-content-between">
-                <div>
-                    <h2 class="mb-0">Reviews</h2>
-                    <small class="text-muted">{{ truck.reviews.count }} reviews</small>
-                </div>
-
-                <a href="{% url 'trucks:new-review' truck.id %}">
-                    <img src="{% static 'open-iconic-master/svg/plus.svg' %}" alt="" width="44" height="44">
-                </a>
-            </div>
-        </div>
-        {% for review in truck.reviews.all %}
-            <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between">
-                    <span>
-                        <h5>
-                            {{ review.reviewer.first_name }}
-                            {{ review.reviewer.last_name }}
-                        <small class="font-weight-bold text-uppercase text-muted">
-                            <a href="{% url 'users:detail' review.reviewer.username %}">
-                        (@{{ review.reviewer.username }})
+                <div class="row card">
+                    <h3 class="card-header">Reviews</h3>
+                    <div class="list-group">
+                        {% for review in truck.reviews.all %}
+                            <a href="{% url 'trucks:reviews' truck.id %}"
+                               class="list-group-item list-group-item-action flex-column align-items-start active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
+                                    <span>
+                                    <i class="fa fa-clock-o"></i>
+                                    <small>{{ review.post_created|timesince }} ago</small>
+                                    </span>
+                                </div>
+                                <p class="mb-1">{{ review.description }}</p>
+                                <small>Donec id elit non mi porta.</small>
                             </a>
-                        </small>
-                        </h5>
-                    </span>
-                    <span class="bg-dark p-2 text-white font-weight-bold">
-                        {{ review.rating|default_if_none:"no rating" }}
-                    </span>
+                        {% endfor %}
+
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'trucks:reviews' truck.id %}" class="float-right">view all reviews</a>
+                    </div>
                 </div>
-                <p class="card-body">
-                    {{ review.description|default_if_none:"" }}
-                </p>
+                {#                <div class="row">#}
+                {#                    <div class="list-group">#}
+                {#                        {% for review in truck.reviews.all %}#}
+                {#                            <div class="card mb-3">#}
+                {#                                <div class="card-header d-flex justify-content-between">#}
+                {#                    <span>#}
+                {#                        <h5>#}
+                {#                            {{ review.reviewer.first_name }}#}
+                {#                            {{ review.reviewer.last_name }}#}
+                {#                        <small class="font-weight-bold text-uppercase text-muted">#}
+                {#                            <a href="{% url 'users:detail' review.reviewer.username %}">#}
+                {#                        (@{{ review.reviewer.username }})#}
+                {#                            </a>#}
+                {#                        </small>#}
+                {#                        </h5>#}
+                {#                    </span>#}
+                {#                                    <span class="bg-dark p-2 text-white font-weight-bold">#}
+                {#                        {{ review.rating|default_if_none:"no rating" }}#}
+                {#                    </span>#}
+                {#                                </div>#}
+                {#                                <p class="card-body">#}
+                {#                                    {{ review.description|default_if_none:"" }}#}
+                {#                                </p>#}
+                {#                            </div>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {##}
+                {#                </div>#}
             </div>
-        {% endfor %}
+
+            {#            <div class="row mb-2">#}
+            {#                <div class="col d-flex flex-row justify-content-between">#}
+            {#                    <div>#}
+            {#                        <h2 class="mb-0">Reviews</h2>#}
+            {#                        <small class="text-muted">{{ truck.reviews.count }} reviews</small>#}
+            {#                    </div>#}
+            {##}
+            {#                    <a href="{% url 'trucks:new-review' truck.id %}">#}
+            {#                        <img src="{% static 'open-iconic-master/svg/plus.svg' %}" alt="" width="44" height="44">#}
+            {#                    </a>#}
+            {#                </div>#}
+            {#            </div>#}
+        </div>
 
 
     </div>

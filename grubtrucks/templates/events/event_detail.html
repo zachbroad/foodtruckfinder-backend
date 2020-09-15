@@ -5,27 +5,67 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        {{ event.title }}
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <p>{{ event.description }}</p>
-                </div>
-                <div class="card-footer">
-                    <span>Start: <strong>{{ event.start_time }}</strong></span>
-                    <br/>
-                    <span>End: <strong>{{ event.end_time }}</strong></span>
+    <div class="container-fluid bg-dark">
+        <div class="container">
+            <div class="row py-4 text-white">
+                <div class="col d-inline-flex justify-content-between align-items-start">
+                    <div style="max-width: 70%;">
+                        <h2 class="">{{ event.title }}</h2>
+                        <span>{{ event.description }}</span>
+                    </div>
+
+                    <div class="pt-3">
+                        {% if event.start_time|timeuntil > 0 %}
+                            <span class="badge badge-pill badge-primary">
+                    <i class="fa fa-clock-o"></i>
+                    in {{ event.start_time|timeuntil }}
+                    </span>
+                        {% else %}
+                            <span class="badge badge-pill badge-primary">
+                    <i class="fa fa-clock-o"></i>
+                    {{ event.start_time|timesince }} ago
+                    </span>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-
+    </div>
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-sm-12 col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ event.title }}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ event.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>Start: <strong>{{ event.start_time }}</strong></span>
+                        <br/>
+                        <span>End: <strong>{{ event.end_time }}</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Event Info
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <span>
+                        <b>Address</b>: {{ event.address|default_if_none:"no address" }}
+                        </span>
+                        <span>
+                        <b>Phone Number</b>: {{ event.|default_if_none:"no address" }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

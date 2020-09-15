@@ -17,11 +17,13 @@ class EventAdmin(admin.ModelAdmin):
         'end_time',
         'address',
         'geolocation',
+        'phone_number',
     ]
 
     fields = [
         'title',
         'description',
+        'phone_number',
         'start_time',
         'end_time',
         'address',
@@ -44,6 +46,7 @@ class EventAdmin(admin.ModelAdmin):
         'description',
         'address',
         'trucks',
+        'phone_number',
     ]
 
     formfield_overrides = {

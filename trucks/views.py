@@ -78,9 +78,8 @@ class ReviewListCreate(View):
     #     return view(request, *args, **kwargs)
 
 
-class ReviewUpdate(generic.UpdateView):
+class ReviewDetail(generic.DetailView):
     model = Review
 
-
-class ReviewDetail(generic.DetailView):
+class ReviewUpdate(generic.UpdateView):
     model = Review

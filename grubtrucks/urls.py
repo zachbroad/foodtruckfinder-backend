@@ -11,11 +11,11 @@ from announcements.api.views import AnnouncementViewSet
 from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
 from grubtrucks.views import IndexView
+from notifications.api.views import NotificationViewSet
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
-from notifications.api.views import NotificationViewSet
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
