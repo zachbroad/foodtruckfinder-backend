@@ -6,7 +6,7 @@ from .models import Truck, MenuItem, Review
 
 def index(request):
     all_trucks = Truck.objects.all()
-    return render(request, 'trucks/index.html', {'all_trucks': all_trucks})
+    return render(request, 'trucks/trucks_index.html', {'all_trucks': all_trucks})
 
 
 def detail(request, truck_id):

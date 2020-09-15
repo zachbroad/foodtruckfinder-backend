@@ -309,7 +309,7 @@ class HomePage(views.APIView):
     def get(self, request, format=None):
         trucks = Truck.objects.all()
 
-        trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+        trending = Truck.get_trending()
 
         # User's recent
         visits = Visit.objects.filter(visitor=self.request.user)[:10]

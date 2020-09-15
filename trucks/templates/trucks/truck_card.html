@@ -1,11 +1,12 @@
-<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">
+{#<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">#}
+    <div class="truck-card">
     <div class="card">
-        <img src="{{ truck.image.url }}" alt="Photo of {{ truck.title }}." class="card-img-top,/>
+        <img src="{{ truck.image.url }}" alt="Photo of {{ truck.title }}." class="card-img-top"/>
         <div class="card-body">
             <a href="{% url 'trucks:detail' truck.id %}">
                 <h5 class="card-title">{{ truck.title }}</h5>
             </a>
-            <p class="card-text">{{ truck.description }}</p>
+{#            <p class="card-text">{{ truck.description }}</p>#}
         </div>
     </div>
 </div>

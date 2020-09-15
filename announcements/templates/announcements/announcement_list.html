@@ -13,24 +13,46 @@
             </div>
         </div>
         <div class="row">
-            {% for announcement in announcement_list %}
-                <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
+            <div class="col-8">
+
+                {% for announcement in announcement_list %}
+                    <div class="mb-3">
+                        <div class="card">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <a href="{% url 'announcements:detail' announcement.id %}">
+                                        {{ announcement.title }}
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ announcement.description }}</p>
+                            </div>
+
+                            <div class="card-footer">
+                                <span><strong>{{ announcement.posted_on }}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-4">
+                <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">
-                            <a href="{% url 'announcements:detail' announcement.id %}">
-                                {{ announcement.title }}
-                            </a>
-                        </h3>
+
+                        <h3>Filter</h3>
                     </div>
                     <div class="card-body">
-                        <p>{{ announcement.description }}</p>
-                    </div>
+                        <ul>
+                            <li>Most recent</li>
+                            <li>Trending</li>
+                            <li>Oldest</li>
+                        </ul>
 
-                    <div class="card-footer">
-                        <span><strong>{{ announcement.posted_on }}</strong></span>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
 
         </div>
     </div>

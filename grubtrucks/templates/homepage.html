@@ -6,7 +6,7 @@
 
     {% include 'welcome.html' %}
 
-    <div class="container">
+    <div class="container py-3">
         <div class="row">
             <div class="col">
                 <h2>What is Grubtrucks?</h2>
@@ -35,6 +35,23 @@
                     <li>Manage your menu & identify trends</li>
                     <li>Go Live - notify all your followers when you open up</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark py-5">
+        <div class="container text-white">
+            <div class="row">
+                <div class="col">
+                    <h2>Trending on Grubtrucks</h2>
+                </div>
+            </div>
+            <div class="row">
+                {% for truck in trucks %}
+                    <div class="col-lg-3">
+                        {% include 'trucks/truck_card.html' with truck=truck %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

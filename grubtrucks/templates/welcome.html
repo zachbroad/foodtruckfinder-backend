@@ -2,17 +2,18 @@
 
 <style type="text/css">
     .land-bg {
-        background-image: url("/static/landbg/paula-vermeulen-URjZkhqsuBk-unsplash.jpg");
-        background-repeat: repeat;
+        background-image: url("/static/landbg/8.jpg");
+        {#background-repeat: no-repeat;#}
         background-position: center;
         background-size: cover;
+        {#background-size: 100vw;#}
     }
 </style>
 
 
 <div class="container-fluid land-bg">
     <div class="row">
-        <div class="mx-auto col-sm-12 col-md-10 col-lg-7" style="max-width: 540px">
+        <div class="mx-auto col-sm-12 col-md-10 col-lg-7" style="max-width: 520px">
             <div class="card p-3 my-5 shadow">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -21,8 +22,12 @@
                     <img src="{% static 'grubtruck.png' %}" alt="Grubtruck" width="57" height="45">
                 </div>
 
-                <p>Love food trucks?</p>
-                <p>Register for the Grubtrucks beta!</p>
+                <p>
+                    Love food trucks?
+                </p>
+                <p>
+                    Register for the Grubtrucks beta!
+                </p>
                 <p>Sign up for our mailing list and we'll send you an email when it becomes available.</p>
 
                 <!-- Begin Mailchimp Signup Form -->

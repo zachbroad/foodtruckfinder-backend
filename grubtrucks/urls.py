@@ -10,7 +10,7 @@ from rest_framework import routers
 from announcements.api.views import AnnouncementViewSet
 from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
-from grubtrucks.views import index
+from grubtrucks.views import IndexView
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
@@ -44,7 +44,7 @@ api_patterns = [
 
 urlpatterns = [
                   # Test site
-                  path('', index, name='index'),
+                  path('', IndexView.as_view(), name='index'),
 
                   # Account
                   path('accounts/', include('allauth.urls')),

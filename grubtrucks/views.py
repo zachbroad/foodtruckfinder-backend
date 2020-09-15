@@ -1,7 +1,9 @@
 import os
 
-from django.shortcuts import render
 from django.core.mail import send_mail
+from django.views.generic import TemplateView
+
+from trucks.models import Truck
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
@@ -19,7 +21,10 @@ def registration(request, email):
     send_mail(subject, message, email_from, recipients, host, password, )
 
 
-def index(request):
-    template = "index.html"
-    context = {}
-    return render(request, template, context)
+class IndexView(TemplateView):
+    template_name = "homepage.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["trucks"] = Truck.get_trending()
+        return context

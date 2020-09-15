@@ -1,15 +1,13 @@
 import math
 import time
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 from django.conf import settings
 from django.core import validators
 from django.db import models
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Count, F
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-from django_property_filter import PropertyFilterSet, PropertyBooleanFilter
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
 
@@ -127,6 +125,12 @@ class Truck(ModelLocation):
     @property
     def live(self):
         return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
+
+    @staticmethod
+    def get_trending():
+        trucks = Truck.objects.all()
+        trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+        return trending
 
     def __str__(self):
         return self.title
