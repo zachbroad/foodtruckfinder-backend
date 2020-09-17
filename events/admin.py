@@ -4,8 +4,11 @@ from django.contrib import admin
 from django_google_maps import fields as map_fields
 from django_google_maps import widgets as map_widgets
 
-from .models import Event
+from .models import Event, ImGoing
 
+
+class ImGoingAdmin(admin.StackedInline):
+    model = ImGoing
 
 class EventAdmin(admin.ModelAdmin):
     model = Event
@@ -18,6 +21,9 @@ class EventAdmin(admin.ModelAdmin):
         'address',
         'geolocation',
         'phone_number',
+    ]
+    inlines = [
+        ImGoingAdmin,
     ]
 
     fields = [

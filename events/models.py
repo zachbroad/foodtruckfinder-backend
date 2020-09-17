@@ -26,6 +26,12 @@ class Event(ModelLocation):
         return self.title
 
 
+class ImGoing(models.Model):
+    comments = models.TextField(max_length=500, help_text='Is there anything you\'d like to say to the event organizer?', blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, help_text='Event you are attending')
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, help_text='Who is going?')
+
+
 class CancelledEventManager(models.Manager):
     def get_query_set(self):
         return self.filter(cancelled_date__isnull=False)
