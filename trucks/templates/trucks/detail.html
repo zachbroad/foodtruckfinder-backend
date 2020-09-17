@@ -18,7 +18,9 @@
                             {% endif %}
                         </div>
                     </div>
-                    <img class="card-img-bottom" src="{{ truck.image.url }}"/>
+                    {% if truck.image != None %}
+                        <img class="card-img-bottom" src="{{ truck.image.url }}"/>
+                    {% endif %}
                     <div class="card-footer">
                         <a href="tel:{{ truck.phone }}" class="btn btn-info">Call</a>
                         {% if truck.address != None %}
