@@ -1,3 +1,4 @@
+from rest_framework import filters
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
@@ -7,7 +8,8 @@ from catering.models import CaterRequest
 
 class CateringViewSet(ModelViewSet):
     queryset = CaterRequest.objects.all()
-
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('truck__id',)
     serializer_class = CaterRequestSerializer
 
     # permission_classes = (permissions.IsAuthenticated,)

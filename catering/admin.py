@@ -18,6 +18,7 @@ class CaterRequestAdmin(admin.ModelAdmin):
         'truck',
         'when',
         'duration',
+        'requested_on',
     )
 
     list_filter = (

@@ -13,6 +13,8 @@ class CaterRequest(models.Model):
     when = models.DateTimeField()
     duration = models.FloatField()
 
+    requested_on = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ('-when',)
 
