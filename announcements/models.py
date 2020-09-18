@@ -31,7 +31,7 @@ def notify_on_announcement_creation(sender, instance, created, **kwargs):
     if created:
         devices = FCMDevice.objects.all()
         devices.send_message(data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high"},
-                             title=instance.title, body=instance.description, icon="icon_notif")
+                             title=instance.title, body=instance.body_summary(), icon="icon_notif")
 
 
 class AnnouncementImage(models.Model):

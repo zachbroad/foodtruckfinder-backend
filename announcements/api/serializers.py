@@ -28,8 +28,9 @@ class AnnouncementSerializer(ModelSerializer):
         fields = [
             'id',
             'title',
-            'description',
+            'body',
             'posted_on',
             'edited_on',
             'images',
         ]
+

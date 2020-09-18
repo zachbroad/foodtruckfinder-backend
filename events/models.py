@@ -27,9 +27,13 @@ class Event(ModelLocation):
 
 
 class ImGoing(models.Model):
-    comments = models.TextField(max_length=500, help_text='Is there anything you\'d like to say to the event organizer?', blank=True)
+    comments = models.TextField(max_length=500, help_text='Is there anything you\'d like to say to the event organizer?', blank=True,
+                                null=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, help_text='Event you are attending')
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, help_text='Who is going?')
+
+    class Meta:
+        unique_together = ('event', 'user',)
 
 
 class CancelledEventManager(models.Manager):

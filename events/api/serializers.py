@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from events.models import Event
+from events.models import Event, ImGoing
 from trucks.api.serializers import TruckSerializer
 
 
@@ -17,4 +17,16 @@ class EventSerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
             'trucks',
+        ]
+
+
+class ImGoingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImGoing
+
+        fields = [
+            'id',
+            'event',
+            'user',
+            'comments',
         ]
