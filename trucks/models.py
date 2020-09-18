@@ -139,6 +139,15 @@ class Truck(ModelLocation):
         return self.title
 
 
+class TruckImage(models.Model):
+    truck = models.ForeignKey(Truck, help_text='Truck this image belongs to', related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='truck_images')
+    caption = models.CharField(max_length=1024, blank=True, null=True, help_text='Image caption')
+
+    def __str__(self):
+        return self.image.name
+
+
 class TruckManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().all()
@@ -208,21 +217,16 @@ class Review(models.Model):
     def __str__(self):
         return self.truck.title + ' - Review: ' + self.reviewer.username
 
-    def clean(self):
-        if self.rating < 0 or self.rating > 5:
-            raise ValidationError("Invalid rating. Value must be between 0 and 5.")
-        super()
-
     def save(self, *args, **kwargs):
         self.full_clean()
         super(Review, self).save(*args, **kwargs)
 
     @property
-    def all_likes(self):
+    def likes(self):
         return self.likes.all().filter(is_liked=True)
 
     @property
-    def all_dislikes(self):
+    def dislikes(self):
         return self.likes.all().filter(is_liked=False)
 
 

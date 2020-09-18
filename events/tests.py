@@ -3,7 +3,7 @@ from datetime import datetime
 from rest_framework.test import APITestCase
 
 # Create your tests here.
-from events.models import Event
+from events.models import Event, ImGoing
 from users.models import User
 
 
@@ -16,7 +16,7 @@ class EventsTests(APITestCase):
             last_name='Broad',
         )
 
-        event = Event.objects.create(
+        self.event = Event.objects.create(
             title='null',
             description='null',
             address='null',
@@ -27,10 +27,37 @@ class EventsTests(APITestCase):
         )
 
     def test_im_going(self):
-        # request = APIRequestFactory().get("")
-        # im_going_view = EventViewSet.as_view({'POST': 'going'})
-        # im_going_view(request=request)
         self.client.force_login(self.user)
+
+        # Say that I'm going
         response = self.client.post('/api/events/1/going/', format='json')
-        # print(response.)
         self.assertLess(response.status_code, 300)
+
+        # Check that GET shows that I am attending correctly
+        response = self.client.get('/api/events/1/going/', format='json')
+        self.assertTrue(response.data['going'])
+
+        # Delete my intent to attend event
+        response = self.client.delete('/api/events/1/going/', format='json')
+        self.assertLess(response.status_code, 300)
+
+        # Check that GET shows I am not attending correctly
+        response = self.client.get('/api/events/1/going/', format='json')
+        self.assertFalse(response.data['going'])
+
+    def test_im_not_going(self):
+        self.client.force_login(self.user)
+
+        # Check that GET shows I am not attending correctly
+        response = self.client.get('/api/events/1/going/', format='json')
+        self.assertFalse(response.data['going'])
+
+        # I'm going...
+        response = self.client.post('/api/events/1/going/', format='json')
+        self.assertLess(response.status_code, 300)
+        self.assertIsNotNone(ImGoing.objects.filter(event=self.event, user=self.user).first())
+
+        # Not going anymore
+        response = self.client.delete('/api/events/1/going/', format='json')
+        self.assertLess(response.status_code, 300)
+        self.assertIsNone(ImGoing.objects.filter(event=self.event, user=self.user).first())
