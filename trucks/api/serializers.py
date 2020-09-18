@@ -33,7 +33,6 @@ class LiveSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'You are already live, or will be live during this time')
 
-            
             return data
         else:
             raise serializers.ValidationError(
@@ -342,12 +341,11 @@ class TruckSerializer(serializers.ModelSerializer):
             return rating
 
 
-
-
 class TruckDashboardSerializer(TruckSerializer):
     menu = MenuItemSerializer(many=True, required=False, source='items')
     owner = serializers.CurrentUserDefault()
     visits = serializers.SerializerMethodField()
+    number_of_cater_requests = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -370,6 +368,7 @@ class TruckDashboardSerializer(TruckSerializer):
             'visits',
             'live',
             'available_for_catering',
+            'number_of_cater_requests',
         )
 
         read_only_fields = (

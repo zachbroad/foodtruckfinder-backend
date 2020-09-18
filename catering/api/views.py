@@ -15,8 +15,10 @@ class CateringViewSet(ModelViewSet):
     # permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        if self.action == 'retrieve' or self.action == 'list':
+        if self.action == 'list':
             return CaterRequest.objects.filter(truck__owner_id=self.request.user).all()
+        else:
+            return super(CateringViewSet, self).get_queryset()
 
     def get_permissions(self):
         if self.action == 'destroy' or self.action == 'update':

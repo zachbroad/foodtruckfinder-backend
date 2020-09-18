@@ -16,4 +16,5 @@ class CaterRequestSerializer(ModelSerializer):
 
             'when',
             'duration',
+            'requested_on',
         )

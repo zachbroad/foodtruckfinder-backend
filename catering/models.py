@@ -1,14 +1,16 @@
 from django.db import models
+from phone_field import PhoneField
 
 # Create your models here.
 from trucks.models import Truck
 
 
 class CaterRequest(models.Model):
-    name = models.CharField(max_length=128)
-    email = models.EmailField()
-    details = models.TextField(max_length=10000)
-    truck = models.ForeignKey(Truck, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=128, help_text='Your name and/or event name')
+    email = models.EmailField(help_text='Email you\'d like to be reached at')
+    phone = PhoneField(help_text='Your contact number')
+    details = models.TextField(max_length=10000, help_text='Tell us about your event')
+    truck = models.ForeignKey(Truck, on_delete=models.DO_NOTHING, help_text='What truck would you like to cater your event?')
 
     when = models.DateTimeField()
     duration = models.FloatField()
