@@ -7,7 +7,30 @@ from django_google_maps import widgets as map_widgets
 from .models import Event, ImGoing
 
 
-class ImGoingAdmin(admin.StackedInline):
+
+@admin.register(ImGoing)
+class ImGoingInlineAdmin(admin.ModelAdmin):
+    model = ImGoing
+
+    fields = [
+        'user',
+        'event',
+        'comments',
+    ]
+
+    list_display = [
+        'user',
+        'event',
+        'comments',
+    ]
+
+    search_fields = [
+        'comments',
+        'event',
+        'user',
+    ]
+
+class ImGoingInlineAdmin(admin.TabularInline):
     model = ImGoing
 
 class EventAdmin(admin.ModelAdmin):
@@ -23,7 +46,7 @@ class EventAdmin(admin.ModelAdmin):
         'phone_number',
     ]
     inlines = [
-        ImGoingAdmin,
+        ImGoingInlineAdmin,
     ]
 
     fields = [
