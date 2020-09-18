@@ -1,21 +1,20 @@
-import datetime
-
-from dateutil import parser
-from django.db.models import Q, F, Count
 from django.utils import timezone
-from rest_framework import filters as drf_filters
+from django.db.models import Q, F, Count
 from rest_framework import generics, pagination, permissions
-from rest_framework import views
+from rest_framework import filters as drf_filters
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.exceptions import ValidationError
+from rest_framework import views
 from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
-    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer, \
+    VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer,\
     PatchMenuItemSerializer, LiveSerializer
+import datetime
+from rest_framework.mixins import UpdateModelMixin
+from dateutil import parser
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -70,7 +69,7 @@ class ReviewsViewSet(ModelViewSet):
         serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
 
         if serializer.is_valid():
-            existing_like = ReviewLike.objects.filter(liked_by=self.request.user) \
+            existing_like = ReviewLike.objects.filter(liked_by=self.request.user)\
                 .filter(review_id=pk)
             if existing_like.exists():
                 obj: ReviewLike = existing_like.first()
@@ -100,7 +99,7 @@ class LiveViewSet(ModelViewSet):
         data = validated_data.data.copy()
         try:
             currently_live = Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
-                                               Q(truck__id=data['truck'])))
+                                           Q(truck__id=data['truck'])))
             if currently_live.count() > 0:
                 raise ValidationError('You are currently live')
         except Live.DoesNotExist:
@@ -119,6 +118,7 @@ class LiveViewSet(ModelViewSet):
         return Response(live_serialized.data)
 
 
+
 class TruckLiveViewSet(generics.UpdateAPIView):
     serializer_class = LiveSerializer
     queryset = Live.objects.all()
@@ -126,7 +126,7 @@ class TruckLiveViewSet(generics.UpdateAPIView):
 
     def get_object(self, *args, **kwargs):
         return Live.objects.get((Q(start_time__lte=timezone.now(), end_time__gte=timezone.now()) &
-                                 Q(truck__id=self.kwargs['truck'])))
+                          Q(truck__id=self.kwargs['truck'])))
 
     def get(self, request, *args, **kwargs):
         serializer = LiveSerializer
@@ -188,7 +188,7 @@ class TruckViewSet(ModelViewSet):
             qs = sorted(sorted_trucks, key=lambda i: i.distance(lat, lng))
 
         if tag_startswith is not None:
-            qs = (Truck.objects.filter(tags__title__startswith=tag_startswith).all())
+           qs = (Truck.objects.filter(tags__title__startswith=tag_startswith).all())
 
         if title_startswith is not None:
             qs = Truck.objects.filter(title__startswith=title_startswith).all()
@@ -217,7 +217,7 @@ class TruckViewSet(ModelViewSet):
         data = request.data
         tag_objs = []
         menu_objs = []
-
+        print(data['tags'])
         try:
             truck = self.get_object()
             tags = data.get('tags', None)
@@ -228,26 +228,29 @@ class TruckViewSet(ModelViewSet):
             website = data.get('website', None)
             geolocation = data.get('geolocation', None)
             catering = data.get('catering', None)
-
+            print(tags)
             if tags is not None:
+                tag_objs = []
                 for tag in tags:
-                    if len(tag) > 1:
-                        new_tag = Tag.objects.get(title=tag['pk'])
-                        tag_objs.append(new_tag)
+                    print(tag)
+                    s_tag = TagSerializer(data=tag)
+                    # tag_data = TagSerializer(data=tags, many=True)
+                    if s_tag.is_valid():
+                        print(s_tag.data)
+                        s_tag.save()
+                        tag_objs.append(s_tag)
+                    else:
+                        print(s_tag.errors)
+            else: 
+                print('Tags are None')
             truck.tags.set(tag_objs)
-
-            if menu is not None:
-                for item in menu:
-                    new_item = MenuItem.objects.get(pk=menu['pk'])
-                    menu_objs.append(new_item)
-            truck.tags.set(menu_objs)
 
             if title is not None:
                 truck.title = title
 
             if description is not None:
                 truck.description = description
-
+            
             if phone is not None:
                 truck.phone = phone
 
@@ -266,7 +269,6 @@ class TruckViewSet(ModelViewSet):
         except Tag.DoesNotExist:
             raise ValidationError('Tag doesn\'t exist')
         serializer = TruckSerializer(truck, many=False, context={'request': request}, partial=True)
-        print(serializer.data)
         return Response(serializer.data)
 
     def get_serializer_class(self):
@@ -307,7 +309,7 @@ class HomePage(views.APIView):
     def get(self, request, format=None):
         trucks = Truck.objects.all()
 
-        trending = Truck.get_trending()
+        trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
 
         # User's recent
         visits = Visit.objects.filter(visitor=self.request.user)[:10]
@@ -352,6 +354,7 @@ class TagsViewSet(ModelViewSet):
         featured = self.request.query_params.get('featured', None)
 
         if featured is not None:
+
             qs = Tag.objects.filter(featured=featured).all()
 
         return qs

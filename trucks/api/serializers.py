@@ -293,12 +293,12 @@ class CreateTruckSerializer(serializers.ModelSerializer):
 class TruckSerializer(serializers.ModelSerializer):
     menu = MenuItemSerializer(many=True, required=False, source='items')
     # visit_history = VisitSerializer(many=True, required=False)
+    tags = TagSerializer(many=True, required=False)
     owner = serializers.CurrentUserDefault()
     reviews = ReviewSerializer(many=True)
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
     favorites = serializers.IntegerField(source='num_favorites')
-    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Truck
@@ -341,12 +341,7 @@ class TruckSerializer(serializers.ModelSerializer):
         if rating is not None:
             return rating
 
-    def get_tags(self, instance):
-        tags = Truck.objects.get(pk=instance.pk).tags.all()
-        tag_titles = []
-        for tag in tags:
-            tag_titles.append(tag.title)
-        return tag_titles
+
 
 
 class TruckDashboardSerializer(TruckSerializer):
