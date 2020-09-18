@@ -250,7 +250,7 @@ class TruckViewSet(ModelViewSet):
 
         serializer = TruckSerializer(truck, many=False, context={'request': request})
 
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
