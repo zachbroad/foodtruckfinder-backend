@@ -101,7 +101,10 @@ class Truck(ModelLocation):
         return d
 
     def distance(self, lat, lng):
-        return Truck.distance_raw(float(lat), float(lng), float(self.geolocation.lat), float(self.geolocation.lon))
+        try:
+            return Truck.distance_raw(float(lat), float(lng), float(self.geolocation.lat), float(self.geolocation.lon))
+        except:
+            return None
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
