@@ -4,7 +4,16 @@ from django.contrib import admin
 from django_google_maps import fields as map_fields
 from django_google_maps import widgets as map_widgets
 
-from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live
+from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live, TruckImage
+
+
+class TruckImageInline(admin.StackedInline):
+    model = TruckImage
+
+    fields = [
+        'image',
+        'caption',
+    ]
 
 
 class TruckAdmin(admin.ModelAdmin):
@@ -47,6 +56,10 @@ class TruckAdmin(admin.ModelAdmin):
         'phone',
         'website',
     )
+
+    inlines = [
+        TruckImageInline
+    ]
 
     model = Truck
 
