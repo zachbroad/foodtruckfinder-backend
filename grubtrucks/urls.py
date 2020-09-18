@@ -1,5 +1,6 @@
 from allauth.account.views import PasswordResetView
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
@@ -69,6 +70,8 @@ urlpatterns = [
                   path('rest-auth/password/reset/', PasswordResetView.as_view(), name='password-reset'),
                   path('login-token/', CustomAuthToken.as_view(), name='login-token'),
                   path('validate-token/', ValidateToken.as_view(), name='validate-token'),
+                  # markdown
+                  url(r'^markdownx/', include('markdownx.urls')),
                   re_path('^static/(?P<path>.*)$', serve,
                           {'document_root': settings.STATIC_ROOT}),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

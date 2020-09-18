@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Announcement, AnnouncementImage
+from markdownx.admin import MarkdownxModelAdmin
 
 
 class AnnouncementImageAdmin(admin.TabularInline):
@@ -8,17 +9,17 @@ class AnnouncementImageAdmin(admin.TabularInline):
 
 
 @admin.register(Announcement)
-class AnnouncementAdmin(admin.ModelAdmin):
+class AnnouncementAdmin(MarkdownxModelAdmin):
     list_display = [
         'title',
-        'description',
+        'body',
         'posted_on',
         'edited_on',
     ]
 
     search_fields = [
         'title',
-        'description',
+        'body',
     ]
 
     sortable_by = [

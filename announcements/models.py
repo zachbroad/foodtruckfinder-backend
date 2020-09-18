@@ -2,11 +2,13 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from fcm_django.models import FCMDevice
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 
 class Announcement(models.Model):
-    title = models.CharField(max_length=256)
-    description = models.TextField(max_length=10000)
+    title = models.CharField(max_length=256, help_text='Announcement title')
+    body = MarkdownxField(help_text='Announcement body', null=True)
 
     posted_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
@@ -16,6 +18,12 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+
+    def formatted_markdown(self):
+        return markdownify(self.body)
+
+    def body_summary(self):
+        return markdownify(self.body[:300] + "...")
 
 
 @receiver(post_save, sender=Announcement)
