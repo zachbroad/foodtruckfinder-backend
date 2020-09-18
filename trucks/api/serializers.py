@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
+from catering.models import CaterRequest
 
 
 class LiveSerializer(serializers.ModelSerializer):
@@ -377,6 +378,10 @@ class TruckDashboardSerializer(TruckSerializer):
             'reviews',
             'favorites',
         )
+
+
+    def get_number_of_cater_requests(self, instance):
+        return CaterRequest.objects.filter(truck=instance).count()
 
     def get_visits(self, instance):
         return instance.visits.count()
