@@ -127,7 +127,8 @@ class Truck(ModelLocation):
 
     @property
     def live(self):
-        return len(self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now())) > 0
+        return self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now()).exists() or self.schedule.filter(
+            start_time__lt=timezone.now(), end_time__gt=timezone.now()).exists()
 
     @staticmethod
     def get_trending():
@@ -148,6 +149,30 @@ class TruckImage(models.Model):
         return self.image.name
 
 
+class TruckEvent(ModelLocation):
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='schedule')
+
+    title = models.CharField(max_length=256, blank=True)
+    description = models.TextField(max_length=1000, blank=True)
+
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    class Meta:
+        ordering = ('start_time',)
+
+    def __str__(self):
+        return "{}'s event ({}) @ {} until {}".format(self.truck.title, self.title or "unnamed", self.start_time, self.end_time)
+
+    @property
+    def old(self) -> bool:
+        return (self.end_time - timezone.now()).total_seconds() < 0
+
+    @property
+    def is_now(self) -> bool:
+        return self.start_time < timezone.now() < self.end_time
+
+
 class TruckManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().all()
@@ -160,11 +185,9 @@ class MenuItem(models.Model):
     type = models.IntegerField(choices=TYPE_CHOICES)
 
     # non-specific
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='items')
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=120, null=True)
-    description = models.CharField(
-        max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
+    description = models.CharField(max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
                               default='/assets/truck_logo_placeholder.png')

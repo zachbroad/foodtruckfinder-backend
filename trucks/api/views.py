@@ -11,11 +11,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag
+from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag, TruckEvent
 from users.models import FavoriteTruck
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer, \
-    PatchMenuItemSerializer, LiveSerializer
+    PatchMenuItemSerializer, LiveSerializer, TruckEventSerializer
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -229,17 +229,11 @@ class TruckViewSet(ModelViewSet):
             # geolocation = data.get('geolocation', None)
             # catering = data.get('catering', None)
 
-            print(tags)
-            print(data)
             if tags is not None:
                 truck.tags.clear()
                 for tag in tags:
-                    tag
                     tgobj = Tag.objects.filter(id=tag).first()
                     truck.tags.add(tgobj)
-
-
-
 
         except Truck.DoesNotExist:
             raise ValidationError('Truck doesn\'t exist')
@@ -253,8 +247,10 @@ class TruckViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.action == 'create':
             return CreateTruckSerializer
+        if self.action == 'events':
+            return TruckEventSerializer
 
         return TruckSerializer
 
@@ -282,6 +278,25 @@ class TruckViewSet(ModelViewSet):
         serializer = self.get_serializer_class()
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
+
+    @action(detail=True, methods=["GET", "POST"], permission_classes=[permissions.AllowAny],
+            serializer_class=TruckEventSerializer, )  # TODO perm changes
+    def events(self, request, pk=None):
+        if request.method == "GET":
+            qs = self.get_queryset()
+            events = list(TruckEvent.objects.filter(truck=self.get_object()).all())
+            serializer = TruckEventSerializer(events, many=True, context={'request': request})
+            return Response(serializer.data)
+
+        if request.method == "POST":  # handle these perms better
+            truck = Truck.objects.filter(id=pk).first()
+            if truck.owner != request.user:
+                return Response({"error": "You don't have permission to create events for this truck!"},
+                                status=status.HTTP_401_UNAUTHORIZED)
+            serializer = TruckEventSerializer(data=request.data, many=False, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            TruckEvent.objects.create(**serializer.data, truck_id=pk)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class HomePage(views.APIView):

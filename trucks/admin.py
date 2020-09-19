@@ -4,7 +4,7 @@ from django.contrib import admin
 from django_google_maps import fields as map_fields
 from django_google_maps import widgets as map_widgets
 
-from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live, TruckImage
+from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live, TruckImage, TruckEvent
 
 
 class TruckImageInline(admin.StackedInline):
@@ -13,6 +13,39 @@ class TruckImageInline(admin.StackedInline):
     fields = [
         'image',
         'caption',
+    ]
+
+
+class TruckEventInline(admin.TabularInline):
+    model = TruckEvent
+
+
+@admin.register(TruckEvent)
+class TruckEventAdmin(admin.ModelAdmin):
+    model = TruckEvent
+
+    list_display = [
+        '__str__',
+        'truck',
+        'title',
+        'description',
+        'start_time',
+        'end_time',
+    ]
+
+    sortable_by = [
+        'start_time',
+        'end_time',
+    ]
+
+    list_filter = [
+        'start_time',
+    ]
+
+    search_fields = [
+        'truck',
+        'title',
+        'description',
     ]
 
 
@@ -58,7 +91,8 @@ class TruckAdmin(admin.ModelAdmin):
     )
 
     inlines = [
-        TruckImageInline
+        TruckImageInline,
+        TruckEventInline,
     ]
 
     model = Truck

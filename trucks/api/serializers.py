@@ -4,9 +4,9 @@ from django.db.models import Avg
 from django.db.models import Q
 from rest_framework import serializers
 
+from catering.models import CaterRequest
 from grubtrucks.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
-from catering.models import CaterRequest
 
 
 class LiveSerializer(serializers.ModelSerializer):
@@ -278,16 +278,21 @@ class CreateTruckSerializer(serializers.ModelSerializer):
                 MenuItem.objects.create(truck=truck, **item)
         return truck
 
-        # def create(self, request, *args, **kwargs):
-        #     is_many = isinstance(request.data, list)
-        #     if not is_many:
-        #         return super(TruckViewSet, self).create(request, *args, **kwargs)
-        #     else:
-        #         serializer = self.get_serializer(data=request.data, many=True)
-        #         serializer.is_valid(raise_exception=True)
-        #         self.perform_create(serializer)
-        #         headers = self.get_success_headers(serializer.data)
-        #         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+from trucks.models import TruckEvent
+
+
+class TruckEventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TruckEvent
+        fields = (
+            'pk',
+            'title',
+            'description',
+            'start_time',
+            'end_time',
+        )
 
 
 class TruckSerializer(serializers.ModelSerializer):
@@ -299,6 +304,7 @@ class TruckSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
     favorites = serializers.IntegerField(source='num_favorites')
+    schedule = TruckEventSerializer(many=True)
 
     class Meta:
         model = Truck
@@ -307,17 +313,21 @@ class TruckSerializer(serializers.ModelSerializer):
             'owner',
             'title',
             'image',
-            'distance',
             'description',
-            'address',
-            'geolocation',
             'phone',
             'website',
-            'menu',
-            'tags',
-            'rating',
+
+            'address',
+            'geolocation',
+            'distance',
+
             'reviews',
+            'rating',
             'favorites',
+
+            'menu',
+            'schedule',
+            'tags',
             'live',
             'available_for_catering',
         ]
@@ -361,7 +371,6 @@ class TruckDashboardSerializer(TruckSerializer):
             'phone',
             'website',
             'menu',
-            # 'visit_history',
             'tags',
             'rating',
             'reviews',
@@ -378,7 +387,6 @@ class TruckDashboardSerializer(TruckSerializer):
             'reviews',
             'favorites',
         )
-
 
     def get_number_of_cater_requests(self, instance):
         return CaterRequest.objects.filter(truck=instance).count()
