@@ -357,6 +357,7 @@ class TruckDashboardSerializer(TruckSerializer):
     owner = serializers.CurrentUserDefault()
     visits = serializers.SerializerMethodField()
     number_of_cater_requests = serializers.SerializerMethodField()
+    schedule = TruckEventSerializer(many=True)
 
     class Meta:
         model = Truck
@@ -371,6 +372,7 @@ class TruckDashboardSerializer(TruckSerializer):
             'phone',
             'website',
             'menu',
+            'schedule',
             'tags',
             'rating',
             'reviews',
