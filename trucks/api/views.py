@@ -299,6 +299,12 @@ class TruckViewSet(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+class TruckScheduleViewSet(ModelViewSet):
+    serializer_class = TruckEventSerializer  # TODO make the serializer work here for create/edit... has to do with how it doesnt need truck id cuz i get it from request.pk in another view
+    queryset = TruckEvent.objects.all()
+    pagination_class = pagination.LimitOffsetPagination
+
+
 class HomePage(views.APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 

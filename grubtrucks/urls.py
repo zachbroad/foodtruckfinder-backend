@@ -14,13 +14,12 @@ from events.api.views import EventViewSet
 from grubtrucks.views import IndexView
 from notifications.api.views import NotificationViewSet
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet, TruckLiveViewSet
+    TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
-router.register(r'notifications', NotificationViewSet, basename='Notifications')
 router.register(r'caters', CateringViewSet)
 router.register(r'dashboard', DashboardViewSet)
 router.register(r'devices', FCMDeviceAuthorizedViewSet)
@@ -29,11 +28,13 @@ router.register(r'favorites', FavoritesViewSet)
 router.register(r'feedback', FeedbackViewSet)
 router.register(r'lives', LiveViewSet)
 router.register(r'menu-items', MenuItemViewSet)
+router.register(r'notifications', NotificationViewSet, basename='Notifications')
+router.register(r'profile', ProfileViewSet)
 router.register(r'reviews', ReviewsViewSet)
 router.register(r'tags', TagsViewSet)
 router.register(r'trucks', TruckViewSet)
+router.register(r'schedules', TruckScheduleViewSet)
 router.register(r'users', AccountViewSet)
-router.register(r'profile', ProfileViewSet)
 router.register(r'visits', VisitViewSet)
 
 api_patterns = [
