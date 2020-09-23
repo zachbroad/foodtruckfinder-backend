@@ -59,7 +59,7 @@ class Truck(ModelLocation):
                               default='../media/assets/truck_logo_placeholder.png')
     description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, null=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     phone = PhoneField(blank=True, help_text='Contact number')
     website = models.URLField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
