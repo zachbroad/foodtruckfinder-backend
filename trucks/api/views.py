@@ -304,6 +304,9 @@ class TruckScheduleViewSet(ModelViewSet):
     queryset = TruckEvent.objects.all()
     pagination_class = pagination.LimitOffsetPagination
 
+    filter_backends = (drf_filters.SearchFilter,)
+    search_fields = ('truck__id',)
+
 
 class HomePage(views.APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
