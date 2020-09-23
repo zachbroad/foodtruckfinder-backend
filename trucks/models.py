@@ -57,7 +57,7 @@ class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
                               default='../media/assets/truck_logo_placeholder.png')
-    description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description')
+    description = models.TextField(max_length=3000, blank=True, default='Sorry, this truck has no description.')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     phone = PhoneField(blank=True, help_text='Contact number')
