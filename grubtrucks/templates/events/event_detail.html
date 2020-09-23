@@ -58,12 +58,25 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <span>
-                        <b>Address</b>: {{ event.address|default_if_none:"no address" }}
-                        </span>
-                        <span>
-                        <b>Phone Number</b>: {{ event.|default_if_none:"no address" }}
-                        </span>
+                        {% if event.address != None %}
+                            <div>
+                                <iframe id="map"
+                                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q={{ event.address }}"
+                                        width="100%" height="520" frameborder="0" style="border:0"
+                                        allowfullscreen>
+                                </iframe>
+                                <span>
+                                <b>Address</b>: {{ event.address|default_if_none:"no address" }}
+                                </span>
+                            </div>
+                        {% endif %}
+                        {% if event.phone_number != None %}
+                            <div>
+                                <span>
+                                <b>Phone Number</b>: {{ event.|default_if_none:"no address" }}
+                                </span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

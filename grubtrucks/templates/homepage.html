@@ -62,7 +62,7 @@
 
             {% if trucks != None %}
                 <div class="row">
-                    {% for truck in trucks %}
+                    {% for truck in trucks|slice:":3" %}
                         <div class="col-md-4 col-sm-6 py-2">
                             {% include 'trucks/truck_card.html' with truck=truck %}
                         </div>
