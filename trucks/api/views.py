@@ -221,14 +221,26 @@ class TruckViewSet(ModelViewSet):
         try:
             truck = self.get_object()
             tags = data.get('tags', None)
-            # title = data.get('title', None)
-            # description = data.get('description', None)
-            # menu = data.get('menu', None)
-            # phone = data.get('phone', None)
-            # website = data.get('website', None)
-            # geolocation = data.get('geolocation', None)
-            # catering = data.get('catering', None)
+            title = data.get('title', None)
+            description = data.get('description', None)
+            menu = data.get('menu', None)
+            phone = data.get('phone', None)
+            website = data.get('website', None)
+            geolocation = data.get('geolocation', None)
+            catering = data.get('catering', None)
 
+            if title is not None:
+                truck.title = title
+            if description is not None:
+                truck.description = description 
+            if phone is not None:
+                truck.phone = phone
+            if website is not None:
+                truck.website = website
+            if geolocation is not None:
+                truck.geolocation = geolocation
+            if catering is not None:
+                truck.catering = catering
             if tags is not None:
                 truck.tags.clear()
                 for tag in tags:

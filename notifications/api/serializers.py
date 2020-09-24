@@ -12,7 +12,9 @@ class NotificationSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'posted_on',
+            'seen',
             'user',
             'route',
             'webview_route',
         ]
+
