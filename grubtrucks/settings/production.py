@@ -10,7 +10,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'grubtrucks.herokuapp.com'
+    'onthegrub.herokuapp.com'
 ]
 
 DATABASES['default'] = dj_database_url.config(

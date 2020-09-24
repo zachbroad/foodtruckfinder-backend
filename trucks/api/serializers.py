@@ -283,7 +283,6 @@ from trucks.models import TruckEvent
 
 
 class TruckEventSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = TruckEvent
         fields = (
@@ -292,6 +291,8 @@ class TruckEventSerializer(serializers.ModelSerializer):
             'description',
             'start_time',
             'end_time',
+            'address',
+            'geolocation',
         )
 
 

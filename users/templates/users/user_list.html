@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Grubtrucks users
+    OnTheGrub Users List
 {% endblock %}
 
 {% block content %}
 <div class="container">
 <div class="row">
     <div class="col">
-        <h2>Grubtrucks users</h2>
+        <h2>OnTheGrub Users</h2>
         <ul>
             {% for user in user_list %}
                 <li><a href="">@{{ user.username }}</a></li>
