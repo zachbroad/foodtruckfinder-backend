@@ -67,7 +67,8 @@ class ReviewsViewSet(ModelViewSet):
     @action(detail=True, methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
             permission_classes=(permissions.IsAuthenticated,))
     def like(self, request, pk=None):
-        serializer = LikeSerializer(data=self.request.data, context={'request', self.request})
+        serializer = LikeSerializer(data=self.request.data, context={
+                                    'request', self.request})
 
         if serializer.is_valid():
             existing_like = ReviewLike.objects.filter(liked_by=self.request.user) \
@@ -78,7 +79,8 @@ class ReviewsViewSet(ModelViewSet):
                 ls = LikeSerializer(obj)
                 return Response(ls.data)
             else:
-                l = ReviewLike.objects.create(**serializer.data, liked_by=self.request.user, review_id=pk)
+                l = ReviewLike.objects.create(
+                    **serializer.data, liked_by=self.request.user, review_id=pk)
                 ls = LikeSerializer(l)
                 return Response(ls.data)
 
@@ -132,7 +134,8 @@ class TruckLiveViewSet(generics.UpdateAPIView):
         serializer = LiveSerializer
         try:
             live = self.get_object()
-            data = serializer(live, many=False, context={'request': request}, partial=True)
+            data = serializer(live, many=False, context={
+                              'request': request}, partial=True)
         except Live.DoesNotExist:
             raise ValidationError('Truck currently not live')
         return Response(data.data)
@@ -155,7 +158,8 @@ class TruckLiveViewSet(generics.UpdateAPIView):
             live.save()
         except Live.DoesNotExist:
             raise ValidationError('You are not live')
-        serializer = LiveSerializer(live, many=False, context={'request': request}, partial=True)
+        serializer = LiveSerializer(live, many=False, context={
+                                    'request': request}, partial=True)
         return Response(serializer.data)
 
 
@@ -169,8 +173,10 @@ class TruckViewSet(ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
 
-        tag_startswith = self.request.query_params.get('tags__title__startswith', None)
-        title_startswith = self.request.query_params.get('title__startswith', None)
+        tag_startswith = self.request.query_params.get(
+            'tags__title__startswith', None)
+        title_startswith = self.request.query_params.get(
+            'title__startswith', None)
         owner = self.request.query_params.get('owner', None)
 
         geolocation = self.request.query_params.get('geolocation', None)
@@ -188,13 +194,15 @@ class TruckViewSet(ModelViewSet):
             qs = sorted(sorted_trucks, key=lambda i: i.distance(lat, lng))
 
         if tag_startswith is not None:
-            qs = (Truck.objects.filter(tags__title__startswith=tag_startswith).all())
+            qs = (Truck.objects.filter(
+                tags__title__startswith=tag_startswith).all())
 
         if title_startswith is not None:
             qs = Truck.objects.filter(title__startswith=title_startswith).all()
 
         if title_startswith is not None and tag_startswith is not None:
-            q = Q(Q(title__startswith=title_startswith) | Q(tags__title__startswith=tag_startswith))
+            q = Q(Q(title__startswith=title_startswith) |
+                  Q(tags__title__startswith=tag_startswith))
             qs = Truck.objects.filter(q)
 
         # if tags is not None:
@@ -227,12 +235,12 @@ class TruckViewSet(ModelViewSet):
             phone = data.get('phone', None)
             website = data.get('website', None)
             geolocation = data.get('geolocation', None)
-            catering = data.get('catering', None)
+            catering = data.get('available_for_catering', None)
 
             if title is not None:
                 truck.title = title
             if description is not None:
-                truck.description = description 
+                truck.description = description
             if phone is not None:
                 truck.phone = phone
             if website is not None:
@@ -240,13 +248,13 @@ class TruckViewSet(ModelViewSet):
             if geolocation is not None:
                 truck.geolocation = geolocation
             if catering is not None:
-                truck.catering = catering
+                truck.available_for_catering = catering
             if tags is not None:
                 truck.tags.clear()
                 for tag in tags:
                     tgobj = Tag.objects.filter(id=tag).first()
                     truck.tags.add(tgobj)
-
+            truck.save()
         except Truck.DoesNotExist:
             raise ValidationError('Truck doesn\'t exist')
         except Tag.DoesNotExist:
@@ -268,7 +276,8 @@ class TruckViewSet(ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def trending(self, request):
-        qs = self.get_queryset().annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+        qs = self.get_queryset().annotate(favorite_count=Count(
+            F('favorites'))).order_by('-favorite_count')
         serializer = self.get_serializer_class()
         data = serializer(qs, many=True, context={'request': request})
         return Response(data.data)
@@ -296,8 +305,10 @@ class TruckViewSet(ModelViewSet):
     def events(self, request, pk=None):
         if request.method == "GET":
             qs = self.get_queryset()
-            events = list(TruckEvent.objects.filter(truck=self.get_object()).all())
-            serializer = TruckEventSerializer(events, many=True, context={'request': request})
+            events = list(TruckEvent.objects.filter(
+                truck=self.get_object()).all())
+            serializer = TruckEventSerializer(
+                events, many=True, context={'request': request})
             return Response(serializer.data)
 
         if request.method == "POST":  # handle these perms better
@@ -305,14 +316,16 @@ class TruckViewSet(ModelViewSet):
             if truck.owner != request.user:
                 return Response({"error": "You don't have permission to create events for this truck!"},
                                 status=status.HTTP_401_UNAUTHORIZED)
-            serializer = TruckEventSerializer(data=request.data, many=False, context={'request': request})
+            serializer = TruckEventSerializer(
+                data=request.data, many=False, context={'request': request})
             serializer.is_valid(raise_exception=True)
             TruckEvent.objects.create(**serializer.data, truck_id=pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class TruckScheduleViewSet(ModelViewSet):
-    serializer_class = TruckEventSerializer  # TODO make the serializer work here for create/edit... has to do with how it doesnt need truck id cuz i get it from request.pk in another view
+    # TODO make the serializer work here for create/edit... has to do with how it doesnt need truck id cuz i get it from request.pk in another view
+    serializer_class = TruckEventSerializer
     queryset = TruckEvent.objects.all()
     pagination_class = pagination.LimitOffsetPagination
 
@@ -326,7 +339,8 @@ class HomePage(views.APIView):
     def get(self, request, format=None):
         trucks = Truck.objects.all()
 
-        trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
+        trending = trucks.annotate(favorite_count=Count(
+            F('favorites'))).order_by('-favorite_count')
 
         # User's recent
         visits = Visit.objects.filter(visitor=self.request.user)[:10]
@@ -337,10 +351,14 @@ class HomePage(views.APIView):
         favorites = trucks.filter(favorites__in=favorites)
 
         # There's gotta be a better way to do this lmao
-        ts_trending = TruckSerializer(trending, many=True, context={'request': request})
-        ts_recent = TruckSerializer(recent, many=True, context={'request': request})
-        ts_favorites = TruckSerializer(favorites, many=True, context={'request': request})
-        ts_new = TruckSerializer(trucks.order_by("-pk"), many=True, context={'request': request})
+        ts_trending = TruckSerializer(
+            trending, many=True, context={'request': request})
+        ts_recent = TruckSerializer(
+            recent, many=True, context={'request': request})
+        ts_favorites = TruckSerializer(
+            favorites, many=True, context={'request': request})
+        ts_new = TruckSerializer(trucks.order_by(
+            "-pk"), many=True, context={'request': request})
 
         return Response({
             "trending": ts_trending.data,
