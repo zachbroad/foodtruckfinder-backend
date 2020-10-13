@@ -65,6 +65,8 @@ class Truck(ModelLocation):
     tags = models.ManyToManyField('Tag', blank=True)
     available_for_catering = models.BooleanField(default=False)
 
+    reviewed = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
 

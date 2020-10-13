@@ -234,6 +234,7 @@ class TruckViewSet(ModelViewSet):
             menu = data.get('menu', None)
             phone = data.get('phone', None)
             website = data.get('website', None)
+            address = data.get('address', None)
             geolocation = data.get('geolocation', None)
             catering = data.get('available_for_catering', None)
 
@@ -247,6 +248,7 @@ class TruckViewSet(ModelViewSet):
                 truck.website = website
             if geolocation is not None:
                 truck.geolocation = geolocation
+                # TODO: reverse geocode geolocation and save new address
             if catering is not None:
                 truck.available_for_catering = catering
             if tags is not None:
