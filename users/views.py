@@ -17,7 +17,7 @@ class UserList(ListView):
 
 class SignupView(allauth_views.SignupView):
     template_name = "signup.html"
-    success_url = reverse_lazy("users:success")
+    success_url = reverse_lazy("grub-success")
 
 
 class LoginView(allauth_views.LoginView):

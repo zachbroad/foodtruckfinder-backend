@@ -17,7 +17,7 @@ from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, Dashboa
     TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
-from users import urls as user_urls
+from users.views import SignupView, SuccessView, LoginView, LogoutView
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
@@ -52,8 +52,12 @@ urlpatterns = [
                   # Account
                   path('accounts/', include('allauth.urls')),
 
-                  path('users/', include(user_urls.user_urlpatterns)),
-                  path('auth/', include(user_urls.auth_urlpatterns)),
+                  path('users/', include('users.urls')),
+
+                  path('signup/', SignupView.as_view(), name='grub-signup'),
+                  path('login/', LoginView.as_view(), name='grub-login'),
+                  path('logout/', LogoutView.as_view(), name='grub-logout'),
+                  path('success/', SuccessView.as_view(), name='grub-success'),
 
                   path('users/', include('django.contrib.auth.urls')),
 
