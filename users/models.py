@@ -77,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_truck_owner(self):
-        return Truck.objects.filter(owner=self).exists()
+        return Truck.objects.filter(owner=self).count() > 0
 
     @property
     def trucks(self):
