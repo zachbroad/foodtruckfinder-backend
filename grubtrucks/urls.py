@@ -17,6 +17,7 @@ from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, Dashboa
     TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
+from users import urls as user_urls
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
@@ -50,7 +51,10 @@ urlpatterns = [
 
                   # Account
                   path('accounts/', include('allauth.urls')),
-                  path('users/', include('users.urls')),
+
+                  path('users/', include(user_urls.user_urlpatterns)),
+                  path('auth/', include(user_urls.auth_urlpatterns)),
+
                   path('users/', include('django.contrib.auth.urls')),
 
                   path('trucks/', include('trucks.urls')),

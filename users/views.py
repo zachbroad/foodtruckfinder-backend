@@ -1,5 +1,6 @@
 from allauth.account import views as allauth_views
-from django.views.generic import DetailView, ListView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DetailView, ListView, TemplateView
 
 from users.models import User
 
@@ -16,6 +17,7 @@ class UserList(ListView):
 
 class SignupView(allauth_views.SignupView):
     template_name = "signup.html"
+    success_url = reverse_lazy("users:success")
 
 
 class LoginView(allauth_views.LoginView):
@@ -24,3 +26,7 @@ class LoginView(allauth_views.LoginView):
 
 class LogoutView(allauth_views.LogoutView):
     template_name = "logout.html"
+
+
+class SuccessView(TemplateView):
+    template_name = "success.html"
