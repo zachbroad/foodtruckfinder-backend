@@ -16,7 +16,7 @@ ALLOWED_HOSTS = [
 DATABASES['default'] = dj_database_url.config(
     conn_max_age=600, ssl_require=True)
 
-ROOT_URLCONF = 'grubtrucks.urls'
+ROOT_URLCONF = 'onthegrub.urls'
 
 # MIDDLEWARE += [
 #     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -33,7 +33,7 @@ STATICFILES_DIRS = (
 # class WhiteNoiseStaticFilesStorage(CompressedManifestStaticFilesStorage):
 #     manifest_strict = False
 #
-# STATICFILES_STORAGE = 'grubtrucks.settings.production.WhiteNoiseStaticFilesStorage'
+# STATICFILES_STORAGE = 'onthegrub.settings.production.WhiteNoiseStaticFilesStorage'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -51,8 +51,8 @@ AWS_BUCKET_ACL = 'public-read'
 # AWS_BUCKET_ACL = None
 
 # ASSETS
-MEDIA_URL = 'https://%s/%s/' % ('grubtrucks-app.s3.amazonaws.com', 'media')
-STATIC_URL = 'https://%s/%s/' % ('grubtrucks-app.s3.amazonaws.com', 'static')
+MEDIA_URL = 'https://%s/%s/' % ('onthegrub.s3.amazonaws.com', 'media')
+STATIC_URL = 'https://%s/%s/' % ('onthegrub.s3.amazonaws.com', 'static')
 
 # EMAIL
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

@@ -1,1 +1,1 @@
-web: gunicorn grubtrucks.wsgi
+web: gunicorn onthegrub.wsgi

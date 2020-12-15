@@ -1,7 +1,7 @@
 from django.db import models
 from phone_field import PhoneField
 
-from grubtrucks.settings.settings import AUTH_USER_MODEL
+from onthegrub.settings.settings import AUTH_USER_MODEL
 from trucks.models import Truck
 from users.models import User
 from util.models import ModelLocation

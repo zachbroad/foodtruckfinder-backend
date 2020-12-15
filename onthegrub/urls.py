@@ -11,12 +11,13 @@ from rest_framework import routers
 from announcements.api.views import AnnouncementViewSet
 from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
-from grubtrucks.views import IndexView
+from onthegrub.views import IndexView
 from notifications.api.views import NotificationViewSet
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
     TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
+from django.views.generic.base import TemplateView
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
@@ -47,6 +48,10 @@ api_patterns = [
 urlpatterns = [
                   # Test site
                   path('', IndexView.as_view(), name='index'),
+
+
+                  # robots.txt
+                  path('robots.txt/', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),),
 
                   # Account
                   path('accounts/', include('allauth.urls')),

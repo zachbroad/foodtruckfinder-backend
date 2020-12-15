@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from grubtrucks.util import Base64ImageField
+from onthegrub.util import Base64ImageField
 from users.models import User, SearchTerm, FavoriteTruck, Feedback
 
 

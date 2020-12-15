@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='profile_picture',
-            field=models.ImageField(blank=True, default='/grubtrucks/static/grubtruck.png', null=True, upload_to=''),
+            field=models.ImageField(blank=True, default='/onthegrub/static/grubtruck.png', null=True, upload_to=''),
         ),
     ]

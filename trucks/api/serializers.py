@@ -5,7 +5,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from catering.models import CaterRequest
-from grubtrucks.util import Base64ImageField
+from onthegrub.util import Base64ImageField
 from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
 
 

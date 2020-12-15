@@ -3,7 +3,7 @@
   <component name="TerminalProjectOptionsProvider">
     <envs>
       <env key="SECRET_KEY" value="asdfasdfasdfasdf" />
-      <env key="DJANGO_SETTINGS_MODULE" value="grubtrucks.settings.settings" />
+      <env key="DJANGO_SETTINGS_MODULE" value="onthegrub.settings.settings" />
     </envs>
   </component>
 </project>
