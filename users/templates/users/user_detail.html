@@ -6,24 +6,37 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-5 m-2 p-3 card">
-                <div class="d-flex justify-content-between align-content-center align-items-center">
-                    <div class="align-self-start">
-                        <h2 class="p-0 m-0">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h2>
-                        <h4 class="text-muted">@{{ user.username }}</h4>
+        <div class="row no-gutters">
+            <div class="col-sm-12 col-md-6 col-lg-5 p-3 m-3 mx-auto card bg-light">
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="card-title">
+                        <h1 class="p-0 m-0">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h1>
+                        <h3 class="text-muted">@{{ user.username }}</h3>
+                        <p class="m-0 p-0">member for {{ user.date_joined|timesince }} days</p>
+                        <p class="m-0 p-0">last active {{ user.last_login|date }}</p>
                     </div>
-
-                    <div class="text-right">
-                        <p class="m-0 p-0">Member for {{ user.date_joined|timesince }} days</p>
-                        <p class="m-0 p-0">Last active {{ user.last_login|date }}</p>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-dark" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                style="font-size: 1.25rem; margin: 0; padding: 0.5rem 1rem; line-height: 2rem;"
+                        >
+                            …
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-item">Share</div>
+                            <div class="dropdown-item">Report</div>
+                        </div>
                     </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline-success">Follow</button>
+                    <button class="btn btn-outline-dark">Message</button>
                 </div>
             </div>
         </div>
     </div>
 
-    {% if user.is_truck_owner|capfirst %}
+    {% if user.is_truck_owner %}
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -34,6 +47,14 @@
                 {% for truck in user.trucks.all %}
                     {% include 'trucks/truck_card.html' with truck=truck %}
                 {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3>Not a truck owner</h3>
+                </div>
             </div>
         </div>
     {% endif %}

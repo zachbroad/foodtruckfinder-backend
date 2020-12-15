@@ -2,6 +2,7 @@ import datetime
 
 from dateutil import parser
 from django.db.models import Q, F, Count
+from django.http import HttpRequest
 from django.utils import timezone
 from rest_framework import filters as drf_filters
 from rest_framework import generics, pagination, permissions, status
@@ -68,7 +69,7 @@ class ReviewsViewSet(ModelViewSet):
             permission_classes=(permissions.IsAuthenticated,))
     def like(self, request, pk=None):
         serializer = LikeSerializer(data=self.request.data, context={
-                                    'request', self.request})
+            'request', self.request})
 
         if serializer.is_valid():
             existing_like = ReviewLike.objects.filter(liked_by=self.request.user) \
@@ -135,7 +136,7 @@ class TruckLiveViewSet(generics.UpdateAPIView):
         try:
             live = self.get_object()
             data = serializer(live, many=False, context={
-                              'request': request}, partial=True)
+                'request': request}, partial=True)
         except Live.DoesNotExist:
             raise ValidationError('Truck currently not live')
         return Response(data.data)
@@ -159,7 +160,7 @@ class TruckLiveViewSet(generics.UpdateAPIView):
         except Live.DoesNotExist:
             raise ValidationError('You are not live')
         serializer = LiveSerializer(live, many=False, context={
-                                    'request': request}, partial=True)
+            'request': request}, partial=True)
         return Response(serializer.data)
 
 
@@ -338,36 +339,40 @@ class TruckScheduleViewSet(ModelViewSet):
 class HomePage(views.APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    def get(self, request, format=None):
+    def get(self, request: HttpRequest, format=None):
+        response_data = dict()
         trucks = Truck.objects.all()
 
+        # User specific truck lists
+        if request.user.is_authenticated:
+            # User's recent
+            visits = Visit.objects.filter(visitor=self.request.user)[:10]
+            recent = trucks.filter(visits__in=visits).distinct()
+
+            # Users's Favorites
+            favorites = FavoriteTruck.objects.filter(user=self.request.user)
+            favorites = trucks.filter(favorites__in=favorites)
+
+            # recent
+            response_data['recent'] = TruckSerializer(
+                recent, many=True, context={'request': request}).data
+
+            # favorites
+            response_data['favorites'] = TruckSerializer(
+                favorites, many=True, context={'request': request}).data
+
+        # Trending
         trending = trucks.annotate(favorite_count=Count(
             F('favorites'))).order_by('-favorite_count')
 
-        # User's recent
-        visits = Visit.objects.filter(visitor=self.request.user)[:10]
-        recent = trucks.filter(visits__in=visits).distinct()
+        response_data['trending'] = TruckSerializer(
+            trending, many=True, context={'request': request}).data
 
-        # Favorites
-        favorites = FavoriteTruck.objects.filter(user=self.request.user)
-        favorites = trucks.filter(favorites__in=favorites)
+        # Newest trucks (we are sorting by pk, not by date or most recently updated // todo ... should we?)
+        response_data['new'] = TruckSerializer(trucks.order_by(
+            "-pk"), many=True, context={'request': request}).data
 
-        # There's gotta be a better way to do this lmao
-        ts_trending = TruckSerializer(
-            trending, many=True, context={'request': request})
-        ts_recent = TruckSerializer(
-            recent, many=True, context={'request': request})
-        ts_favorites = TruckSerializer(
-            favorites, many=True, context={'request': request})
-        ts_new = TruckSerializer(trucks.order_by(
-            "-pk"), many=True, context={'request': request})
-
-        return Response({
-            "trending": ts_trending.data,
-            "new": ts_new.data,
-            "recent": ts_recent.data,
-            "favorites": ts_favorites.data,
-        })
+        return Response(response_data)
 
 
 class DashboardViewSet(ModelViewSet):
