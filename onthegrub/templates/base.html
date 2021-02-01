@@ -44,17 +44,21 @@
                 <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'announcements:index' %}">News</a>
+                <a class="nav-link" href="https://blog.onthegrub.com/">Blog</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'events:index' %}">Events</a>
-            </li>
+            {# RE-ENABLING THESE SOON #}
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="{% url 'announcements:index' %}">News</a>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="{% url 'events:index' %}">Events</a>#}
+{#            </li>#}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'trucks:index' %}">Trucks</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'catering:index' %}">Catering</a>
-            </li>
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="{% url 'catering:index' %}">Catering</a>#}
+{#            </li>#}
         </ul>
         <ul class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
