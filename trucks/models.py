@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
+from rest_framework.reverse import reverse_lazy, reverse
 
 from notifications.models import Notification
 from util.models import ModelLocation
@@ -65,7 +66,11 @@ class Truck(ModelLocation):
     tags = models.ManyToManyField('Tag', blank=True)
     available_for_catering = models.BooleanField(default=False)
 
+    last_updated = models.DateTimeField(auto_now=True)
     reviewed = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        return reverse("trucks:detail", args=[self.id])
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -241,6 +246,9 @@ class Review(models.Model):
 
     def __str__(self):
         return self.truck.title + ' - Review: ' + self.reviewer.username
+
+    def get_absolute_url(self):
+        return reverse("trucks:review-detail", args=[self.truck_id, self.id])
 
     def save(self, *args, **kwargs):
         self.full_clean()

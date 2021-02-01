@@ -8,17 +8,21 @@ from django.urls import path, include, re_path
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 from rest_framework import routers
 
+from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps.views import sitemap
+from trucks.models import Truck, Review
+
 from announcements.api.views import AnnouncementViewSet
 from catering.api.views import CateringViewSet
+from django.views.generic.base import TemplateView
 from events.api.views import EventViewSet
-from onthegrub.views import IndexView
 from notifications.api.views import NotificationViewSet
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
+from onthegrub.views import IndexView
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
 from users.api.views import CustomAuthToken, ValidateToken
-from django.views.generic.base import TemplateView
 from users.views import SignupView, SuccessView, LoginView, LogoutView
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
+    TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementViewSet)
@@ -39,6 +43,16 @@ router.register(r'schedules', TruckScheduleViewSet)
 router.register(r'users', AccountViewSet)
 router.register(r'visits', VisitViewSet)
 
+truck_info_dict = {
+    'queryset': Truck.objects.all(),
+    'date_field': 'last_updated'
+}
+
+review_info_dict = {
+    'queryset': Review.objects.all(),
+    'date_field': 'post_edited',
+}
+
 api_patterns = [
     *router.urls,
     # "Home" Page
@@ -50,9 +64,8 @@ urlpatterns = [
                   # Test site
                   path('', IndexView.as_view(), name='index'),
 
-
                   # robots.txt
-                  path('robots.txt/', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),),
+                  path('robots.txt/', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), ),
 
                   # Account
                   path('accounts/', include('allauth.urls')),
@@ -88,4 +101,13 @@ urlpatterns = [
                   url(r'^markdownx/', include('markdownx.urls')),
                   re_path('^static/(?P<path>.*)$', serve,
                           {'document_root': settings.STATIC_ROOT}),
+
+                  ### SITEMAP
+                    path("sitemap.xml", sitemap, {
+                        'sitemaps': {
+                            'trucks': GenericSitemap(info_dict=truck_info_dict, priority=1.0),
+                            'reviews': GenericSitemap(info_dict=review_info_dict, priority=0.9)
+                        }
+                    }, name="django.contrib.sitemaps.views.sitemap")
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
