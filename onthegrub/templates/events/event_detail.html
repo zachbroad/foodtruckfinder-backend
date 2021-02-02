@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Events near you
+    {{ event.title }} on {{ event.start_time }} | OnTheGrub
+{% endblock %}
+{% block description %}
+    {{ event.description }}
 {% endblock %}
 
 {% block content %}
