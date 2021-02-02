@@ -80,6 +80,7 @@ class ReviewListCreate(View):
 
 class ReviewDetail(generic.DetailView):
     model = Review
+    pk_url_kwarg = 'review_id'
 
 class ReviewUpdate(generic.UpdateView):
     model = Review

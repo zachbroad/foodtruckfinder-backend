@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Review on {{ object.truck.title }} by {{ object.reviewer.username }}
+{% endblock %}
+{% block description %}Check out this review on {{ object.truck.title }} by {{ object.reviewer.username }}
+    .{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 col-sm-12 my-3">
+                <div class="card">
+                    <h2 class="card-header">Review by {{ review.reviewer.username }} on {{ review.truck.title }}</h2>
+                    <p class="card-body">
+                        {{ review.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'trucks:detail' object.truck.id %}">
+                    <button class="btn btn-primary">
+                        Go back
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
