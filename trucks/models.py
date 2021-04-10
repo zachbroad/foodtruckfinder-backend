@@ -1,5 +1,6 @@
 import math
 import time
+import uuid
 
 from django.conf import settings
 from django.core import validators
@@ -52,6 +53,34 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class TruckEvent(ModelLocation):
+    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='schedule')
+
+    title = models.CharField(max_length=256, blank=True)
+    description = models.TextField(max_length=1000, blank=True)
+
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    class Meta:
+        ordering = ('start_time',)
+
+    def __str__(self):
+        return "{}'s event ({}) @ {} until {}".format(self.truck.title, self.title or "unnamed", self.start_time,
+                                                      self.end_time)
+
+    def get_absolute_url(self):
+        return reverse('trucks:event-detail', args=[self.truck_id, self.id])
+
+    @property
+    def has_ended(self) -> bool:
+        return (self.end_time - timezone.now()).total_seconds() < 0
+
+    @property
+    def is_now(self) -> bool:
+        return self.start_time < timezone.now() < self.end_time
 
 
 class Truck(ModelLocation):
@@ -134,7 +163,8 @@ class Truck(ModelLocation):
 
     @property
     def live(self):
-        return self.live_objects.filter(start_time__lt=timezone.now(), end_time__gt=timezone.now()).exists() or self.schedule.filter(
+        return self.live_objects.filter(start_time__lt=timezone.now(),
+                                        end_time__gt=timezone.now()).exists() or self.schedule.filter(
             start_time__lt=timezone.now(), end_time__gt=timezone.now()).exists()
 
     @staticmethod
@@ -143,41 +173,22 @@ class Truck(ModelLocation):
         trending = trucks.annotate(favorite_count=Count(F('favorites'))).order_by('-favorite_count')
         return trending
 
+    @property
+    def upcoming_schedule(self) -> [TruckEvent]:
+        return self.schedule.filter(start_time__gte=timezone.now())
+
     def __str__(self):
         return self.title
 
 
 class TruckImage(models.Model):
-    truck = models.ForeignKey(Truck, help_text='Truck this image belongs to', related_name='images', on_delete=models.CASCADE)
+    truck = models.ForeignKey(Truck, help_text='Truck this image belongs to', related_name='images',
+                              on_delete=models.CASCADE)
     image = models.ImageField(upload_to='truck_images')
     caption = models.CharField(max_length=1024, blank=True, null=True, help_text='Image caption')
 
     def __str__(self):
         return self.image.name
-
-
-class TruckEvent(ModelLocation):
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='schedule')
-
-    title = models.CharField(max_length=256, blank=True)
-    description = models.TextField(max_length=1000, blank=True)
-
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-
-    class Meta:
-        ordering = ('start_time',)
-
-    def __str__(self):
-        return "{}'s event ({}) @ {} until {}".format(self.truck.title, self.title or "unnamed", self.start_time, self.end_time)
-
-    @property
-    def old(self) -> bool:
-        return (self.end_time - timezone.now()).total_seconds() < 0
-
-    @property
-    def is_now(self) -> bool:
-        return self.start_time < timezone.now() < self.end_time
 
 
 class TruckManager(models.Manager):
@@ -194,7 +205,8 @@ class MenuItem(models.Model):
     # non-specific
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=120, null=True)
-    description = models.CharField(max_length=500, null=True, blank=True, default='Sorry, this item has no description.')
+    description = models.CharField(max_length=500, null=True, blank=True,
+                                   default='Sorry, this item has no description.')
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
                               default='/assets/truck_logo_placeholder.png')
@@ -234,7 +246,8 @@ class Menu(models.Model):
 
 class Review(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField(verbose_name='truck_rating', validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
+    rating = models.IntegerField(verbose_name='truck_rating',
+                                 validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
     description = models.TextField(max_length=2500, blank=True, null=True)
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
 
@@ -320,7 +333,8 @@ class Live(models.Model):
         if self.end_time < self.start_time:
             raise ValidationError('Start time must be before end time')
         if timezone.now() < self.end_time:
-            lives = Live.objects.filter((Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
+            lives = Live.objects.filter(
+                (Q(start_time__lte=self.end_time, end_time__gte=self.start_time)) & Q(truck__id=self.truck.pk))
             editing = lives[0].pk == self.pk
             if lives.exists() and not editing:
                 raise ValidationError('You are already live, or will be live during this time')

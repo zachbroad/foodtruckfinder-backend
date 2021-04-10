@@ -1,50 +1,46 @@
 {% extends 'base.html' %}
 
 {% block title %}Find Food Trucks Near You | OnTheGrub{% endblock %}
-{% block description %}Looking for food truck near you? Check out OnTheGrub, Florida's #1 food truck finder.{% endblock %}
-{#<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">#}
+{% block description %}
+    Looking for food truck near you? Check out OnTheGrub, Florida's #1 food truck finder.
+{% endblock %}
 
 {% block content %}
     <div class="container text-left">
-        {% if all_trucks %}
-            <div class="row py-3">
-                <div class="col">
-                    <h3>Trucks near you</h3>
-                    <p>Your location</p>
-                </div>
+        <div class="row pt-3">
+            <div class="col">
+                <h3>Trucks near you</h3>
+                <p>Your location</p>
             </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <form method="GET" class="d-flex flex-row">
+                    <input class="form-control mr-2" placeholder="FIND GRUB" name="query" type="text"/>
+                    <button type="submit" class="btn btn-primary">SEARCH</button>
+                </form>
+            </div>
+        </div>
+
+        {% if all_trucks %}
             <div class="row">
                 {% for truck in all_trucks %}
-                    <div class="col-sm-12 col-md-6 col-lg-4">
-                        <div class="card mb-3">
-                            {% if truck.image.file != None %}
-                                <div class="card-attr" style="text-decoration: none; color:white;">
-                                    <img class="card-img-top" src="{{ truck.image.url }}"
-                                         alt="{{ truck.title }}">
-                                </div>
-                            {% endif %}
-                            <a href="{% url 'trucks:detail' truck.pk %}">
-                                <div class="card-footer d-flex justify-content-between">
-                                    <h5>
-                                        {{ truck.title }}
-                                    </h5>
-
-                                    <div>
-                                        {% if truck.rating %}
-                                            <p>{{ truck.rating }}</p>
-                                        {% else %}
-                                            <p>no rating</p>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="col">
+                        {% include 'trucks/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}
             </div>
 
         {% else %}
-            <h3> Sorry, we dont have any trucks!</h3>
+            {% if request.GET.query %}
+                <code>Sorry, there are no trucks matching <b>'{{ request.GET.query }}'</b></code>
+                <a href="{% url 'trucks:index' %}" class="btn btn-outline-dark">
+                    CLEAR SEARCH
+                </a>
+            {% else %}
+                <h3>Sorry, we dont have any trucks!</h3>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

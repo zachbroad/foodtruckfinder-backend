@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from model_utils.models import TimeStampedModel
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 
@@ -72,6 +73,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
+
+    @property
     def favorites(self):
         return self.favorite_trucks.all()
 
@@ -133,3 +138,8 @@ class Feedback(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+
+class UserReportModel(TimeStampedModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reported')
+    description = models.TextField(max_length=2048, blank=False, null=False)

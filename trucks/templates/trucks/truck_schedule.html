@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{ truck.title }}'s Schedule | OnTheGrub{% endblock %}
+{% block description %}Check out {{ truck.title }}'s schedule.{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>{{ truck.title }}'s Schedule</h3>
+            </div>
+        </div>
+    </div>
+
+
+    {{ request.GET.upcoming }}
+    <div class="container">
+        {% if request.GET.showAll == 'true' %}
+            <div class="row">
+                <div class="col">
+                    <h4>{{ truck.schedule.count }} events</h4>
+                    <small>Showing all events... <a href="{% url 'trucks:schedule' truck.id %}">Only
+                        show upcoming events.</a></small>
+                </div>
+            </div>
+
+            {% for event in truck.schedule.all %}
+                <div class="row">
+                    <div class="col">
+                        {% include 'trucks/truckevent_card.html' with event=event %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col">
+                    <h4>{{ truck.schedule.count }} upcoming events</h4>
+                    <small>Showing upcoming events... <a href="{% url 'trucks:schedule' truck.id %}?showAll=true">show
+                        all
+                        events.</a></small>
+                </div>
+            </div>
+
+            {% for event in truck.upcoming_schedule %}
+                <div class="row">
+                    <div class="col">
+                        {% include 'trucks/truckevent_card.html' with event=event %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

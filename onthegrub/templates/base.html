@@ -27,7 +27,7 @@
         gtag('config', 'G-3JRQYTX7NS');
     </script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewporwitht" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
 <body>
@@ -40,25 +40,30 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'index' %}">Home </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.path == '/blog/' %}active{% endif %}">
                 <a class="nav-link" href="https://blog.onthegrub.com/">Blog</a>
             </li>
+            <li class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}">
+                <a href="{% url 'dashboard:index' %}" class="nav-link">Dashboard</a>
+            </li>
+
             {# RE-ENABLING THESE SOON #}
-{#            <li class="nav-item">#}
-{#                <a class="nav-link" href="{% url 'announcements:index' %}">News</a>#}
-{#            </li>#}
-{#            <li class="nav-item">#}
-{#                <a class="nav-link" href="{% url 'events:index' %}">Events</a>#}
-{#            </li>#}
-            <li class="nav-item">
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href="{% url 'announcements:index' %}">News</a>#}
+            {#            </li>#}
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href="{% url 'events:index' %}">Events</a>#}
+            {#            </li>#}
+            <li class="nav-item {% if request.path == '/trucks/' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'trucks:index' %}">Trucks</a>
             </li>
-{#            <li class="nav-item">#}
-{#                <a class="nav-link" href="{% url 'catering:index' %}">Catering</a>#}
-{#            </li>#}
+
+            <li class="nav-item {% if request.path == '/catering/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'catering:index' %}">Catering</a>
+            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}

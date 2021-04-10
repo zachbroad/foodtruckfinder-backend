@@ -1,0 +1,12 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>{{ user.full_name }} <span>(@{{ user.username }})</h3>
+        <img src="{{ user.profile_picture.url }}" alt="" height="44" width="44">
+    </div>
+
+    <div class="card-footer">
+        <small>
+            Member since {{ user.date_joined|date }}
+        </small>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ event.title }} by {{ event.truck.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container py-3">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-outline-dark" onclick="window.history.back()">GO BACK</button>
+            </div>
+        </div>
+    </div>
+    <div class="container pb-3">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-1 p-0">{{ event.title }}</h3>
+                        <h5 class="mb-3 p-0">By <a
+                                href="{% url 'trucks:detail' event.truck.id %}">{{ event.truck.title }}</a></h5>
+                        {% if event.has_ended %}
+                            <small>ended {{ event.end_time|timesince }} ago</small>
+                        {% else %}
+                            <small>starts in {{ event.start_time|timeuntil }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">{{ event.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <a href="" class="btn btn-outline-info">I'M GOING</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

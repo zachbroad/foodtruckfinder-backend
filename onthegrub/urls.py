@@ -1,3 +1,4 @@
+import debug_toolbar
 from allauth.account.views import PasswordResetView
 from django.conf import settings
 from django.conf.urls import url
@@ -5,53 +6,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
-from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
-from rest_framework import routers
-
-from django.contrib.sitemaps import GenericSitemap
-from django.contrib.sitemaps.views import sitemap
-from trucks.models import Truck, Review
-
-from announcements.api.views import AnnouncementViewSet
-from catering.api.views import CateringViewSet
 from django.views.generic.base import TemplateView
-from events.api.views import EventViewSet
-from notifications.api.views import NotificationViewSet
+
 from onthegrub.views import IndexView
-from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
+from trucks.api.views import HomePage, TruckLiveViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 from users.views import SignupView, SuccessView, LoginView, LogoutView
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
 
-router = routers.DefaultRouter()
-router.register(r'announcements', AnnouncementViewSet)
-router.register(r'caters', CateringViewSet)
-router.register(r'dashboard', DashboardViewSet)
-router.register(r'devices', FCMDeviceAuthorizedViewSet)
-router.register(r'events', EventViewSet)
-router.register(r'favorites', FavoritesViewSet)
-router.register(r'feedback', FeedbackViewSet)
-router.register(r'lives', LiveViewSet)
-router.register(r'menu-items', MenuItemViewSet)
-router.register(r'notifications', NotificationViewSet, basename='Notifications')
-router.register(r'profile', ProfileViewSet)
-router.register(r'reviews', ReviewsViewSet)
-router.register(r'tags', TagsViewSet)
-router.register(r'trucks', TruckViewSet)
-router.register(r'schedules', TruckScheduleViewSet)
-router.register(r'users', AccountViewSet)
-router.register(r'visits', VisitViewSet)
+from .routers import GrubRouter
+from .sitemap import sitemap
 
-truck_info_dict = {
-    'queryset': Truck.objects.all(),
-    'date_field': 'last_updated'
-}
-
-review_info_dict = {
-    'queryset': Review.objects.all(),
-    'date_field': 'post_edited',
-}
+router = GrubRouter()
 
 api_patterns = [
     *router.urls,
@@ -83,9 +48,12 @@ urlpatterns = [
                   path('events/', include('events.urls')),
                   path('catering/', include('catering.urls')),
                   path('news/', include('announcements.urls')),
+                  path('dashboard/', include('dashboard.urls')),
 
                   # Admin
+
                   path('admin/', admin.site.urls),
+                  path('__debug__/', include(debug_toolbar.urls)),
 
                   # Api
                   path('api/', include((api_patterns, '<int:pk>'), namespace='api')),
@@ -102,12 +70,6 @@ urlpatterns = [
                   re_path('^static/(?P<path>.*)$', serve,
                           {'document_root': settings.STATIC_ROOT}),
 
-                  ### SITEMAP
-                    path("sitemap.xml", sitemap, {
-                        'sitemaps': {
-                            'trucks': GenericSitemap(info_dict=truck_info_dict, priority=1.0),
-                            'reviews': GenericSitemap(info_dict=review_info_dict, priority=0.9)
-                        }
-                    }, name="django.contrib.sitemaps.views.sitemap")
+                  *sitemap
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

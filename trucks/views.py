@@ -1,22 +1,49 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 
-from .models import Truck, MenuItem, Review
+from .models import Truck, MenuItem, Review, TruckEvent
 
 
 def index(request):
     all_trucks = Truck.objects.all()
+
+    if query := request.GET.get('query'):
+        all_trucks = Truck.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
+
     return render(request, 'trucks/trucks_index.html', {'all_trucks': all_trucks})
 
 
 def detail(request, truck_id):
     truck = get_object_or_404(Truck, pk=truck_id)
-    return render(request, 'trucks/detail.html', {'truck': truck})
+    return render(request, 'trucks/truck_detail.html', {'truck': truck})
 
 
 def menu(request, truck_id):
     full_menu = MenuItem.objects.filter(truck=truck_id)
-    return render(request, 'trucks/menu.html', {'full_menu': full_menu})
+    return render(request, 'trucks/truck_menu.html', {'full_menu': full_menu})
+
+
+class TruckSchedule(generic.DetailView):
+    model = Truck
+    template_name = "trucks/truck_schedule.html"
+    pk_url_kwarg = 'truck_id'
+
+    def get_object(self, queryset=None) -> Truck:
+        return super().get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['truck_events'] = self.get_object().schedule
+        return context
+
+
+class TruckEventDetail(generic.DetailView):
+    model = TruckEvent
+    context_object_name = 'event'
+
+    def get_object(self, queryset=None) -> TruckEvent:
+        return TruckEvent.objects.filter(truck_id=self.kwargs['truck_id'], id=self.kwargs['event_id']).first()
 
 
 class ReviewList(generic.ListView):
@@ -81,6 +108,7 @@ class ReviewListCreate(View):
 class ReviewDetail(generic.DetailView):
     model = Review
     pk_url_kwarg = 'review_id'
+
 
 class ReviewUpdate(generic.UpdateView):
     model = Review

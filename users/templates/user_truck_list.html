@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="container py-3">
+        <div class="row">
+            <div class="col">
+                {% include 'users/user_card.html' with user=user %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-3">
+        <div class="row">
+            <div class="col">
+                {{ user.first_name|capfirst }}'s Trucks
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% for truck in truck_list %}
+                    {% include 'trucks/truck_card.html' with truck=truck %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

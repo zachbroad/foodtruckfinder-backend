@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'trucks.apps.TrucksConfig',
     'users.apps.UsersConfig',
     'util.apps.UtilConfig',
+    'dashboard.apps.DashboardConfig',
     'notifications.apps.NotificationsConfig',
 
     # 3rd party
@@ -68,6 +69,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'storages',
     'markdownx',
+    'debug_toolbar',
     # 'djstripe',
 ]
 
@@ -99,6 +101,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',  # This needs to be before other middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -108,8 +111,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'onthegrub.urls'
+# This is needed for the Django debug toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
+ROOT_URLCONF = 'onthegrub.urls'
 # TEMPLATE_DIRS = (
 # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
 # Always use forward slashes, even on Windows.

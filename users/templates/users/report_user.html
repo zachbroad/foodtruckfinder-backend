@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+    Reporting User | OnTheGrub
+{% endblock %}
+
+{% block content %}
+    <div class="container py-3">
+        <div class="row">
+            <div class="col">
+                <h3>Report @{{ user }}</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <div class="btn-group">
+                        <button class="btn btn-outline-dark" type="submit" onclick="window.history.back()">
+                            CANCEL
+                        </button>
+
+                        <button class="btn btn-danger" type="submit">
+                            REPORT
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

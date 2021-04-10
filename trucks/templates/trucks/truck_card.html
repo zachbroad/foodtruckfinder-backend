@@ -1,14 +1,30 @@
 {#<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">#}
-<div class="card-group">
-    <div class="card">
-        {% if truck.image.file != None %}
-            <img src="{{ truck.image.url }}" alt="Photo of {{ truck.title }}." class="card-img-top"/>
-        {% endif %}
-        <div class="card-body">
-            <a href="{% url 'trucks:detail' truck.id %}">
-                <h5 class="card-title">{{ truck.title }}</h5>
-            </a>
-            {#            <p class="card-text">{{ truck.description }}</p>#}
+<div class="card">
+    <div class="card-body">
+        <a href="{% url 'trucks:detail' truck.id %}">
+            <h5 class="card-title">{{ truck.title }}</h5>
+            <small>{{ truck.address|default_if_none:"" }}</small>
+        </a>
+    </div>
+    {% if truck.image.file != None %}
+        <img src="{{ truck.image.url }}" height="120" alt="Photo of {{ truck.title }}." class="card-img-top"
+             style="object-fit: cover"/>
+    {% endif %}
+    <div class="d-flex card-footer justify-content-end">
+        <div class="btn-group">
+            {% if truck.available_for_catering %}
+                <a href="{% url 'catering:detail' truck.id %}" class="btn btn-outline-info">Book Catering</a>
+            {% endif %}
+{#            <div class="d-md-none">#}
+{#            #}
+{#            </div>#}
+{#        #}
+{#            <div class="d-sm-">#}
+{#                #}
+{#            </div>#}
+            <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>
+            <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-warning">SCHEDULES</a>
+            <a href="{% url 'trucks:detail' truck.id %}" class="btn btn-sm btn-outline-dark">VIEW</a>
         </div>
     </div>
 </div>
