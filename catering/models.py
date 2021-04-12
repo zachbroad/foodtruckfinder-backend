@@ -10,10 +10,11 @@ class CaterRequest(models.Model):
     email = models.EmailField(help_text='Email you\'d like to be reached at')
     phone = PhoneField(help_text='Your contact number')
     details = models.TextField(max_length=10000, help_text='Tell us about your event')
-    truck = models.ForeignKey(Truck, on_delete=models.DO_NOTHING, help_text='What truck would you like to cater your event?')
+    truck = models.ForeignKey(Truck, on_delete=models.DO_NOTHING,
+                              help_text='What truck would you like to cater your event?', related_name='cater_requests')
 
-    when = models.DateTimeField()
-    duration = models.FloatField()
+    when = models.DateTimeField(help_text='When is your event?')
+    duration = models.FloatField(help_text='How many hours do you want catering?')
 
     requested_on = models.DateTimeField(auto_now_add=True)
 
@@ -21,4 +22,5 @@ class CaterRequest(models.Model):
         ordering = ('-when',)
 
     def __str__(self):
-        return 'Cater request by {} for truck {} at {} for {} hours'.format(self.name, self.truck, self.when, self.duration)
+        return 'Cater request by {} for truck {} at {} for {} hours'.format(self.name, self.truck, self.when,
+                                                                            self.duration)

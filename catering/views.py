@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 # Create your views here.
 from trucks.models import Truck
@@ -15,5 +15,8 @@ class CaterList(ListView):
 class TruckCaterRequestList(ListView):
     model = CaterRequest
 
+
 class CaterDetail(DetailView):
     model = CaterRequest
+
+

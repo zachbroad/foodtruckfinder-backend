@@ -17,16 +17,25 @@
         <div class="row mb-3">
             <div class="col">
                 <form method="GET" class="d-flex flex-row">
-                    <input class="form-control mr-2" placeholder="FIND GRUB" name="query" type="text"/>
+                    <input class="form-control mr-2" placeholder="FIND GRUB" value="{{ request.GET.query }}"
+                           name="query" type="text"/>
                     <button type="submit" class="btn btn-primary">SEARCH</button>
                 </form>
             </div>
         </div>
 
+        {% if request.GET.query %}
+            <div class="row">
+                <div class="col">
+                    <h5>Showing search results for <code>{{ request.GET.query }}</code></h5>
+                </div>
+            </div>
+        {% endif %}
+
         {% if all_trucks %}
             <div class="row">
                 {% for truck in all_trucks %}
-                    <div class="col">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
                         {% include 'trucks/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}

@@ -6,10 +6,12 @@
 {% block description %}Check out {{ truck.title }}'s schedule.{% endblock %}
 
 {% block content %}
-    <div class="container">
+    {% include 'util/go_back.html' %}
+
+    <div class="container mt-3">
         <div class="row">
             <div class="col">
-                <h3>{{ truck.title }}'s Schedule</h3>
+                <h3><a href="{% url 'trucks:detail' truck.id %}">{{ truck.title }}</a>'s Schedule</h3>
             </div>
         </div>
     </div>
@@ -26,6 +28,8 @@
                 </div>
             </div>
 
+            <hr/>
+
             {% for event in truck.schedule.all %}
                 <div class="row">
                     <div class="col">
@@ -37,11 +41,13 @@
             <div class="row">
                 <div class="col">
                     <h4>{{ truck.schedule.count }} upcoming events</h4>
-                    <small>Showing upcoming events... <a href="{% url 'trucks:schedule' truck.id %}?showAll=true">show
-                        all
-                        events.</a></small>
+                    <small>Showing upcoming events... <a href="{% url 'trucks:schedule' truck.id %}?showAll=true">
+                        show all events.</a>
+                    </small>
                 </div>
             </div>
+
+            <hr/>
 
             {% for event in truck.upcoming_schedule %}
                 <div class="row">

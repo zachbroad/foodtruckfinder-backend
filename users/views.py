@@ -1,7 +1,10 @@
 from allauth.account import views as allauth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, TemplateView, CreateView
+from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
 from trucks.models import Truck
 from users.models import User, UserReportModel
@@ -32,19 +35,38 @@ class UserTrucks(ListView, LoginRequiredMixin):
         return context
 
 
+class UserEditProfile(UpdateView):
+    model = User
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'phone',
+        'biography',
+    ]
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    template_name = 'users/user_edit.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Successfully saved profile.')
+        return HttpResponseRedirect(self.get_success_url())
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     messages.success(self.request, self.get_success_message(self))
+    #     return super().dispatch(request, *args, **kwargs)
+
+
+    def get_success_url(self):
+        return reverse_lazy('users:detail', args=[self.request.user])
+
+
 class ReportUser(CreateView):
     queryset = UserReportModel.objects.all()
     template_name = "users/report_user.html"
     fields = [
         'description',
     ]
-
-    # def post(self, request, *args, **kwargs):
-    #     desc = request.POST.get('description')
-    #     user = User.objects.filter(username=kwargs.get('username'))
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     self.
 
     def form_valid(self, form):
         return super(ReportUser, self).form_valid(form)

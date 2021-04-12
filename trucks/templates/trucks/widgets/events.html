@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="card my-3">
+                <div class="card-header">
+                    <a href="{% url 'trucks:schedule' truck.id %}" class="text-decoration-none">
+                        <h4>Upcoming events</h4>
+                        <small>
+                            {% if truck.upcoming_schedule.count > 0 %}
+                                {{ truck.schedule.count }} upcoming events
+                            {% else %}
+                                Sorry, this truck has no upcoming events.
+                            {% endif %}
+                        </small>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% if truck.upcoming_schedule.count > 0 %}
+                            {% for event in truck.upcoming_schedule %}
+                                {% include 'trucks/truckevent_card_minimal.html' with event=event %}
+                            {% endfor %}
+                        {% else %}
+                            Sorry, this truck has no upcoming events.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

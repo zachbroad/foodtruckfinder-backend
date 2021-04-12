@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="card my-3">
+                <div class="card-header">
+                    <a href="{% url 'trucks:menu' truck.id %}" class="text-decoration-none">
+                        <h4>Menu</h4>
+                    </a>
+                    <small>{{ truck.title }} has {{ truck.items.count }} items on their menu.</small>
+                </div>
+                <div class="card-body">
+                    {% for item in truck.items.all %}
+                        <div class="list-group-item">
+                            <div>
+                                {{ item.name }}
+                                {{ item.price }}
+                            </div>
+                            {{ item.description|default:"" }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}
+    Catering Dashboard
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="info">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <div class="icon icon-primary">
+                            <h4 class="info-title">Catering Requests
+                                <span class="text-muted">({{ request.user.cater_requests.count }})</span></h4>
+                        </div>
+                        <i class="nc-icon nc-calendar-60"></i>
+                    </div>
+                    <p>
+                        OnTheGrub makes food truck catering a breeze. Manage your requests here and we'll manage it from
+                        there!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.cater_requests %}
+        <div class="container">
+            {% for cater_request in request.user.cater_requests %}
+                <div class="row">
+                    <div class="col-12">
+                        {% include 'dashboard/widgets/cater_request_card.html' %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <code>no cater requests</code>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

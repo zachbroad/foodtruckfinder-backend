@@ -1,38 +1,47 @@
 <div class="container py-3">
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="{% url 'users:detail' request.user %}" class="text-decoration-none">
-                    <h4>
-                        {{ request.user.first_name|default_if_none:"" }} {{ request.user.last_name|default_if_none:"" }}
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'users:detail' request.user %}" class="text-decoration-none">
+                            <h4>
+                                {{ request.user.first_name|default_if_none:"" }} {{ request.user.last_name|default_if_none:"" }}
 
-                        <span class="text-muted font-weight-light">
+                                <span class="text-muted font-weight-light">
                 @{{ request.user.username }}
                 </span>
-                    </h4>
-                </a>
+                            </h4>
+                        </a>
 
-                <a href="#EDITPROFILE">
-                    <span class="fa fa-edit"></span>
-                </a>
+                        <a href="#EDITPROFILE">
+                            <span class="fa fa-edit"></span>
+                        </a>
+                    </div>
+                    <h6 class="font-weight-normal">
+                        {% if request.user.is_truck_owner %}
+                            Truck Owner
+                        {% else %}
+                            Foodie
+                        {% endif %}
+                    </h6>
+                    <hr>
+                    <h6 class="font-weight-normal">
+                        {{ request.user.biography }}
+                    </h6>
+                </div>
+                <div class="card-body btn-group">
+                    {% if request.user.is_truck_owner %}
+                        <a href="{% url 'users:detail' request.user %}" class="btn btn-outline-primary">
+                            Your Profile
+                        </a>
+                        <a href="{% url 'dashboard:catering-index' %}" class="btn btn-outline-dark">Catering
+                            Requests</a>
+                        <a href="{% url 'dashboard:index' %}" class="btn btn-outline-dark">Dashboard</a>
+                    {% else %}
+                    {% endif %}
+                </div>
             </div>
-            <h6 class="font-weight-light">
-
-                {% if request.user.is_truck_owner %}
-                    Truck Owner
-                {% else %}
-                    Foodie
-                {% endif %}
-            </h6>
-        </div>
-        <div class="card-body btn-group">
-            {% if request.user.is_truck_owner %}
-                <a href="{% url 'users:user-trucks' request.user %}" class="btn btn-outline-primary">Your
-                    Trucks</a>
-                <a href="{% url 'catering:index' %}" class="btn btn-outline-dark">Catering Requests</a>
-                <a href="{% url 'events:index' %}" class="btn btn-outline-dark">Manage Schedule</a>
-            {% else %}
-            {% endif %}
         </div>
     </div>
 </div>

@@ -6,7 +6,6 @@ import phone_field.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('trucks', '0007_auto_20200917_1836'),
         ('catering', '0003_caterrequest_requested_on'),
@@ -37,6 +36,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='caterrequest',
             name='truck',
-            field=models.ForeignKey(help_text='What truck would you like to cater your event?', on_delete=django.db.models.deletion.DO_NOTHING, to='trucks.Truck'),
+            field=models.ForeignKey(help_text='What truck would you like to cater your event?',
+                                    on_delete=django.db.models.deletion.DO_NOTHING, to='trucks.Truck'),
         ),
     ]

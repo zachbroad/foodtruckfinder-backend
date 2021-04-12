@@ -1,13 +1,15 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.db.models import Count, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from model_utils.models import TimeStampedModel
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 
-from trucks.models import Truck
+from catering.models import CaterRequest
+from trucks.models import Truck, Visit
 
 
 class MyUserManager(BaseUserManager):
@@ -77,8 +79,26 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name + " " + self.last_name
 
     @property
-    def favorites(self):
+    def my_favorite_trucks(self):
         return self.favorite_trucks.all()
+
+    @property
+    def truck_favorites(self):
+        if not self.is_truck_owner:  # TODO: Is this better than nothing?
+            return 0
+
+        return Truck.objects.aggregate(count=Count('favorites', filter=Q(owner=self)))['count']
+
+    @property
+    def truck_views(self):
+        if not self.is_truck_owner:  # TODO: Is this better than nothing?
+            return 0
+
+        return Visit.owner_visits(self)
+
+    @property
+    def my_cater_requests(self):
+        return CaterRequest.objects.filter(truck__owner=self)
 
     @property
     def is_truck_owner(self):
@@ -87,6 +107,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def trucks(self):
         return Truck.objects.filter(owner=self).all()
+
+    @property
+    def cater_requests(self) -> [CaterRequest]:
+        return CaterRequest.objects.filter(truck__owner=self)
 
     @property
     def search_history(self):

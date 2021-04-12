@@ -44,7 +44,7 @@
                         <a class="btn btn-outline-primary btn-block" href="{% url 'trucks:detail' truck.id %}">
                             View truck
                         </a>
-                        <button class="btn btn-primary btn-block">Book catering</button>
+                        <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-primary btn-block">CATER</a>
                     </div>
                 </div>
             {% endfor %}

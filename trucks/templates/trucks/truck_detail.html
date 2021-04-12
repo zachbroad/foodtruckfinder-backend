@@ -22,134 +22,44 @@
                         </div>
                     </div>
                     {% if truck.image.file != None %}
-                        <img height="160" class="card-img-bottom" style="object-fit: cover"
+                        <img height="auto" class="card-img-bottom" style="object-fit: cover"
                              src="{{ truck.image.url }}"/>
                     {% endif %}
-                    <div class="card-footer btn-group btn-group-sm">
 
+                    <div class="card-footer btn-group btn-group-sm">
                         {% if truck.phone != None %}
                             <a href="tel:{{ truck.phone }}" class="btn btn-info">CALL</a>
                         {% endif %}
 
                         {% if truck.address != None %}
-                            ADDY: {{ truck.address }}
                             <a href="https://www.google.com/maps?q={{ truck.address }}"
                                class="btn btn-success">DIRECTIONS</a>
                         {% elif truck.geolocation != None %}
-                            GEO: {{ truck.geolocation }}
                             <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
                                class="btn btn-success">DIRECTIONS</a>
                         {% else %}
                             {#                            directions unavailable#}
                         {% endif %}
 
-
-                        <div class="btn btn-warning">SCHEDULE</div>
-
-
+                        <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-warning">SCHEDULE</a>
                         <div class="btn btn-danger">FAVORITE</div>
 
-
                         {% if truck.available_for_catering %}
-                            <div class="btn btn-primary">BOOK CATERING</div>
+                            <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-primary">BOOK
+                                CATERING</a>
                         {% endif %}
                     </div>
+
                 </div>
             </div>
-
 
             <div class="col">
-                <div class="card my-3">
-                    <div class="card-header"><h5>Truck Info</h5></div>
-                    <ul class="list-group font-weight-light">
-
-                        <li class="list-group-item">
-                            <h6 class="mb-1">Address</h6>
-                            <a href="https://www.google.com/maps?q={{ truck.address }}">{{ truck.address }}</a>
-                        </li>
-
-                        <li class="list-group-item">
-                            <h6 class="mb-1">Phone Number</h6>
-                            <a href="tel:{{ truck.phone }}">{{ truck.phone }}</a>
-                        </li>
-
-                        <li class="list-group-item">
-                            <h6 class="mb-1">
-                                Catering
-                            </h6>
-                            {% if truck.available_for_catering %}
-                                Available for catering
-                            {% else %}
-                                Not available for catering
-                            {% endif %}
-                        </li>
-
-                        <li class="list-group-item">
-                            {% if truck.owner != None %}
-                                <h6 class="mb-1">Owner</h6>
-                                <a href="{% url 'users:detail' truck.owner.username %}">{{ truck.owner.first_name }} {{ truck.owner.last_name }}
-                                    <span class="text-muted">(@{{ truck.owner.username }})</span></a>
-                            {% else %}
-                                <h6 class="mb-1">Unclaimed Truck</h6>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </div>
+                {% include 'trucks/widgets/truck_info.html' with truck=truck %}
             </div>
         </div>
     </div>
 
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="row">
-                    <div class="col">
-                        <div class="card my-3">
-                            <div class="card-header">
-                                <h4>Upcoming events</h4>
-                            </div>
-                            <div class="card-body">
-                                {% if truck.upcoming_schedule.count > 0 %}
-                                    <h5>{{ truck.schedule.count }} upcoming events</h5>
-                                    {% for event in truck.upcoming_schedule %}
-                                        {% include 'trucks/truckevent_card_minimal.html' with event=event %}
-                                    {% endfor %}
-                                {% else %}
-                                    Sorry, this truck has no upcoming events.
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row pb-3">
-                    <div class="col">
-                        <div class="card">
-                            <h3 class="card-header">Reviews</h3>
-                            <div class="list-group p-3">
-                                {% for review in truck.reviews.all %}
-                                    <a href="{% url 'trucks:reviews' truck.id %}"
-                                       class="list-group-item list-group-item-action flex-column align-items-start ">
-                                        <div class="d-flex justify-content-between">
-                                            <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
-                                            <span>
-                                    <i class="fa fa-clock-o"></i>
-                                    <small>{{ review.post_created|timesince }} ago</small>
-                                    </span>
-                                        </div>
-                                        <p class="mb-1">{{ review.description }}</p>
-                                        {#                                        <small>{{ review.posted_on }}</small>#}
-                                    </a>
-                                {% endfor %}
-
-                            </div>
-                            <div class="card-footer">
-                                <a href="{% url 'trucks:new-review' truck.id %}" class="">leave review</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'trucks/widgets/menu.html' with truck=truck %}
+    {% include 'trucks/widgets/events.html' with truck=truck %}
+    {% include 'trucks/widgets/reviews.html' with truck=truck %}
 {% endblock %}

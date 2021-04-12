@@ -29,14 +29,14 @@ WEEKDAYS = [
 TYPE_ENTRE = 1
 TYPE_SIDE = 2
 TYPE_DRINK = 3
-TYPE_DESERT = 4
+TYPE_DESSERT = 4
 TYPE_COMBO = 5
 
 TYPE_CHOICES = [
     (TYPE_ENTRE, 'Entre'),
     (TYPE_SIDE, 'Side'),
     (TYPE_DRINK, 'Drink'),
-    (TYPE_DESERT, 'Desert'),
+    (TYPE_DESSERT, 'Desert'),
     (TYPE_COMBO, 'Combo')
 ]
 
@@ -56,7 +56,7 @@ class Tag(models.Model):
 
 
 class TruckEvent(ModelLocation):
-    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='schedule')
+    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='schedule', related_query_name='schedule')
 
     title = models.CharField(max_length=256, blank=True)
     description = models.TextField(max_length=1000, blank=True)
@@ -83,6 +83,32 @@ class TruckEvent(ModelLocation):
         return self.start_time < timezone.now() < self.end_time
 
 
+class TruckQuerySet(models.QuerySet):
+    def live(self):
+        return self.filter(live_objects__start_time__lt=timezone.now(),
+                           live_objects__end_time__gt=timezone.now()).all()
+
+    def caterers(self):
+        return self.filter(available_for_catering=True)
+
+    def user_trucks(self, user):
+        return self.filter(owner=user)
+
+
+class TruckManager(models.Manager):
+    def get_queryset(self):
+        return TruckQuerySet(self.model, using=self._db)
+
+    def get_live(self):
+        return self.get_queryset().live()
+
+    def get_caterers(self):
+        return self.get_queryset().caterers()
+
+    def get_user_trucks(self, user):
+        return self.get_queryset().user_trucks(user)
+
+
 class Truck(ModelLocation):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to='uploads/trucks/profile-pictures', blank=True, null=False,
@@ -97,6 +123,7 @@ class Truck(ModelLocation):
 
     last_updated = models.DateTimeField(auto_now=True)
     reviewed = models.BooleanField(default=False)
+    objects = TruckManager()
 
     def get_absolute_url(self):
         return reverse("trucks:detail", args=[self.id])
@@ -158,6 +185,10 @@ class Truck(ModelLocation):
         return self.visits.all()
 
     @property
+    def visit_count(self):
+        return self.visits.count
+
+    @property
     def reviews(self):
         return self.review.all()
 
@@ -191,12 +222,41 @@ class TruckImage(models.Model):
         return self.image.name
 
 
-class TruckManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().all()
+class MenuItemQuerySet(models.QuerySet):
+    def entres(self):
+        self.filter(type=TYPE_ENTRE).all()
 
-    def get_live(self):
-        return super().get_queryset().all()
+    def drinks(self):
+        self.filter(type=TYPE_DRINK).all()
+
+    def sides(self):
+        self.filter(type=TYPE_SIDE).all()
+
+    def desserts(self):
+        self.filter(type=TYPE_DESSERT).all()
+
+    def combos(self):
+        self.filter(type=TYPE_COMBO).all()
+
+
+class MenuItemManager(models.Manager):
+    def get_queryset(self):
+        return MenuItemQuerySet(self.model, using=self._db)
+
+    def get_entres(self):
+        return self.get_queryset().entres()
+
+    def get_sides(self):
+        return self.get_queryset().sides()
+
+    def get_drinks(self):
+        return self.get_queryset().drinks()
+
+    def get_desserts(self):
+        return self.get_queryset().desserts()
+
+    def get_combos(self):
+        return self.get_queryset().combos()
 
 
 class MenuItem(models.Model):
@@ -204,13 +264,14 @@ class MenuItem(models.Model):
 
     # non-specific
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
-    name = models.CharField(max_length=120, null=True)
-    description = models.CharField(max_length=500, null=True, blank=True,
-                                   default='Sorry, this item has no description.')
+    name = models.CharField(max_length=120, blank=False)
+    description = models.CharField(max_length=500, blank=True, )
     price = models.FloatField(max_length=10)
     image = models.ImageField(upload_to='uploads/trucks/menu-items', null=False, blank=True,
                               default='/assets/truck_logo_placeholder.png')
     featured = models.BooleanField(default=False)
+
+    objects = MenuItemManager()
 
     def get_absolute_image_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.image.url)
@@ -299,6 +360,10 @@ class Visit(models.Model):
 
     def __str__(self):
         return f'{self.truck.title} visited by {str(self.visitor.username)} | {self.visited.__str__()}'
+
+    @staticmethod
+    def owner_visits(user):
+        return Visit.objects.filter(truck__owner=user).count
 
 
 class Live(models.Model):

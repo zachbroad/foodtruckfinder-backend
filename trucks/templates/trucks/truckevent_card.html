@@ -6,11 +6,16 @@
         <a href="{% url 'trucks:event-detail' truck.id event.id %}">
             <h3>{{ event.title }}</h3>
         </a>
-        <a href="{% url 'trucks:detail' truck.id %}">
-            <h4>Hosted by {{ event.truck.title }}</h4>
-        </a>
+
+        <h5>
+            Hosted by
+            <a href="{% url 'trucks:detail' truck.id %}">
+                {{ event.truck.title }}
+            </a>
+        </h5>
     </div>
     <div class="card-body">
+        {{ event.description|default:"This event has no description." }}
     </div>
     <div class="card-footer">
         <span>Starts on <strong>{{ event.start_time }}</strong></span>

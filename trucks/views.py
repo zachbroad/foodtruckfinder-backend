@@ -1,7 +1,12 @@
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views import generic
+from django.views.generic import TemplateView
 
+from catering.models import CaterRequest
+from onthegrub.mixins import FormSuccessMessageMixin
 from .models import Truck, MenuItem, Review, TruckEvent
 
 
@@ -11,23 +16,55 @@ def index(request):
     if query := request.GET.get('query'):
         all_trucks = Truck.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
 
-    return render(request, 'trucks/trucks_index.html', {'all_trucks': all_trucks})
+    return render(request, 'trucks/trucks_list.html', {'all_trucks': all_trucks})
 
 
-def detail(request, truck_id):
-    truck = get_object_or_404(Truck, pk=truck_id)
+def detail(request, pk):
+    truck = get_object_or_404(Truck, pk=pk)
     return render(request, 'trucks/truck_detail.html', {'truck': truck})
 
 
-def menu(request, truck_id):
-    full_menu = MenuItem.objects.filter(truck=truck_id)
-    return render(request, 'trucks/truck_menu.html', {'full_menu': full_menu})
+def menu(request, pk):
+    full_menu = MenuItem.objects.filter(truck=pk)
+    truck = Truck.objects.filter(id=pk).first()
+    return render(request, 'trucks/truck_menu.html', {'menu': full_menu, 'truck': truck})
+
+
+class BookCatering(generic.CreateView, FormSuccessMessageMixin):
+    model = CaterRequest
+    message = 'Cater request confirmed.'
+
+    fields = [
+        'name',
+        'email',
+        'phone',
+        'details',
+        'when',
+        'duration',
+    ]
+
+    def form_valid(self, form):
+        form.instance.truck = Truck.objects.get(id=self.kwargs['pk'])
+        FormSuccessMessageMixin.form_valid(self)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        truck = Truck.objects.get(id=self.kwargs['pk'])
+        return reverse('trucks:book-catering-success', kwargs={'pk': truck.id})
+
+
+class BookCateringSuccess(TemplateView):
+    template_name = 'trucks/truck_cater_booking_success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['truck'] = Truck.objects.get(id=kwargs['pk'])
+        return context
 
 
 class TruckSchedule(generic.DetailView):
     model = Truck
-    template_name = "trucks/truck_schedule.html"
-    pk_url_kwarg = 'truck_id'
+    template_name_suffix = '_schedule'
 
     def get_object(self, queryset=None) -> Truck:
         return super().get_object(queryset)
@@ -43,7 +80,7 @@ class TruckEventDetail(generic.DetailView):
     context_object_name = 'event'
 
     def get_object(self, queryset=None) -> TruckEvent:
-        return TruckEvent.objects.filter(truck_id=self.kwargs['truck_id'], id=self.kwargs['event_id']).first()
+        return TruckEvent.objects.filter(truck_id=self.kwargs['pk'], id=self.kwargs['event_id']).first()
 
 
 class ReviewList(generic.ListView):
@@ -51,7 +88,7 @@ class ReviewList(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['truck'] = Truck.objects.filter(id=self.kwargs.get('truck_id')).first()
+        context['truck'] = Truck.objects.filter(id=self.kwargs.get('pk')).first()
         return context
 
 
@@ -64,11 +101,11 @@ class ReviewCreate(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(ReviewCreate, self).get_context_data(**kwargs)
-        context['truck'] = Truck.objects.filter(id=self.kwargs.get('truck_id')).first()
+        context['truck'] = Truck.objects.filter(id=self.kwargs.get('pk')).first()
         return context
 
     def form_valid(self, form):
-        truck = Truck.objects.filter(id=self.kwargs.get('truck_id')).first()
+        truck = Truck.objects.filter(id=self.kwargs.get('pk')).first()
         reviewer = self.request.user
 
         form.instance.truck = truck

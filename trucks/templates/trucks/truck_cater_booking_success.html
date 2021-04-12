@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Booking success! | OnTheGrub
+{% endblock %}
+{% block description %}
+    Booking a food truck for your event has never been easier. Just submit a request, and OnTheGrub will handle it for
+    you!
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Congratulations</h2>
+                <small>
+                    Your request for catering has been sent to {{ truck.title }}.
+                    OnTheGrub will reach out to you by phone or email.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-3">
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'index' %}" class="btn btn-outline-danger">HOME</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

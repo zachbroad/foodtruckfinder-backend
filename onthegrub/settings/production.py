@@ -28,11 +28,12 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-# from whitenoise.storage import CompressedManifestStaticFilesStorage
+from whitenoise.storage import CompressedManifestStaticFilesStorage
 #
 # class WhiteNoiseStaticFilesStorage(CompressedManifestStaticFilesStorage):
 #     manifest_strict = False
 #
+
 # STATICFILES_STORAGE = 'onthegrub.settings.production.WhiteNoiseStaticFilesStorage'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

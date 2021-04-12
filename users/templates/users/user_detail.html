@@ -29,8 +29,12 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-outline-success">Follow</button>
-                    <button class="btn btn-outline-dark">Message</button>
+                    {% if request.user == user %}
+                        <a href="{% url 'users:edit-profile' user.username %}" class="btn btn-outline-dark">EDIT PROFILE</a>
+                    {% else %}
+                        <button class="btn btn-outline-success">FOLLOW</button>
+                        <button class="btn btn-outline-dark">MESSAGE</button>
+                    {% endif %}
                 </div>
             </div>
         </div>

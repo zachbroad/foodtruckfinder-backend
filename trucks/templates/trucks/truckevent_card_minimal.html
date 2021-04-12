@@ -1,9 +1,32 @@
-{#<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">#}
+<a href="{% url 'trucks:event-detail' truck.id event.id %}"
+   class="list-group-item list-group-item-action">
 
-<div class="card my-3">
-    <div class="card-body">
-        <a href="{% url 'trucks:event-detail' truck.id event.id %}">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="p-0 m-0">
             {{ event.title }}
-        </a>
+        </h4>
+
+        <div class="">
+            {% if event.in_progress %}
+                <span class="badge badge-pill badge-primary">
+                    <i class="fa fa-clock-o"></i>
+                    live now!
+                    </span>
+            {% elif event.has_passed %}
+                <span class="badge badge-pill badge-primary">
+                    <i class="fa fa-clock-o"></i>
+                    {{ event.start_time|timesince }} ago
+                    </span>
+            {% else %}
+                <span class="badge badge-pill badge-primary">
+                    <i class="fa fa-clock-o"></i>
+                    in {{ event.start_time|timeuntil }}
+                    </span>
+            {% endif %}
+        </div>
     </div>
-</div>
+    <hr>
+    <p class="font-weight-light">
+        {{ event.description }}
+    </p>
+</a>

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Book {{ truck.title }} for Catering | OnTheGrub
+{% endblock %}
+{% block description %}
+    Booking a food truck for your event has never been easier. Just submit a request, and OnTheGrub will handle it for
+    you!
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Catering Request Form</h2>
+                <small>Book {{ truck.title }} for catering.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-primary">SUBMIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

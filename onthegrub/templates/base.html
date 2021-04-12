@@ -27,7 +27,7 @@
         gtag('config', 'G-3JRQYTX7NS');
     </script>
 
-    <meta name="viewporwitht" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
 <body>
@@ -87,6 +87,15 @@
 
 <div class="page-wrap">
     <main>
+        {% if messages %}
+            <div class="container my-3">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>

@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row pb-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <a href="{% url 'trucks:reviews' truck.id %}" class="text-decoration-none">
+                        <h3>Reviews</h3>
+                    </a>
+                    {% if truck.reviews.count > 0 %}
+                        <small>{{ truck.reviews.count }} reviews</small>
+                    {% endif %}
+                </div>
+                <div class="list-group p-3">
+                    {% for review in truck.reviews.all %}
+                        <a href="{% url 'trucks:reviews' truck.id %}"
+                           class="list-group-item list-group-item-action flex-column align-items-start ">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
+                                <span>
+                                    <i class="fa fa-clock-o"></i>
+                                    <small>{{ review.post_created|timesince }} ago</small>
+                                    </span>
+                            </div>
+                            <p class="mb-1">{{ review.description }}</p>
+                            {#                                        <small>{{ review.posted_on }}</small>#}
+                        </a>
+                    {% endfor %}
+
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'trucks:new-review' truck.id %}" class="">leave review</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
