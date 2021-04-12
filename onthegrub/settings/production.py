@@ -28,7 +28,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-from whitenoise.storage import CompressedManifestStaticFilesStorage
+# from whitenoise.storage import CompressedManifestStaticFilesStorage
 #
 # class WhiteNoiseStaticFilesStorage(CompressedManifestStaticFilesStorage):
 #     manifest_strict = False
@@ -37,6 +37,7 @@ from whitenoise.storage import CompressedManifestStaticFilesStorage
 # STATICFILES_STORAGE = 'onthegrub.settings.production.WhiteNoiseStaticFilesStorage'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
