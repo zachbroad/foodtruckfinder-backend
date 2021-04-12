@@ -3,17 +3,32 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from catering.models import CaterRequest
 from onthegrub.mixins import FormSuccessMessageMixin
 from .models import Truck, MenuItem, Review, TruckEvent
 
 
+
+class TruckList(ListView):
+    queryset = Truck.objects.all()
+    paginate_by = 10
+    template_name = 'trucks/trucks_list.html'
+
+    def get_queryset(self):
+        if query := self.request.GET.get('query'):
+            search_match_trucks = Truck.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
+            return search_match_trucks
+
+        return self.queryset
+
+
 def index(request):
     all_trucks = Truck.objects.all()
 
     if query := request.GET.get('query'):
+        Truck.objects.prefetch_related('')
         all_trucks = Truck.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
 
     return render(request, 'trucks/trucks_list.html', {'all_trucks': all_trucks})

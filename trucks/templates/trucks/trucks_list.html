@@ -32,13 +32,36 @@
             </div>
         {% endif %}
 
-        {% if all_trucks %}
+        {% if page_obj %}
             <div class="row">
-                {% for truck in all_trucks %}
-                    <div class="col-sm-12 col-md-6 col-lg-4">
+                {% for truck in page_obj %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
                         {% include 'trucks/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            {% if page_obj.paginator.num_pages > 1 %}
+                                <li class="page-item page-link">
+                                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                                </li>
+                            {% endif %}
+                            {% if page_obj.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
         {% else %}
