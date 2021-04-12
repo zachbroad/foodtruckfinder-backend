@@ -18,9 +18,9 @@ DATABASES['default'] = dj_database_url.config(
 
 ROOT_URLCONF = 'onthegrub.urls'
 
-# MIDDLEWARE += [
-#     'whitenoise.middleware.WhiteNoiseMiddleware',
-# ]
+MIDDLEWARE += [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+]
 
 # MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE
 
@@ -34,9 +34,9 @@ STATICFILES_DIRS = (
 #     manifest_strict = False
 #
 
-# STATICFILES_STORAGE = 'onthegrub.settings.production.WhiteNoiseStaticFilesStorage'
+STATICFILES_STORAGE = 'onthegrub.settings.production.WhiteNoiseStaticFilesStorage'
 
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
