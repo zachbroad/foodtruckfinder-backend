@@ -17,6 +17,7 @@ class CaterRequest(models.Model):
     duration = models.FloatField(help_text='How many hours do you want catering?')
 
     requested_on = models.DateTimeField(auto_now_add=True)
+    # status = models.ChoiceField
 
     class Meta:
         ordering = ('-when',)

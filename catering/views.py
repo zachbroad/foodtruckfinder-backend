@@ -7,6 +7,7 @@ from .models import CaterRequest
 
 class CaterList(ListView):
     model = Truck
+    paginate_by = 10
 
     def get_queryset(self):
         return Truck.objects.filter(available_for_catering=True)

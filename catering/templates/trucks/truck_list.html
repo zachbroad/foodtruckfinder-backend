@@ -46,8 +46,14 @@
                         </a>
                         <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-primary btn-block">CATER</a>
                     </div>
+
                 </div>
             {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% include 'util/pagination.html' %}
             </div>
         </div>
     </div>
