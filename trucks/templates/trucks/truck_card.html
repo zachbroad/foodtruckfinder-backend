@@ -1,13 +1,12 @@
-{#<div class="truck-card col-sm-12 col-md-6 col-lg-4 pb-3">#}
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-body">
         {% if not dashboard %}
-            <a href="{% url 'trucks:detail' truck.id %}">
+            <a class="text-decoration-none" href="{% url 'trucks:detail' truck.id %}">
                 <h5 class="card-title">{{ truck.title }}</h5>
                 <small>{{ truck.address|default_if_none:"" }}</small>
             </a>
         {% else %}
-            <a href="{% url 'dashboard:truck-detail' truck.id %}">
+            <a class="text-decoration-none" href="{% url 'dashboard:truck-detail' truck.id %}">
                 <h5 class="card-title">{{ truck.title }}</h5>
                 <small>{{ truck.address|default_if_none:"" }}</small>
             </a>
@@ -24,12 +23,12 @@
                     <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-outline-info">CATER</a>
                 {% endif %}
                 <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>
-                <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-warning">SCHEDULES</a>
+                <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-primary">SCHEDULES</a>
                 <a href="{% url 'trucks:detail' truck.id %}" class="btn btn-sm btn-outline-dark">VIEW</a>
             </div>
         {% else %}
             <div class="btn-group btn-group-sm">
-                <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-sm btn-outline-warning">EDIT</a>
+                <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-sm btn-outline-info">EDIT</a>
                 <a href="{% url 'dashboard:truck-detail' truck.id %}" class="btn btn-sm btn-primary">VIEW</a>
             </div>
         {% endif %}
