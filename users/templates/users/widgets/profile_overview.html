@@ -25,10 +25,12 @@
                             Foodie
                         {% endif %}
                     </h6>
-                    <hr>
-                    <h6 class="font-weight-normal">
-                        {{ request.user.biography }}
-                    </h6>
+                    {% if request.user.biography %}
+                        <hr>
+                        <h6 class="font-weight-normal">
+                            {{ request.user.biography }}
+                        </h6>
+                    {% endif %}
                 </div>
                 <div class="card-body btn-group">
                     <a href="{% url 'users:detail' request.user %}" class="btn btn-outline-primary">
