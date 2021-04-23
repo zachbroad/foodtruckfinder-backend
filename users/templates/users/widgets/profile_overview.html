@@ -14,7 +14,7 @@
                             </h4>
                         </a>
 
-                        <a href="#EDITPROFILE">
+                        <a href="{% url 'users:edit-profile' request.user.username %}">
                             <span class="fa fa-edit"></span>
                         </a>
                     </div>
@@ -31,10 +31,10 @@
                     </h6>
                 </div>
                 <div class="card-body btn-group">
+                    <a href="{% url 'users:detail' request.user %}" class="btn btn-outline-primary">
+                        Your Profile
+                    </a>
                     {% if request.user.is_truck_owner %}
-                        <a href="{% url 'users:detail' request.user %}" class="btn btn-outline-primary">
-                            Your Profile
-                        </a>
                         <a href="{% url 'dashboard:catering-index' %}" class="btn btn-outline-dark">Catering
                             Requests</a>
                         <a href="{% url 'dashboard:index' %}" class="btn btn-outline-dark">Dashboard</a>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ item.name }} from {{ item.truck.title }} | OnTheGrub
+{% endblock %}
+
+{% block description %}
+    {{ item.name }} from {{ item.truck.title }} | OnTheGrub
+{% endblock %}
+
+{% block content %}
+    {% include 'util/go_back.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>{{ item.truck.title }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h3>{{ item.name }}</h3>
+                        <small>${{ item.price }}</small>
+                    </div>
+                    <img class="card-img-bottom" src="{{ item.image.url }}" alt="" height="290" style="object-fit: cover">
+                    <div class="card-body">
+                        {{ item.description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

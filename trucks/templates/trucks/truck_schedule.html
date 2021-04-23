@@ -30,17 +30,26 @@
 
             <hr/>
 
-            {% for event in truck.schedule.all %}
+            {% if truck.schedule.count > 0 %}
+                {% for event in truck.schedule.all %}
+                    <div class="row">
+                        <div class="col">
+                            {% include 'trucks/truckevent_card.html' with event=event %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
                 <div class="row">
                     <div class="col">
-                        {% include 'trucks/truckevent_card.html' with event=event %}
+                        <code>No events found</code>
                     </div>
                 </div>
-            {% endfor %}
+            {% endif %}
+
         {% else %}
             <div class="row">
                 <div class="col">
-                    <h4>{{ truck.schedule.count }} upcoming events</h4>
+                    <h4>{{ truck.upcoming_schedule.count }} upcoming events</h4>
                     <small>Showing upcoming events... <a href="{% url 'trucks:schedule' truck.id %}?showAll=true">
                         show all events.</a>
                     </small>
@@ -49,13 +58,21 @@
 
             <hr/>
 
-            {% for event in truck.upcoming_schedule %}
+            {% if truck.upcoming_schedule.count > 0 %}
+                {% for event in truck.upcoming_schedule %}
+                    <div class="row">
+                        <div class="col">
+                            {% include 'trucks/truckevent_card.html' with event=event %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
                 <div class="row">
                     <div class="col">
-                        {% include 'trucks/truckevent_card.html' with event=event %}
+                        <code>No upcoming events found</code>
                     </div>
                 </div>
-            {% endfor %}
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

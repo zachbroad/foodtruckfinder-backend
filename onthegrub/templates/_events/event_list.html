@@ -10,8 +10,18 @@
             <div class="col py-3">
                 <h2>Events near you</h2>
             </div>
-
         </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <form method="GET" class="d-flex flex-row">
+                    <input class="form-control mr-2" placeholder="FIND EVENTS" value="{{ request.GET.query }}"
+                           name="query" type="text"/>
+                    <button type="submit" class="btn btn-primary">SEARCH</button>
+                </form>
+            </div>
+        </div>
+
         <div class="row">
             {% for event in event_list %}
                 <div class="col-sm-12 col-md-6">

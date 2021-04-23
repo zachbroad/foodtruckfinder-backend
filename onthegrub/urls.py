@@ -6,13 +6,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from graphene_django.views import GraphQLView
 
 from onthegrub.views import IndexView
 from trucks.api.views import HomePage, TruckLiveViewSet
 from users.api.views import CustomAuthToken, ValidateToken
 from users.views import SignupView, SuccessView, LoginView, LogoutView
-
 from .routers import GrubRouter
 from .sitemap import sitemap
 
@@ -54,6 +55,7 @@ urlpatterns = [
 
                   path('admin/', admin.site.urls),
                   path('__debug__/', include(debug_toolbar.urls)),
+                  path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
 
                   # Api
                   path('api/', include((api_patterns, '<int:pk>'), namespace='api')),

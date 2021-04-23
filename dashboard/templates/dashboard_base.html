@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="{% if request.path == '/dashboard/profile/' %}active{% endif %}">
-                    <a href="#EDITPROFILE">
+                    <a href="{% url 'users:edit-profile' request.user.username %}">
                         <i class="nc-icon nc-single-02"></i>
                         <p>YOUR PROFILE</p>
                     </a>

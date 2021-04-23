@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from rest_framework import permissions
+from rest_framework import permissions, filters
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.views import Response
@@ -12,6 +12,7 @@ from ..models import Event, ImGoing
 class EventViewSet(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+    filter_backends = (filters.SearchFilter,)
 
     @action(detail=True, methods=["POST", "GET", "DELETE", ], permission_classes=[permissions.IsAuthenticated], name="I'm going")
     def going(self, request, pk=None):

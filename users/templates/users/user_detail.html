@@ -30,7 +30,8 @@
                 </div>
                 <div class="btn-group">
                     {% if request.user == user %}
-                        <a href="{% url 'users:edit-profile' user.username %}" class="btn btn-outline-dark">EDIT PROFILE</a>
+                        <a href="{% url 'users:edit-profile' user.username %}" class="btn btn-outline-dark">EDIT
+                            PROFILE</a>
                     {% else %}
                         <button class="btn btn-outline-success">FOLLOW</button>
                         <button class="btn btn-outline-dark">MESSAGE</button>
@@ -50,11 +51,11 @@
                 </div>
             </div>
             <div class="row my-3">
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    {% for truck in user.trucks.all %}
+                {% for truck in user.trucks.all %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                         {% include 'trucks/truck_card.html' with truck=truck %}
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     {% else %}

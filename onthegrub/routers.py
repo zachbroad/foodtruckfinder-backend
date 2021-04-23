@@ -1,12 +1,13 @@
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
-from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, DashboardViewSet, HomePage, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet, TruckLiveViewSet, TruckScheduleViewSet
+from rest_framework.routers import DefaultRouter
+
 from announcements.api.views import AnnouncementViewSet
+from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
 from notifications.api.views import NotificationViewSet
-from catering.api.views import CateringViewSet
+from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, MenuItemViewSet, \
+    TagsViewSet, LiveViewSet, TruckScheduleViewSet
 from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
-from rest_framework.routers import DefaultRouter
 
 
 class GrubRouter(DefaultRouter):

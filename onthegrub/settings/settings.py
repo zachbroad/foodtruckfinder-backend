@@ -30,7 +30,13 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
 }
 
+GRAPHENE = {
+    'SCHEMA': 'onthegrub.schema.schema'
+}
+
 ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyCHX-SHtIOkmTMLLKIcFHpL0YSiVojWVm8'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,6 +64,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+    'graphene_django',
     'crispy_forms',
     'django_filters',
     'django_property_filter',
@@ -99,6 +106,7 @@ FCM_DJANGO_SETTINGS = {
 }
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'users.User'
@@ -207,7 +215,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyA8kKFG0-n_lV-xNBld3iJjLu2DP34w--I'
 
 LANGUAGE_CODE = 'en-us'
 

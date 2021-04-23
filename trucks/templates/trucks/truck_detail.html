@@ -33,10 +33,10 @@
 
                         {% if truck.address != None %}
                             <a href="https://www.google.com/maps?q={{ truck.address }}"
-                               class="btn btn-success">DIRECTIONS</a>
+                               class="btn btn-success" target="_blank">DIRECTIONS</a>
                         {% elif truck.geolocation != None %}
                             <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
-                               class="btn btn-success">DIRECTIONS</a>
+                               class="btn btn-success" target="_blank">DIRECTIONS</a>
                         {% else %}
                             {#                            directions unavailable#}
                         {% endif %}

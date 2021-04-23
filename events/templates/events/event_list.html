@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block description %}
-    Looking for a Food Truck Event in Florida? OnTheGrub has 'em all... check out all of Florida's upcoming food truck events!
+    Looking for a Food Truck Event in Florida? OnTheGrub has 'em all... check out all of Florida's upcoming food truck
+    events!
 {% endblock %}
 
 
@@ -15,12 +16,28 @@
             <div class="col py-3">
                 <h2>Events near you</h2>
             </div>
-
         </div>
-        <div class="row">
-            {% for event in event_list %}
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="event-card">
+
+        <div class="row mb-3">
+            <div class="col">
+                <form method="GET" class="d-flex flex-row">
+                    <input class="form-control mr-2" placeholder="FIND EVENTS" value="{{ request.GET.query }}"
+                           name="query" type="text"/>
+                    <button type="submit" class="btn btn-primary">SEARCH</button>
+                </form>
+            </div>
+        </div>
+        {% if request.GET.query %}
+            <div class="row">
+                <div class="col">
+                    <h5>Showing search results for <code>{{ request.GET.query }}</code></h5>
+                </div>
+            </div>
+        {% endif %}
+        {% if event_list.count > 0 %}
+            <div class="row">
+                {% for event in event_list %}
+                    <div class="col-sm-12 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
@@ -32,18 +49,24 @@
                             <div class="card-body">
                                 <p>{{ event.description }}</p>
                             </div>
-
                             <div class="card-footer">
                                 <span>Start: <strong>{{ event.start_time }}</strong></span>
                                 <br/>
                                 <span>End: <strong>{{ event.end_time }}</strong></span>
                             </div>
-
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-
-        </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            {% if request.GET.query %}
+                <code>Sorry, there are no events matching <b>'{{ request.GET.query }}'</b></code>
+                <a href="{% url 'events:index' %}" class="btn btn-outline-dark">
+                    CLEAR SEARCH
+                </a>
+            {% else %}
+                <h3>Sorry, there are no events currently available.</h3>
+            {% endif %}
+        {% endif %}
     </div>
 {% endblock %}

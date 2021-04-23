@@ -10,13 +10,13 @@
                 </div>
                 <div class="card-body">
                     {% for item in truck.items.all %}
-                        <div class="list-group-item">
+                        <a href="{% url 'trucks:menu-item' truck.id item.id %}" class="list-group-item">
                             <div>
                                 {{ item.name }}
                                 {{ item.price }}
                             </div>
                             {{ item.description|default:"" }}
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

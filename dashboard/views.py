@@ -1,12 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q, QuerySet
-from django.shortcuts import render
+from django.db.models import Q, QuerySet
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, UpdateView, DetailView
 
 # Create your views here.
-from catering.models import CaterRequest
 from notifications.models import Notification
 from trucks.models import Truck, Visit
 
@@ -19,7 +16,7 @@ def get_db_context(self, context):
     return context
 
 
-class DashboardIndex(TemplateView, LoginRequiredMixin):
+class DashboardIndex(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard_index.html'
 
     def get_context_data(self, **kwargs):
@@ -28,12 +25,12 @@ class DashboardIndex(TemplateView, LoginRequiredMixin):
         return context
 
 
-class DashboardCateringIndex(ListView, LoginRequiredMixin):
+class DashboardCateringIndex(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard_catering_index.html'
     queryset = Truck.objects.all()
 
 
-class DashboardMyTrucksList(ListView, LoginRequiredMixin):
+class DashboardMyTrucksList(LoginRequiredMixin, ListView):
     template_name = 'dashboard/dashboard_trucks_list.html'
     queryset = Truck.objects.all()
     context_object_name = 'my_trucks'
@@ -48,7 +45,7 @@ class DashboardMyTrucksList(ListView, LoginRequiredMixin):
             return user_trucks
 
 
-class DashboardTruckDetail(DetailView, LoginRequiredMixin):
+class DashboardTruckDetail(LoginRequiredMixin, DetailView):
     template_name = 'dashboard/dashboard_detail.html'
     queryset = Truck.objects.all()
     pk_url_kwarg = 'truck_id'
@@ -63,7 +60,7 @@ class DashboardTruckDetail(DetailView, LoginRequiredMixin):
         return context
 
 
-class DashboardEditTruck(UpdateView, LoginRequiredMixin):
+class DashboardEditTruck(LoginRequiredMixin, UpdateView):
     template_name = 'dashboard/dashboard_edit_truck.html'
     pk_url_kwarg = 'truck_id'
     queryset = Truck.objects.all()
@@ -78,14 +75,14 @@ class DashboardEditTruck(UpdateView, LoginRequiredMixin):
         'available_for_catering',
     ]
 
-    def form_valid(self, form):
-        pass
+    # def form_valid(self, form):
+    #     pass
 
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
 
 
-class DashboardNotifications(ListView, LoginRequiredMixin):
+class DashboardNotifications(LoginRequiredMixin, ListView):
     template_name = 'dashboard/dashboard_notifications.html'
     queryset = Notification.objects.all()
     context_object_name = 'notifications'

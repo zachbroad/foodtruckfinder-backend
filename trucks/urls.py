@@ -6,6 +6,7 @@ app_name = 'trucks'
 urlpatterns = [
     path('', views.TruckList.as_view(), name='index'),
     path('<pk>/menu/', views.menu, name='menu'),
+    path('<pk>/menu/<item_id>/', views.MenuItemDetail.as_view(), name='menu-item'),
     path('<pk>/book/', views.BookCatering.as_view(), name='book-catering'),
     path('<pk>/book/success/', views.BookCateringSuccess.as_view(), name='book-catering-success'),
     path('<pk>/schedule/', views.TruckSchedule.as_view(), name='schedule'),
