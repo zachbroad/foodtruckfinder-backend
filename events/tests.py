@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.utils import timezone
 from rest_framework.test import APITestCase
 
 # Create your tests here.
@@ -21,8 +22,8 @@ class EventsTests(APITestCase):
             description='null',
             address='null',
             phone_number='111-111-1111',
-            start_time=datetime.now(),
-            end_time=datetime.now(),
+            start_time=timezone.now(),
+            end_time=timezone.now(),
             organizer=self.user,
         )
 

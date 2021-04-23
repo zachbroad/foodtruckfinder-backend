@@ -32,7 +32,7 @@
             </div>
         {% endif %}
 
-        {% if page_obj %}
+        {% if page_obj.has_other_pages %}
             <div class="row">
                 {% for truck in page_obj %}
                     <div class="col-sm-12 col-md-6 col-lg-4 mb-2">

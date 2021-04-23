@@ -5,9 +5,22 @@
         </h4>
         <hr>
         {{ cater_request.details }}
+        
+        <p>
+            {{ cater_request.status }}
+        </p>
     </div>
+
     <div class="card-footer">
-        <button class="btn btn-danger">REJECT</button>
-        <button class="btn btn-success">ACCEPT</buttonc>
+        <form class="d-inline" action="{% url 'dashboard:catering-request-modify' cater_request.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="status" name="status" value="rejected">
+            <button class="btn btn-danger" type="submit">REJECT</button>
+        </form>
+        <form class="d-inline" action="{% url 'dashboard:catering-request-modify' cater_request.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="status" name="status" value="accepted">
+            <button class="btn btn-success">ACCEPT</button>
+        </form>
     </div>
 </div>

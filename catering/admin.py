@@ -9,20 +9,23 @@ class CaterRequestAdmin(admin.ModelAdmin):
         'name',
         'email',
         'truck',
+        'details',
     )
 
     list_display = (
         'email',
-        'details',
         'name',
+        'details',
+        'status',
         'truck',
         'when',
-        'duration',
         'requested_on',
+        'duration',
     )
 
     list_filter = (
         'when',
+        'status',
     )
 
     date_hierarchy = 'when'

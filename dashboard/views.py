@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, UpdateView, DetailView
 
 # Create your views here.
+from catering.models import CaterRequest
 from notifications.models import Notification
 from trucks.models import Truck, Visit
 
@@ -27,7 +28,19 @@ class DashboardIndex(LoginRequiredMixin, TemplateView):
 
 class DashboardCateringIndex(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard_catering_index.html'
-    queryset = Truck.objects.all()
+    queryset = CaterRequest.objects.all()
+
+
+class DashboardCateringDetail(LoginRequiredMixin, DetailView):
+    queryset = CaterRequest.objects.all()
+
+
+class DashboardCaterRequestResponse(LoginRequiredMixin, UpdateView):
+    queryset = CaterRequest.objects.all()
+    success_url = reverse_lazy('dashboard:catering-index')
+    fields = (
+        'status',
+    )
 
 
 class DashboardMyTrucksList(LoginRequiredMixin, ListView):
@@ -48,7 +61,6 @@ class DashboardMyTrucksList(LoginRequiredMixin, ListView):
 class DashboardTruckDetail(LoginRequiredMixin, DetailView):
     template_name = 'dashboard/dashboard_detail.html'
     queryset = Truck.objects.all()
-    pk_url_kwarg = 'truck_id'
     context_object_name = 'truck'
 
     def get_context_data(self, **kwargs):
@@ -62,7 +74,6 @@ class DashboardTruckDetail(LoginRequiredMixin, DetailView):
 
 class DashboardEditTruck(LoginRequiredMixin, UpdateView):
     template_name = 'dashboard/dashboard_edit_truck.html'
-    pk_url_kwarg = 'truck_id'
     queryset = Truck.objects.all()
     success_url = reverse_lazy('dashboard:truck-list')
     context_object_name = 'truck'

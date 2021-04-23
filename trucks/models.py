@@ -1,6 +1,5 @@
 import math
 import time
-import uuid
 
 from django.conf import settings
 from django.core import validators
@@ -11,7 +10,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from phone_field import PhoneField
 from rest_framework.exceptions import ValidationError
-from rest_framework.reverse import reverse_lazy, reverse
+from rest_framework.reverse import reverse
 
 from notifications.models import Notification
 from util.models import ModelLocation
@@ -26,6 +25,7 @@ WEEKDAYS = [
     (7, "Sunday"),
 ]
 
+TYPE_NONE = 0
 TYPE_ENTRE = 1
 TYPE_SIDE = 2
 TYPE_DRINK = 3
@@ -33,6 +33,7 @@ TYPE_DESSERT = 4
 TYPE_COMBO = 5
 
 TYPE_CHOICES = [
+    (TYPE_NONE, 'None'),
     (TYPE_ENTRE, 'Entre'),
     (TYPE_SIDE, 'Side'),
     (TYPE_DRINK, 'Drink'),
@@ -223,6 +224,9 @@ class TruckImage(models.Model):
 
 
 class MenuItemQuerySet(models.QuerySet):
+    def uncategorized(self):
+        self.filter(type=TYPE_NONE).all()
+
     def entres(self):
         self.filter(type=TYPE_ENTRE).all()
 
@@ -243,6 +247,9 @@ class MenuItemManager(models.Manager):
     def get_queryset(self):
         return MenuItemQuerySet(self.model, using=self._db)
 
+    def get_uncategorized(self):
+        return self.get_queryset().uncategorized()
+
     def get_entres(self):
         return self.get_queryset().entres()
 
@@ -260,7 +267,7 @@ class MenuItemManager(models.Manager):
 
 
 class MenuItem(models.Model):
-    type = models.IntegerField(choices=TYPE_CHOICES)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TYPE_NONE)
 
     # non-specific
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='items')
