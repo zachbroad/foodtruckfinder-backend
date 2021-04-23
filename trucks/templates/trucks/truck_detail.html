@@ -20,7 +20,7 @@
                                 <p>no rating</p>
                             {% endif %}
                         </div>
-                    </div>
+                    </div>w
                     {% if truck.image.file != None %}
                         <img height="auto" class="card-img-bottom" style="object-fit: cover"
                              src="{{ truck.image.url }}"/>
@@ -38,10 +38,10 @@
                             <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
                                class="btn btn-success" target="_blank">DIRECTIONS</a>
                         {% else %}
-                            {#                            directions unavailable#}
+{#                                                        directions unavailable#}
                         {% endif %}
 
-                        <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-warning">SCHEDULE</a>
+                        <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-info">SCHEDULE</a>
                         <div class="btn btn-danger">FAVORITE</div>
 
                         {% if truck.available_for_catering %}

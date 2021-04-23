@@ -1,38 +1,58 @@
 <div class="card my-3">
     <div class="card-header">
-        <h5>Truck Info</h5>
+        <h4>Truck Info</h4>
         <small>Everything about {{ truck.title }}</small>
     </div>
     <ul class="list-group font-weight-light">
 
-        <li class="list-group-item">
-            <h6 class="mb-1">Address</h6>
-            <a href="https://www.google.com/maps?q={{ truck.address }}">{{ truck.address }}</a>
-        </li>
-
-        <li class="list-group-item">
-            <h6 class="mb-1">Phone Number</h6>
-            <a href="tel:{{ truck.phone }}">{{ truck.phone }}</a>
-        </li>
-
-        <li class="list-group-item">
-            <h6 class="mb-1">
-                Catering
-            </h6>
-            {% if truck.available_for_catering %}
-                Available for catering
-            {% else %}
-                Not available for catering
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">Address</h6>
+                <a href="https://www.google.com/maps?q={{ truck.address }}">{{ truck.address }}</a>
+            </div>
+            {% if truck.address != None %}
+                <a href="https://www.google.com/maps?q={{ truck.address }}"
+                   class="btn btn-sm btn-success" target="_blank">DIRECTIONS</a>
+            {% elif truck.geolocation != None %}
+                <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
+                   class="btn btn-sm btn-success" target="_blank">DIRECTIONS</a>
             {% endif %}
         </li>
 
-        <li class="list-group-item">
+        {% if truck.phone %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">Phone Number</h6>
+                    <a href="tel:{{ truck.phone }}">{{ truck.phone }}</a>
+                </div>
+                <a class="btn btn-light btn-sm" href="tel:{{ truck.phone }}">CALL</a>
+            </li>
+        {% endif %}
+
+        {% if truck.available_for_catering %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">
+                        Catering
+                    </h6>
+                    Available for catering
+                </div>
+                <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-primary">BOOK</a>
+            </li>
+        {% endif %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
             {% if truck.owner != None %}
-                <h6 class="mb-1">Owner</h6>
-                <a href="{% url 'users:detail' truck.owner.username %}">{{ truck.owner.first_name }} {{ truck.owner.last_name }}
-                    <span class="text-muted">(@{{ truck.owner.username }})</span></a>
+                <div>
+                    <h6 class="mb-1">Owner</h6>
+                    <a href="{% url 'users:detail' truck.owner.username %}">{{ truck.owner.first_name }} {{ truck.owner.last_name }}
+                        <span class="text-muted">(@{{ truck.owner.username }})</span></a>
+                </div>
+
+                <a href="{% url 'users:detail' truck.owner.username %}" class="btn btn-sm btn-dark">VIEW</a>
             {% else %}
                 <h6 class="mb-1">Unclaimed Truck</h6>
+                <a href="#CLAIM" class="btn btn-sm btn-dark">CLAIM</a>
             {% endif %}
         </li>
     </ul>

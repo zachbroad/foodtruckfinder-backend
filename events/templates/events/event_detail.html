@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}
     {{ event.title }} | OnTheGrub
@@ -10,9 +11,15 @@
 
 
 {% block content %}
-    <div class="container">
+    {% include 'util/go_back.html' %}
+    <div class="container my-3">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col">
+                <h2></h2>
+            </div>
+        </div>
+        <section class="row">
+            <main class="col-sm-12 col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -22,13 +29,49 @@
                     <div class="card-body">
                         <p>{{ event.description }}</p>
                     </div>
-                    <div class="card-footer">
-                        <span>Start: <strong>{{ event.start_time }}</strong></span>
-                        <br/>
-                        <span>End: <strong>{{ event.end_time }}</strong></span>
+                </div>
+            </main>
+            <aside class="col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Event Details</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <section>
+                            <h4>Who's going</h4>
+                            <p>Trucks attending: <strong>{{ event.trucks|length }}</strong></p>
+                        </section>
+
+                        <hr>
+
+                        <section>
+                            <h4>When & Where</h4>
+                            {% if event.address != None or event.geolocation != None %}
+                                <a href="https://www.google.com/maps?q=
+
+
+
+                                        {% if event.address %}{{ event.address }}{% else %}{{ event.geolocation }}{% endif %}"
+                                   target="_blank">
+                                    {{ event.address|default_if_none:event.geolocation }}
+                                </a>
+                            {% else %}
+                                <p>{{ event.address }}</p>
+                            {% endif %}
+                            <br/>
+                            <span><strong>{{ event.start_time }}</strong> for <strong>{{ event.duration|intword }} hours</strong>.</span>
+                        </section>
+
+                        <hr>
+
+                        <section>
+                            <h4>Location</h4>
+                        </section>
                     </div>
                 </div>
-            </div>
-        </div>
+
+            </aside>
+        </section>
     </div>
 {% endblock %}

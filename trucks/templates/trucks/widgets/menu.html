@@ -1,3 +1,4 @@
+{% load humanize %}
 <div class="container">
     <div class="row">
         <div class="col-md-12 col-sm-12">
@@ -10,12 +11,26 @@
                 </div>
                 <div class="card-body">
                     {% for item in truck.items.all %}
-                        <a href="{% url 'trucks:menu-item' truck.id item.id %}" class="list-group-item">
-                            <div>
-                                {{ item.name }}
-                                {{ item.price }}
+                        <a href="{% url 'trucks:menu-item' truck.id item.id %}" class="text-decoration-none">
+
+                            <div class="list-group-item p-1 d-flex align-items-center">
+                                <img src="{{ item.image.url }}" alt="{{ item.name }}"
+                                     class="img-responsive border shadow-sm mr-2" width="64" height="64">
+                                <section class="flex-fill">
+                                    <div class="d-flex align-items-center">
+                                        <h5 class="p-0 m-0">
+                                            {{ item.name }}
+                                        </h5>
+                                        <div class="badge badge-pill badge-success ml-2 border">
+                                            ${{ item.price|floatformat:2 }}</div>
+                                    </div>
+                                    {{ item.description|default:"" }}
+                                </section>
+                                {#                            <a class="btn btn-outline-info mr-1 ml-2"#}
+                                {#                               href="{% url 'trucks:menu-item' truck.id item.id %}">#}
+                                {#                                VIEW#}
+                                {#                            </a>#}
                             </div>
-                            {{ item.description|default:"" }}
                         </a>
                     {% endfor %}
                 </div>
