@@ -48,7 +48,6 @@ class FavoriteThisTruck(View, LoginRequiredMixin):
 
         return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
 
-et
 class UnfavoriteThisTruck(DeleteView, LoginRequiredMixin):
     model = TruckFavorite
 
