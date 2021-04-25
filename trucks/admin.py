@@ -4,7 +4,7 @@ from django.contrib import admin
 from django_google_maps import fields as map_fields
 from django_google_maps import widgets as map_widgets
 
-from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live, TruckImage, TruckEvent
+from .models import Truck, MenuItem, Review, ReviewLike, Visit, Tag, Live, TruckImage, TruckEvent, TruckFavorite
 
 
 class TruckImageInline(admin.StackedInline):
@@ -18,6 +18,27 @@ class TruckImageInline(admin.StackedInline):
 
 class TruckEventInline(admin.TabularInline):
     model = TruckEvent
+
+
+class FavoriteTruckAdmin(admin.ModelAdmin):
+    model = TruckFavorite
+
+    list_display = (
+        'user',
+        'truck',
+        'created'
+    )
+
+    search_fields = (
+        'user',
+        'truck',
+    )
+
+    list_filter = (
+        'created',
+    )
+
+    date_hierarchy = 'created'
 
 
 @admin.register(TruckEvent)
@@ -237,10 +258,11 @@ class LiveAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_time'
 
 
-admin.site.register(Tag, TagAdmin)
-admin.site.register(Visit, VisitAdmin)
-admin.site.register(Truck, TruckAdmin)
+admin.site.register(Live, LiveAdmin)
 admin.site.register(MenuItem, MenuItemAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(ReviewLike, ReviewLikeAdmin)
-admin.site.register(Live, LiveAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Truck, TruckAdmin)
+admin.site.register(TruckFavorite, FavoriteTruckAdmin)
+admin.site.register(Visit, VisitAdmin)

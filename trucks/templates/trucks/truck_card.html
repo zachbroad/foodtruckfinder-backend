@@ -1,36 +1,26 @@
-<div class="card shadow-sm">
+{% load static %}
+{% load sass_tags %}
+{% block head %}
+    <link rel="stylesheet" href="{% sass_src 'css/trucks/card.scss' %}">
+{% endblock %}
+
+<div class="card shadow-sm truck-card" onclick="window.location.href='{% url 'trucks:detail' truck.id %}'">
     <div class="card-body">
-        {% if not dashboard %}
-            <a class="text-decoration-none" href="{% url 'trucks:detail' truck.id %}">
-                <h5 class="card-title">{{ truck.title }}</h5>
-                <small>{{ truck.address|default_if_none:"" }}</small>
-            </a>
-        {% else %}
-            <a class="text-decoration-none" href="{% url 'dashboard:truck-detail' truck.id %}">
-                <h5 class="card-title">{{ truck.title }}</h5>
-                <small>{{ truck.address|default_if_none:"" }}</small>
-            </a>
-        {% endif %}
+        <h5 class="card-title text-dark">{{ truck.title }}</h5>
+        <small class="text-black-50 font-weight-bold">{{ truck.address|default_if_none:"" }}</small>
     </div>
     {% if truck.image.file != None %}
         <img src="{{ truck.image.url }}" height="120" alt="Photo of {{ truck.title }}." class="card-img-top"
              style="object-fit: cover"/>
     {% endif %}
+
     <div class="d-flex card-footer justify-content-end">
-        {% if not dashboard %}
-            <div class="btn-group">
-                {% if truck.available_for_catering %}
-                    <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-outline-info">CATER</a>
-                {% endif %}
-                <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>
-                <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-primary">SCHEDULES</a>
-                <a href="{% url 'trucks:detail' truck.id %}" class="btn btn-sm btn-outline-dark">VIEW</a>
-            </div>
-        {% else %}
-            <div class="btn-group btn-group-sm">
-                <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-sm btn-outline-info">EDIT</a>
-                <a href="{% url 'dashboard:truck-detail' truck.id %}" class="btn btn-sm btn-primary">VIEW</a>
-            </div>
-        {% endif %}
+        <div class="btn-group flex-wrap">
+            {% if truck.available_for_catering %}
+                <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-outline-info">CATER</a>
+            {% endif %}
+            <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>
+            <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-primary">SCHEDULES</a>
+        </div>
     </div>
 </div>

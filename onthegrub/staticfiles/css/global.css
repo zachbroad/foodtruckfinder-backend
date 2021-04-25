@@ -1,0 +1,7 @@
+.hover-grow {
+  transition: 0.2s; }
+
+.hover-grow:hover {
+  transform: scale(1.025); }
+
+/*# sourceMappingURL=global.css.map */

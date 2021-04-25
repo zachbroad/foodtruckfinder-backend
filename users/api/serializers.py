@@ -1,19 +1,8 @@
 from rest_framework import serializers
 
 from onthegrub.util import Base64ImageField
-from users.models import User, SearchTerm, FavoriteTruck, Feedback
-
-
-class FavoriteTruckSerializer(serializers.ModelSerializer):
-    user = serializers.CurrentUserDefault()
-
-    class Meta:
-        model = FavoriteTruck
-        fields = (
-            'pk',
-            'user',
-            'truck',
-        )
+from trucks.api.serializers import FavoriteTruckSerializer
+from users.models import User, SearchTerm, Feedback
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

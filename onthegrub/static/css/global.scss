@@ -1,0 +1,10 @@
+$transition-time: 0.20s;
+$grow-size: 1.025;
+
+.hover-grow {
+  transition: $transition-time;
+}
+
+.hover-grow:hover {
+  transform: scale($grow-size);
+}

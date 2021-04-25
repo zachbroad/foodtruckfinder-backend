@@ -1,24 +1,15 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.contrib import messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
-GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + \
-                    r'env\lib\site-packages\osgeo\gdal300.dll'
-
-# Quick-start development settings - unsuitable for production
-
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5r&bht!1rco2-fe@aa4a%#5#uds+#fw(to+y%--5t%87pe3(q0'
 EMAIL_HOST_USER = 'grubtrucksapp@gmail.com'
 EMAIL_HOST_PASSWORD = 'arsfuuwlccjxqqrw'
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = [
     "10.0.2.2",
@@ -26,17 +17,51 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
-}
+INTERNAL_IPS = [
+    '127.0.0.1',  # This is needed for the Django debug toolbar
+]
+
+SITE_ID = 1
+
+# App settings
+
+ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
 
 GRAPHENE = {
     'SCHEMA': 'onthegrub.schema.schema'
 }
 
-ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyCHX-SHtIOkmTMLLKIcFHpL0YSiVojWVm8'
+
+WAGTAIL_SITE_NAME = 'OnTheGrub'
+
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": True,
+}
+
+## Geospatial libraries
+GEOS_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\geos_c.dll'
+GDAL_LIBRARY_PATH = BASE_DIR[0:-10] + r'env\lib\site-packages\osgeo\gdal300.dll'
+
+# Static Files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder'
+]
+
+# Media Files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -49,7 +74,22 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
 
-    # local
+    # Wagtail
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+    'modelcluster',
+    'taggit',
+
+    # OTG Apps
     'announcements.apps.AnnouncementsConfig',
     'catering.apps.CateringConfig',
     'events.apps.EventsConfig',
@@ -59,29 +99,43 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'notifications.apps.NotificationsConfig',
 
+    # Dev/Util
+    'debug_toolbar',
+    'sass_processor',
+
     # 3rd party
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
-    'graphene_django',
     'crispy_forms',
     'django_filters',
-    'django_property_filter',
-    'model_utils',
-
     'django_google_maps',
+    'django_property_filter',
     'fcm_django',
+    'graphene_django',
+    'markdownx',
+    'model_utils',
     'phone_field',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
     'storages',
-    'markdownx',
-    'debug_toolbar',
     # 'djstripe',
+]
+
+MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',  # This needs to be before other middleware
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 MESSAGE_TAGS = {
@@ -92,49 +146,23 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# dj-stripe vars
-# STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
-# STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
-# STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
-# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
-# STRIPE_LIVE_MODE = False  # Change to True in production
-# DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint
-
-FCM_DJANGO_SETTINGS = {
-    "FCM_SERVER_KEY": "AAAAvYJnq44:APA91bHoPGfkFciJYrP0fny8G9kGVSZ-92g2qZrSDx9Q2E6eX9_-kVtcPqiGUX6rGnEoBFowFMqEa3j_DtE9XtARqwdZkRlK3UCD4pj9HPZDyY1QCb5nkcVP88oGh2DM8gdsvbg9A2z9",
-    "ONE_DEVICE_PER_USER": False,
-    "DELETE_INACTIVE_DEVICES": True,
-}
-
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'users.User'
-
 AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'America/New_York'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-SITE_ID = 1
-
-MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',  # This needs to be before other middleware
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-]
-
-# This is needed for the Django debug toolbar
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
 
 ROOT_URLCONF = 'onthegrub.urls'
 # TEMPLATE_DIRS = (
@@ -152,6 +180,9 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            # 'builtins': [
+            #     'sass_processor.templatetags.sass_tags' # TODO: Figure this out
+            # ],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -162,8 +193,6 @@ TEMPLATES = [
         },
     },
 ]
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 WSGI_APPLICATION = 'onthegrub.wsgi.application'
 
@@ -185,9 +214,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
+}
 
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -196,8 +227,6 @@ DATABASES = {
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -213,21 +242,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'America/New_York'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-# allauth Providers
+# Allauth Providers
 SOCIALACCOUNT_PROVIDERS = {
     # GOOGLE PROVIDER
     'google': {
@@ -264,33 +279,18 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    os.path.join(BASE_DIR, 'static'),
-)
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
-
+# Location Settings
 LOCATION_FIELD_PATH = STATIC_URL + 'location_field'
-
 LOCATION_FIELD = {
+    # Map Settings
     'map.provider': 'google',
     'map.zoom': 13,
-
     'search.provider': 'google',
     'search.suffix': '',
 
     # Google
     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-    'provider.google.api_key': '<AIzaSyC3dAA4FyHJORduaUx7Yr7eZuX97hVmAHQ>',
+    'provider.google.api_key': 'AIzaSyCHX-SHtIOkmTMLLKIcFHpL0YSiVojWVm8',
     'provider.google.api_libraries': '',
     'provider.google.map.type': 'ROADMAP',
 
@@ -302,7 +302,7 @@ LOCATION_FIELD = {
     # OpenStreetMap
     'provider.openstreetmap.max_zoom': 18,
 
-    # misc
+    # Misc
     'resources.root_path': LOCATION_FIELD_PATH,
     'resources.media': {
         'js': (
@@ -344,4 +344,12 @@ LOGGING = {
     }
 }
 
-DEBUG_PROPAGATE_EXCEPTIONS = True
+### UNUSED STUFF FOR NOW THAT WE MIGHT USE IN THE FUTURE
+
+# dj-stripe vars
+# STRIPE_LIVE_PUBLIC_KEY = os.environ.get("STRIPE_LIVE_PUBLIC_KEY", "<your publishable key>")
+# STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
+# STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "<your publishable key>")
+# STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
+# STRIPE_LIVE_MODE = False  # Change to True in production
+# DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx" # Get from section in Stripe dashboard where you added the webhook endpoint

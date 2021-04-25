@@ -90,6 +90,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         return Truck.objects.aggregate(count=Count('favorites', filter=Q(owner=self)))['count']
 
     @property
+    def has_favorited_truck(self, truck):
+        return TruckFavorite.objects.get(
+            truck=truck,
+            user=self,
+        ).exists()
+
+    @property
     def truck_views(self):
         if not self.is_truck_owner:  # TODO: Is this better than nothing?
             return 0
@@ -122,19 +129,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def had_module_perms(self, app_label):
         return True
 
-
-class FavoriteTruck(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='favorites')
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'truck')
-
-    def __str__(self):
-        return '{} favorited by {}'.format(self.truck.title, self.user.username)
 
 
 class SearchTerm(models.Model):

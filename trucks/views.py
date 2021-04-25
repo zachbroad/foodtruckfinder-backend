@@ -1,12 +1,17 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponseGone
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
-from django.views import generic
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views import generic, View
 from django.views.generic import TemplateView, ListView
+from django.views.generic.edit import DeleteView
 
 from catering.models import CaterRequest
 from onthegrub.mixins import FormSuccessMessageMixin
-from .models import Truck, MenuItem, Review, TruckEvent
+from .models import Truck, MenuItem, Review, TruckEvent, TruckFavorite
 
 
 class TruckList(ListView):
@@ -20,6 +25,49 @@ class TruckList(ListView):
             return search_match_trucks
 
         return self.queryset
+
+
+class FavoriteThisTruck(View, LoginRequiredMixin):
+    model = TruckFavorite
+
+    def get_object(self, request, *args, **kwargs):
+        return self.model.objects.get(
+            user=self.request.user,
+            truck_id=self.kwargs.get('pk')
+        )
+
+    def get(self, request, *args, **kwargs):
+        pass
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        obj = self.model.objects.create(
+            user=self.request.user,
+            truck_id=self.kwargs.get('pk'),
+        )
+
+        return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
+
+et
+class UnfavoriteThisTruck(DeleteView, LoginRequiredMixin):
+    model = TruckFavorite
+
+    def get_success_url(self):
+        return reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')])
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        obj = self.model.objects.get(
+            user=self.request.user,
+            truck_id=self.kwargs.get('pk'),
+        )
+        obj.delete()
+
+        # TODO: improve this  <><<><><>
+        if obj:
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return HttpResponseGone('You can\'t unfavorite this truck... you don\'t have it favorited!')
 
 
 def detail(request, pk):
@@ -95,13 +143,15 @@ class TruckEventDetail(generic.DetailView):
 class ReviewList(generic.ListView):
     model = Review
 
+    # paginate_by = 10 #TODO : FIX THE TEMPLATES SO THAT I CAN DO THIS
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['truck'] = Truck.objects.filter(id=self.kwargs.get('pk')).first()
         return context
 
 
-class ReviewCreate(generic.CreateView):
+class ReviewCreate(generic.CreateView, LoginRequiredMixin):
     model = Review
     fields = [
         'rating',
@@ -121,34 +171,6 @@ class ReviewCreate(generic.CreateView):
         form.instance.reviewer = reviewer
 
         return super(ReviewCreate, self).form_valid(form)
-
-
-from django.views import View
-
-
-# class ReviewCreateForm(ModelForm):
-#     class Meta:
-#         model = Review
-#         fields = [
-#             'rating',
-#             'description',
-#         ]
-
-
-class ReviewListCreate(View):
-
-    def get(self, request, *args, **kwargs):
-        view = ReviewList.as_view()
-        return view(request, *args, **kwargs)
-
-    # def post(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return HttpResponseForbidden()
-    #
-    #     # request.data
-    #
-    #     view = ReviewCreate.as_view()
-    #     return view(request, *args, **kwargs)
 
 
 class ReviewDetail(generic.DetailView):

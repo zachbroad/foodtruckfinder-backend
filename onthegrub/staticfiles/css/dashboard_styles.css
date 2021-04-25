@@ -1,0 +1,19 @@
+.icon-big {
+    font-size: 3em;
+    min-height: 64px;
+}
+
+.icon-big i {
+    line-height: 59px;
+}
+
+
+.icon-med {
+    font-size: 1.5em;
+    min-height: 64px;
+}
+
+.icon-med i {
+    font-size: 2em;
+    line-height: 59px;
+}

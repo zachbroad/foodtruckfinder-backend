@@ -6,7 +6,19 @@ from rest_framework import serializers
 
 from catering.models import CaterRequest
 from onthegrub.util import Base64ImageField
-from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live
+from trucks.models import Truck, MenuItem, Menu, Review, ReviewLike, Visit, Tag, Live, TruckFavorite
+
+
+class FavoriteTruckSerializer(serializers.ModelSerializer):
+    user = serializers.CurrentUserDefault()
+
+    class Meta:
+        model = TruckFavorite
+        fields = (
+            'pk',
+            'user',
+            'truck',
+        )
 
 
 class LiveSerializer(serializers.ModelSerializer):

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load has_favorited %}
 
 
 {% block title %}{{ truck.title }} | OnTheGrub{% endblock %}
@@ -20,7 +21,8 @@
                                 <p>no rating</p>
                             {% endif %}
                         </div>
-                    </div>w
+                    </div>
+
                     {% if truck.image.file != None %}
                         <img height="auto" class="card-img-bottom" style="object-fit: cover"
                              src="{{ truck.image.url }}"/>
@@ -38,11 +40,22 @@
                             <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
                                class="btn btn-success" target="_blank">DIRECTIONS</a>
                         {% else %}
-{#                                                        directions unavailable#}
+                            {#                                                        directions unavailable#}
                         {% endif %}
 
                         <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-info">SCHEDULE</a>
-                        <div class="btn btn-danger">FAVORITE</div>
+
+                            {% if user|has_favorited_truck:truck.id %}
+                            <form action="{% url 'trucks:unfavorite' truck.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">UNFAVORITE</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'trucks:favorite' truck.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">FAVORITE</button>
+                            </form>
+                        {% endif %}
 
                         {% if truck.available_for_catering %}
                             <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-primary">BOOK

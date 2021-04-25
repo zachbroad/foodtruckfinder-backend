@@ -56,6 +56,18 @@ class Tag(models.Model):
         return self.title
 
 
+class TruckFavorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
+    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='favorites')
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'truck')
+
+    def __str__(self):
+        return '{} favorited by {}'.format(self.truck.title, self.user.username)
+
+
 class TruckEvent(ModelLocation):
     truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='schedule', related_query_name='schedule')
 
@@ -192,6 +204,10 @@ class Truck(ModelLocation):
     @property
     def reviews(self):
         return self.review.all()
+
+    @property
+    def is_favorited(self):
+        return TruckFavorite.objects.get(truck_id=self.id).exists()
 
     @property
     def live(self):

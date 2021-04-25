@@ -2,7 +2,7 @@ import datetime
 
 from dateutil import parser
 from django.db.models import Q, F, Count
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
 from django.utils import timezone
 from rest_framework import filters as drf_filters
 from rest_framework import generics, pagination, permissions, status
@@ -12,11 +12,45 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag, TruckEvent
-from users.models import FavoriteTruck
+from trucks.models import Truck, Live, MenuItem, Review, ReviewLike, Visit, Tag, TruckEvent, TruckFavorite
 from .serializers import TruckSerializer, MenuItemSerializer, CreateTruckSerializer, ReviewSerializer, LikeSerializer, \
     VisitSerializer, TruckDashboardSerializer, CreateReviewSerializer, CreateMenuItemSerializer, TagSerializer, \
-    PatchMenuItemSerializer, LiveSerializer, TruckEventSerializer
+    PatchMenuItemSerializer, LiveSerializer, TruckEventSerializer, FavoriteTruckSerializer
+
+
+class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = FavoriteTruckSerializer
+    model = TruckFavorite
+    queryset = TruckFavorite.objects.all()
+
+    filterset_fields = ['user', 'truck']
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_object(self):
+        # "SHOULD" always return 1 object
+        return self.model.objects.get(truck__id=self.request.query_params.get('truck'),
+                                      user__id=self.request.query_params.get('user'))
+
+    def get_queryset(self):
+        queryset = TruckFavorite.objects.all()
+        user_id = self.request.query_params.get('user__id')
+        truck_id = self.request.query_params.get('truck___id')
+
+        if user_id is not None and truck_id is not None:
+            queryset = queryset.filter(user__id=user_id, truck__id=truck_id)
+        elif user_id is not None:
+            queryset = queryset.filter(user__id=user_id)
+        elif truck_id is not None:
+            queryset = queryset.filter(truck__id=truck_id)
+
+        return queryset
 
 
 class MenuItemDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -297,7 +331,7 @@ class TruckViewSet(ModelViewSet):
     @action(detail=False, methods=["GET"], permission_classes=[permissions.IsAuthenticated, ])
     def favorites(self, request):
         qs = self.get_queryset()
-        favorites = FavoriteTruck.objects.filter(user=self.request.user)
+        favorites = TruckFavorite.objects.filter(user=self.request.user)
         qs = qs.filter(favorites__in=favorites)
         serializer = self.get_serializer_class()
         data = serializer(qs, many=True, context={'request': request})
@@ -350,7 +384,7 @@ class HomePage(views.APIView):
             recent = trucks.filter(visits__in=visits).distinct()
 
             # Users's Favorites
-            favorites = FavoriteTruck.objects.filter(user=self.request.user)
+            favorites = TruckFavorite.objects.filter(user=self.request.user)
             favorites = trucks.filter(favorites__in=favorites)
 
             # recent

@@ -8,43 +8,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from users.models import User, FavoriteTruck, Feedback
+from trucks.models import TruckFavorite
+from users.models import User, Feedback
 from .serializers import UserSerializer, FavoriteTruckSerializer, FeedbackSerializer
 
-
-class FavoritesViewSet(ModelViewSet, generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = FavoriteTruckSerializer
-    model = FavoriteTruck
-    queryset = FavoriteTruck.objects.all()
-
-    filterset_fields = ['user', 'truck']
-
-    def destroy(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-        except Http404:
-            pass
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_object(self):
-        # "SHOULD" always return 1 object
-        return self.model.objects.get(truck__id=self.request.query_params.get('truck'),
-                                      user__id=self.request.query_params.get('user'))
-
-    def get_queryset(self):
-        queryset = FavoriteTruck.objects.all()
-        user_id = self.request.query_params.get('user__id')
-        truck_id = self.request.query_params.get('truck___id')
-
-        if user_id is not None and truck_id is not None:
-            queryset = queryset.filter(user__id=user_id, truck__id=truck_id)
-        elif user_id is not None:
-            queryset = queryset.filter(user__id=user_id)
-        elif truck_id is not None:
-            queryset = queryset.filter(truck__id=truck_id)
-
-        return queryset
 
 
 class AccountRudView(generics.RetrieveUpdateDestroyAPIView):

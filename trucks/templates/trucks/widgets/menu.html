@@ -9,6 +9,7 @@
                     </a>
                     <small>{{ truck.title }} has {{ truck.items.count }} items on their menu.</small>
                 </div>
+
                 <div class="card-body">
                     {% for item in truck.items.all %}
                         <a href="{% url 'trucks:menu-item' truck.id item.id %}" class="text-decoration-none">
@@ -26,10 +27,6 @@
                                     </div>
                                     {{ item.description|default:"" }}
                                 </section>
-                                {#                            <a class="btn btn-outline-info mr-1 ml-2"#}
-                                {#                               href="{% url 'trucks:menu-item' truck.id item.id %}">#}
-                                {#                                VIEW#}
-                                {#                            </a>#}
                             </div>
                         </a>
                     {% endfor %}

@@ -6,8 +6,8 @@ from catering.api.views import CateringViewSet
 from events.api.views import EventViewSet
 from notifications.api.views import NotificationViewSet
 from trucks.api.views import TruckViewSet, ReviewsViewSet, VisitViewSet, MenuItemViewSet, \
-    TagsViewSet, LiveViewSet, TruckScheduleViewSet
-from users.api.views import AccountViewSet, FavoritesViewSet, FeedbackViewSet, ProfileViewSet
+    TagsViewSet, LiveViewSet, TruckScheduleViewSet, FavoritesViewSet
+from users.api.views import AccountViewSet, FeedbackViewSet, ProfileViewSet
 
 
 class GrubRouter(DefaultRouter):

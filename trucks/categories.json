@@ -1,0 +1,10 @@
+{
+  "mexican": {
+    "str": "Mexican",
+    "desc": "Tacos, burritos, taquitos & everything else you love about Mexican cuisine."
+  },
+  "american": {
+    "str": "American",
+    "desc": "Classic American food."
+  }
+}

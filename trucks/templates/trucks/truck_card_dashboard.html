@@ -1,0 +1,24 @@
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/trucks/card.scss' %}">
+{% endblock %}
+
+<div class="card shadow-sm truck-card" onclick="window.location.href='{% url 'dashboard:truck-detail' truck.id %}'">
+    <div class="card-body">
+        <a class="text-decoration-none" href="{% url 'dashboard:truck-detail' truck.id %}">
+            <h5 class="card-title">{{ truck.title }}</h5>
+            <small>{{ truck.address|default_if_none:"" }}</small>
+        </a>
+    </div>
+
+    {% if truck.image.file != None %}
+        <img src="{{ truck.image.url }}" height="120" alt="Photo of {{ truck.title }}." class="card-img-top"
+             style="object-fit: cover"/>
+    {% endif %}
+
+    <div class="d-flex card-footer justify-content-end">
+        <div class="btn-group btn-group-sm flex-wrap">
+            <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-sm btn-outline-info">EDIT</a>
+        </div>
+    </div>
+</div>

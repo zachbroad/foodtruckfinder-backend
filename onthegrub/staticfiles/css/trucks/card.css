@@ -1,0 +1,9 @@
+.truck-card {
+  display: block;
+  cursor: pointer;
+  transition: all 0.25s; }
+
+.truck-card:hover {
+  transform: scale(1.02); }
+
+/*# sourceMappingURL=card.css.map */

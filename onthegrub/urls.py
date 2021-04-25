@@ -9,6 +9,9 @@ from django.urls import path, include, re_path
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from graphene_django.views import GraphQLView
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.core import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
 
 from onthegrub.views import IndexView
 from trucks.api.views import HomePage, TruckLiveViewSet
@@ -49,6 +52,9 @@ urlpatterns = [
                   path('events/', include('events.urls')),
                   path('catering/', include('catering.urls')),
                   path('news/', include('announcements.urls')),
+                  path('blog/', include(wagtail_urls)),
+                  path('documents/', include(wagtaildocs_urls)),
+                  path('cms/', include(wagtailadmin_urls)),
                   path('dashboard/', include('dashboard.urls')),
 
                   # Admin

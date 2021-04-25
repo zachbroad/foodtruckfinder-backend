@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, SearchTerm, FavoriteTruck, Feedback
+from .models import User, SearchTerm, Feedback
 
 
 class FeedbackAdmin(admin.ModelAdmin):
@@ -23,26 +23,6 @@ class FeedbackAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'created'
 
-
-class FavoriteTruckAdmin(admin.ModelAdmin):
-    model = FavoriteTruck
-
-    list_display = (
-        'user',
-        'truck',
-        'created'
-    )
-
-    search_fields = (
-        'user',
-        'truck',
-    )
-
-    list_filter = (
-        'created',
-    )
-
-    date_hierarchy = 'created'
 
 
 class SearchTermAdmin(admin.ModelAdmin):
@@ -101,7 +81,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Feedback, FeedbackAdmin)
-admin.site.register(FavoriteTruck, FavoriteTruckAdmin)
 admin.site.register(SearchTerm, SearchTermAdmin)
 admin.site.register(User, UserAdmin)
 
