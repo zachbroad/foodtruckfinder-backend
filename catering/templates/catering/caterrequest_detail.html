@@ -7,6 +7,10 @@
     Request food truck catering for your event OnTheGrub, Florida's #1 food truck finder.
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'catering:detail' truck.id %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">

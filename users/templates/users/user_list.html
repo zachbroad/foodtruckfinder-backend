@@ -4,6 +4,10 @@
     OnTheGrub Users List
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'users:list' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
 <div class="row">

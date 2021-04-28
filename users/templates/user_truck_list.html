@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ user.username }}
+    {{ user.username }}'s Trucks | OnTheGrub
+{% endblock %}
+
+{% block description %}
+    Find food trucks owned by {{ user.username }}.
+{% endblock %}
+
+{% block head %}
+    <link rel="canonical" href="{% url 'users:user-trucks' user.username %}">
 {% endblock %}
 
 {% block content %}

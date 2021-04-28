@@ -4,6 +4,10 @@
 {% block title %}Edit your profile | OnTheGrub{% endblock %}
 {% block description %}Manage how your profile appears to others OnTheGrub.{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'users:edit-profile' user.username %}">
+{% endblock %}
+
 {% block content %}
     <div class="container my-3">
         <div class="row">

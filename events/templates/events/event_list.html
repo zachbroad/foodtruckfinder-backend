@@ -9,6 +9,9 @@
     events!
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'events:index' %}">
+{% endblock %}
 
 {% block content %}
     <div class="container">

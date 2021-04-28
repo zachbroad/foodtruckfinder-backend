@@ -7,6 +7,10 @@
     Logout of OnTheGrub, Florida's #1 food truck finder.
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'logout' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container py-5">
         <div class="row">

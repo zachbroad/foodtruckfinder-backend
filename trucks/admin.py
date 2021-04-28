@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django_google_maps import fields as map_fields
 from django_google_maps import widgets as map_widgets
 
@@ -91,18 +92,49 @@ class TruckAdmin(admin.ModelAdmin):
     }
 
     list_display = (
-        'image',
         'title',
         'owner',
         'address',
         'phone',
         'website',
-        'available_for_catering'
+        'available_for_catering',
+        'image',
     )
+
+    class HasImageFilter(admin.SimpleListFilter):
+        title = 'has image'
+        parameter_name = 'has_image'
+
+        def lookups(self, request, model_admin):
+            return [
+                ('has_image', 'Has image'),
+                ('has_default_image', 'Has default image'),
+                ('has_no_image', 'Has no image')
+            ]
+
+        def queryset(self, request, queryset):
+            if self.value() == 'has_image':
+                return queryset.distinct().filter(image__isnull=False)
+            elif self.value() == 'has_default_image':
+                return queryset.distinct().filter(image=Truck._meta.get_field('image').get_default())
+            elif self.value() == 'has_no_image':
+                return queryset.distinct().filter(image__isnull=True)
+            else:
+                return queryset
+
 
     list_filter = (
         'available_for_catering',
+        HasImageFilter
     )
+
+
+
+    def has_image(self, obj):
+        return obj.image != None
+
+    has_image.boolean = True
+    has_image.short_description = 'Find trucks without images.'
 
     search_fields = (
         'title',

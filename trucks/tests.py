@@ -5,13 +5,12 @@ from trucks.models import Truck, MenuItem
 
 class TruckTestCase(TestCase):
     def setUp(self) -> None:
-        Truck.objects.create(title="New Truck One", description="To bring a wonderful fufilment of your taste buds!")
-        Truck.objects.create(title="New Truck Two", description="To bring spice to you life and your block!")
-        self.truck_one = Truck.objects.get(title="New Truck One")
-        self.truck_two = Truck.objects.get(title="New Truck Two")
+        self.truck = Truck.objects.create(title="New Truck One", description="To bring a wonderful fulfilment of your taste buds!")
 
-    def test_truck_titles(self):
-        self.assertEqual(self.truck_one.title[8], self.truck_two.title[8])
+    def test_has_image(self):
+        self.assertIs(self.truck.image.name, Truck._meta.get_field('image').get_default())
+        self.truck.image = None
+        self.assertIsNone(self.truck.image.name)
 
 
 class MenuItemTestCase(TestCase):

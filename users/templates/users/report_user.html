@@ -5,6 +5,10 @@
     Reporting User | OnTheGrub
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'users:user-report' user.username %}">
+{% endblock %}
+
 {% block content %}
     <div class="container py-3">
         <div class="row">

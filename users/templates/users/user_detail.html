@@ -4,6 +4,10 @@
     Viewing {{ user.username }}'s profile
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'users:detail' user.username %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row no-gutters justify-content-center">
