@@ -91,6 +91,7 @@ class TruckAdmin(admin.ModelAdmin):
     }
 
     list_display = (
+        'image',
         'title',
         'owner',
         'address',
