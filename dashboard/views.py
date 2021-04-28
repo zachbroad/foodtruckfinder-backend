@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, QuerySet
+from django.http.response import HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, UpdateView, DetailView
 
 # Create your views here.
 from catering.models import CaterRequest
 from notifications.models import Notification
-from trucks.models import Truck, Visit
+from trucks.models import Truck, Visit, MenuItem
 
 
 def get_db_context(self, context):
@@ -91,6 +92,40 @@ class DashboardEditTruck(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
+
+
+class DashboardViewTruckMenu(LoginRequiredMixin, ListView):
+    model = MenuItem
+    context_object_name = 'items'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(DashboardViewTruckMenu, self).get_context_data(**kwargs)
+        context['truck'] = Truck.objects.get(id=self.kwargs.get('pk'))
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if Truck.objects.get(id=self.kwargs.get('pk')).owner != self.request.user:
+            return HttpResponseForbidden("You don't own this truck!")
+
+        return super(DashboardViewTruckMenu, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return MenuItem.objects.filter(truck_id=self.kwargs.get('pk'), truck__owner=self.request.user)
+
+
+class DashboardViewTruckMenuItem(LoginRequiredMixin, DetailView):
+    model = MenuItem
+    context_object_name = 'item'
+    template_name_suffix = '_detail_dashboard'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(DashboardViewTruckMenuItem, self).get_context_data(**kwargs)
+        context['truck'] = Truck.objects.get(id=self.kwargs.get('pk'))
+        return context
+
+
+class DashboardEditTruckMenu(LoginRequiredMixin, UpdateView):
+    pass
 
 
 class DashboardNotifications(LoginRequiredMixin, ListView):

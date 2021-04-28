@@ -11,23 +11,27 @@
 
 {% block content %}
     <div class="container py-5">
-        <div class="row">
+        <div class="row mx-1">
             <div class="col-lg-6 col-md-8 col-sm-12 mx-auto card p-3">
                 <h2>Create your OnTheGrub account</h2>
                 <form method="POST" class="form-group">
                     {% csrf_token %}
                     {{ form|crispy }}
 
-                    <button type="submit" class="btn btn-success">Register</button>
-                    <a href="{% url 'grub-login' %}" class="">Login to an existing account</a>
 
-                    <br/>
-                    <div class="py-1"></div>
+                    <div class="mb-3">
+                        <a href="{% url 'grub-login' %}" class="btn btn-outline-dark">Login to an existing account</a>
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </div>
 
-                    <a class="btn btn-info" href="{% provider_login_url "facebook" method="oauth2" %}">Login with
-                        Facebook</a>
-                    <a class="btn btn-success" href="{% provider_login_url "google" method="oauth2" %}">Login with
-                        Google</a>
+                    <div class="btn-group btn-group-sm btn-group-justified w-100">
+                        <a class="btn btn-info" href="{% provider_login_url "facebook" method="oauth2" %}">
+                            Login with Facebook
+                        </a>
+                        <a class="btn btn-success" href="{% provider_login_url "google" method="oauth2" %}">
+                            Login with Google
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>

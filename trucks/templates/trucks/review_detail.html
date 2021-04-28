@@ -6,6 +6,10 @@
 {% block description %}Check out this review on {{ object.truck.title }} by {{ object.reviewer.username }}
     .{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:review-detail' truck.id review.id %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">

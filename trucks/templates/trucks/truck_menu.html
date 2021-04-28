@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ item.name }} from {{ truck.title }} | OnTheGrub{% endblock %}
-{% block description %}
-    Check out {{ truck.title }}'s menu, reviews, schedule, and more OnTheGrub, the food truck finder.
+{% block title %}{{ truck.title }}'s Menu | OnTheGrub{% endblock %}
+{% block description %}Check out {{ truck.title }}'s menu, reviews, schedule, and more OnTheGrub, the food truck
+    finder.{% endblock %}
+
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:menu' truck.id %}">
 {% endblock %}
 
 {% block content %}
@@ -19,22 +22,11 @@
         </div>
     </div>
 
-
     {% if menu %}
         <div class="container">
             <div class="row">
                 {% for menu_item in menu %}
-                    <div class="col-sm-12 col-md-4 col-lg-3">
-                        <div class="card mb-3">
-                            <div class="card-header">{{ menu_item.name }}</div>
-                            <img class="card-img-top" src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}"/>
-
-                            <div class="card-body">
-                                <p class="font-weight-light">{{ menu_item.description }}<p>
-                            </div>
-                            </a>
-                        </div>
-                    </div>
+                    {% include 'trucks/widgets/menu_item.html' with menu_item=menu_item %}
                 {% endfor %}
             </div>
         </div>

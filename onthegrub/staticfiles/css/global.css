@@ -1,5 +1,6 @@
 .hover-grow {
-  transition: 0.2s; }
+  transition: 0.2s;
+  cursor: pointer; }
 
 .hover-grow:hover {
   transform: scale(1.025); }

@@ -55,7 +55,7 @@
             <div class="row my-3">
                 {% for truck in user.trucks.all %}
                     <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                        {% include 'trucks/truck_card.html' with truck=truck %}
+                        {% include 'trucks/widgets/truck_card.html' with truck=truck %}
                     </div>
                 {% endfor %}
             </div>

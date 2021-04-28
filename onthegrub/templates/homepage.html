@@ -5,20 +5,50 @@
 {% block description %}Find food trucks, events, catering, and more OnTheGrub, Florida's #1 food truck
     finder.{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'index' %}">
+{% endblock %}
+
 {% block content %}
 
     {#    {% include 'welcome.html' %}#}
-
-
-
-
-    <div class="container-fluid bg-light py-5">
-        {% if not request.user.is_authenticated %}
+    {% if not request.user.is_authenticated %}
+        <div class="container-fluid bg-light py-3">
             {% include 'users/widgets/register_or_login.html' %}
-        {% else %}
+        </div>
+    {% else %}
+        <div class="container-fluid bg-light py-3">
             {% include 'users/widgets/profile_overview.html' %}
-        {% endif %}
-    </div>
+        </div>
+
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        EVENTS
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card">
+                        CATERING
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card">
+                        BLOG
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card">
+                        MAP
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="container-fluid bg-dark py-3">
         <div class="container text-white">
@@ -32,7 +62,7 @@
                 <div class="row">
                     {% for truck in trucks|slice:":3" %}
                         <div class="col-md-4 col-sm-6 py-2">
-                            {% include 'trucks/truck_card.html' with truck=truck %}
+                            {% include 'trucks/widgets/truck_card.html' with truck=truck %}
                         </div>
                     {% endfor %}
                 </div>

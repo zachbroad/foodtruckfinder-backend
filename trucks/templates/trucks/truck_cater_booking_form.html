@@ -9,6 +9,10 @@
     you!
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:book-catering' truck.id %}">
+{% endblock %}
+
 {% block content %}
     <div class="container mt-3">
         <div class="row">

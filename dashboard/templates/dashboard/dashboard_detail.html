@@ -62,8 +62,9 @@
 
                     <div class="card-footer">
                         <div class="btn-group w-100">
-                            <button class="btn btn-dark">EDIT TRUCK</button>
-                            <button class="btn btn-info">EDIT MENU</button>
+                            <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-dark">EDIT TRUCK</a>
+                            <a href="{% url 'dashboard:view-menu' truck.id %}" class="btn btn-primary">VIEW MENU</a>
+                            <a href="{% url 'dashboard:edit-menu' truck.id %}" class="btn btn-info">EDIT MENU</a>
                         </div>
                     </div>
                 </div>

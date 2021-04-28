@@ -3,6 +3,7 @@ $grow-size: 1.025;
 
 .hover-grow {
   transition: $transition-time;
+  cursor: pointer;
 }
 
 .hover-grow:hover {

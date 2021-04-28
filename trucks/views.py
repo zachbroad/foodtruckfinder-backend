@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -37,7 +38,7 @@ class FavoriteThisTruck(View, LoginRequiredMixin):
         )
 
     def get(self, request, *args, **kwargs):
-        pass
+        return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -46,13 +47,22 @@ class FavoriteThisTruck(View, LoginRequiredMixin):
             truck_id=self.kwargs.get('pk'),
         )
 
+        # FIXME make cleaner
+        truck = Truck.objects.get(id=self.kwargs.get('pk'))
+
+        messages.info(request, f'{truck.title} removed from favorites.')
+
         return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
+
 
 class UnfavoriteThisTruck(DeleteView, LoginRequiredMixin):
     model = TruckFavorite
 
     def get_success_url(self):
         return reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')])
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -64,6 +74,9 @@ class UnfavoriteThisTruck(DeleteView, LoginRequiredMixin):
 
         # TODO: improve this  <><<><><>
         if obj:
+            # FIXME make cleaner
+            truck = Truck.objects.get(id=self.kwargs.get('pk'))
+            messages.info(request, f'{truck.title} removed from favorites.')
             return HttpResponseRedirect(self.get_success_url())
         else:
             return HttpResponseGone('You can\'t unfavorite this truck... you don\'t have it favorited!')

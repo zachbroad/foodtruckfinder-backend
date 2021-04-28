@@ -202,10 +202,6 @@ class Truck(ModelLocation):
         return self.visits.count
 
     @property
-    def reviews(self):
-        return self.review.all()
-
-    @property
     def is_favorited(self):
         return TruckFavorite.objects.get(truck_id=self.id).exists()
 
@@ -304,8 +300,7 @@ class MenuItem(models.Model):
 
 
 class Menu(models.Model):
-    truck = models.ForeignKey(
-        Truck, on_delete=models.CASCADE, related_name='menu')
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='menu')
 
     @property
     def combos(self):

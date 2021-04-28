@@ -19,7 +19,7 @@
                     <div class="list-group">
                         {% if truck.upcoming_schedule.count > 0 %}
                             {% for event in truck.upcoming_schedule %}
-                                {% include 'trucks/truckevent_card_minimal.html' with event=event %}
+                                {% include 'trucks/widgets/truckevent_card_minimal.html' with event=event %}
                             {% endfor %}
                         {% else %}
                             Sorry, this truck has no upcoming events.

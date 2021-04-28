@@ -6,6 +6,10 @@
 {% endblock %}
 {% block description %}Leave a review for {{ object.truck.title }}.{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:new-review' truck.id %}">
+{% endblock %}
+
 {% block content %}
     {% include 'util/go_back.html' %}
 

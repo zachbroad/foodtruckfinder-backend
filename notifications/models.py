@@ -25,5 +25,7 @@ class Notification(models.Model):
 def notify_on_notification_creation(sender, instance, created, **kwargs):
     if created:
         devices = FCMDevice.objects.all()
-        devices.send_message(data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high", "pk": instance.pk, "route": instance.route, "webview_route": instance.webview_route, "seen": instance.seen},
-                            title=instance.title, body=instance.description, icon="icon_notif")
+        devices.send_message(
+            data={"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done", "priority": "high", "pk": instance.pk,
+                  "route": instance.route, "webview_route": instance.webview_route, "seen": instance.seen},
+            title=instance.title, body=instance.description, icon="icon_notif")

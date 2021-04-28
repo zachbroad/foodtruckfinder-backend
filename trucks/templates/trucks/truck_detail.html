@@ -7,6 +7,10 @@
 {% block description %}Check out {{ truck.title }}'s menu, reviews, schedule, and more OnTheGrub, Florida's #1 food
     truck finder.{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:detail' truck.id %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">
@@ -45,7 +49,7 @@
 
                         <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-info">SCHEDULE</a>
 
-                            {% if user|has_favorited_truck:truck.id %}
+                        {% if user|has_favorited_truck:truck.id %}
                             <form action="{% url 'trucks:unfavorite' truck.id %}" method="POST">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-danger">UNFAVORITE</button>
@@ -72,7 +76,13 @@
         </div>
     </div>
 
-    {% include 'trucks/widgets/menu.html' with truck=truck %}
-    {% include 'trucks/widgets/events.html' with truck=truck %}
+    {% if truck.items > 0 %}
+        {% include 'trucks/widgets/menu.html' with truck=truck %}
+    {% endif %}
+
+    {% if truck.events.count > 0 %}
+        {% include 'trucks/widgets/events.html' with truck=truck %}
+    {% endif %}
+
     {% include 'trucks/widgets/reviews.html' with truck=truck %}
 {% endblock %}

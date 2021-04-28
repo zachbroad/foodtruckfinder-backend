@@ -8,6 +8,10 @@
     {{ item.name }} from {{ item.truck.title }} | OnTheGrub
 {% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:menu-item' truck.id item.id %}">
+{% endblock %}
+
 {% block content %}
     {% include 'util/go_back.html' %}
 
@@ -17,6 +21,7 @@
                 <h2>{{ item.truck.title }}</h2>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <div class="card">
@@ -24,7 +29,8 @@
                         <h3>{{ item.name }}</h3>
                         <div class="badge badge-pill badge-success border">${{ item.price|floatformat:2 }}</div>
                     </div>
-                    <img class="card-img-bottom" src="{{ item.image.url }}" alt="" height="290" style="object-fit: cover">
+                    <img class="card-img-bottom" src="{{ item.image.url }}" alt="" height="290"
+                         style="object-fit: cover">
                     <div class="card-body">
                         {{ item.description }}
                     </div>

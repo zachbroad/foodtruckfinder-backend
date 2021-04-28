@@ -1,0 +1,27 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}
+    {{ item.name }} from {{ truck.title }} | OnTheGrub
+{% endblock %}
+
+{% block description %}
+    {{ item.name }} from {{ truck.title }} | OnTheGrub
+{% endblock %}
+
+{% block content %}
+    <div class="container my-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-secondary" href="{% url 'dashboard:view-menu' truck.id %}">
+                    Return to truck menu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            {% include 'trucks/widgets/dashboard_menu_item.html' with menu_item=item fullwidth=True %}
+        </div>
+    </div>
+{% endblock %}

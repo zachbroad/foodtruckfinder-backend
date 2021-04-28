@@ -32,14 +32,15 @@
                         </h6>
                     {% endif %}
                 </div>
-                <div class="card-body btn-group">
-                    <a href="{% url 'users:detail' request.user %}" class="btn btn-outline-primary">
-                        Your Profile
+                <div class="card-body p-0 m-2 btn-group btn-group-sm">
+                    <a href="{% url 'users:detail' request.user %}" class="btn btn-sm btn-outline-primary">
+                        PROFILE
                     </a>
                     {% if request.user.is_truck_owner %}
-                        <a href="{% url 'dashboard:catering-index' %}" class="btn btn-outline-dark">Catering
-                            Requests</a>
-                        <a href="{% url 'dashboard:index' %}" class="btn btn-outline-dark">Dashboard</a>
+                        <a href="{% url 'dashboard:catering-index' %}" class="btn btn-sm btn-outline-dark">
+                            CATER REQUESTS
+                        </a>
+                        <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-dark">DASHBOARD</a>
                     {% else %}
                     {% endif %}
                 </div>

@@ -5,6 +5,10 @@
 {% block title %}{{ truck.title }}'s Schedule | OnTheGrub{% endblock %}
 {% block description %}Check out {{ truck.title }}'s schedule.{% endblock %}
 
+{% block head %}
+    <link rel="canonical" href="{% url 'trucks:schedule' truck.id %}">
+{% endblock %}
+
 {% block content %}
     {% include 'util/go_back.html' %}
 
@@ -34,7 +38,7 @@
                 {% for event in truck.schedule.all %}
                     <div class="row">
                         <div class="col">
-                            {% include 'trucks/truckevent_card.html' with event=event %}
+                            {% include 'trucks/widgets/truckevent_card.html' with event=event %}
                         </div>
                     </div>
                 {% endfor %}
@@ -62,7 +66,7 @@
                 {% for event in truck.upcoming_schedule %}
                     <div class="row">
                         <div class="col">
-                            {% include 'trucks/truckevent_card.html' with event=event %}
+                            {% include 'trucks/widgets/truckevent_card.html' with event=event %}
                         </div>
                     </div>
                 {% endfor %}
