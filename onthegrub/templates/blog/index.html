@@ -10,14 +10,10 @@
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col">
-                {% for post in posts %}
-                    <a class="font-weight-bold" href={{ post.get_url }}>
-                        {{ post }}
-                    </a>
-                {% endfor %}
-            </div>
+        <div class="row no-gutters">
+            {% for post in posts %}
+                {% include 'blog/widgets/blog_card.html' with post=post %}
+            {% endfor %}
         </div>
     </div>
 

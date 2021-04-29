@@ -3,6 +3,7 @@ import os
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
 
+from blog.models import ArticlePage
 from trucks.models import Truck
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
@@ -26,5 +27,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['posts'] = ArticlePage.objects.all().live()
         context["trucks"] = Truck.get_trending()
         return context

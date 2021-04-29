@@ -12,43 +12,32 @@
 {% block content %}
 
     {#    {% include 'welcome.html' %}#}
-    {% if not request.user.is_authenticated %}
-        <div class="container-fluid bg-light py-3">
-            {% include 'users/widgets/register_or_login.html' %}
-        </div>
-    {% else %}
-        <div class="container-fluid bg-light py-3">
-            {% include 'users/widgets/profile_overview.html' %}
-        </div>
+    <div class="container-fluid bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-5">
+                    {% if not request.user.is_authenticated %}
+                        {% include 'users/widgets/register_or_login.html' %}
+                    {% else %}
+                        {% include 'users/widgets/profile_overview.html' %}
+                    {% endif %}
+                </div>
 
-{#        <div class="container py-3">#}
-{#            <div class="row">#}
-{#                <div class="col-6">#}
-{#                    <div class="card">#}
-{#                        EVENTS#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-6">#}
-{#                    <div class="card">#}
-{#                        CATERING#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-6">#}
-{#                    <div class="card">#}
-{#                        BLOG#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-6">#}
-{#                    <div class="card">#}
-{#                        MAP#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-    {% endif %}
+                <div class="col-sm-12 col-md-6 col-lg-7 mt-3 mt-md-0">
+                    <div class="row no-gutters">
+                        {% for post in posts %}
+                            {% include 'blog/widgets/blog_card.html' with post=post %}
+                        {% endfor %}
+                    </div>
+                    <div class="row justify-content-end w-100">
+                        <div class="col">
+                            <a href="/blog/" class="btn btn-primary">VIEW ALL</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid bg-dark py-3">
         <div class="container text-white">
