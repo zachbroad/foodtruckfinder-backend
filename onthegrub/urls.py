@@ -19,6 +19,7 @@ from users.api.views import CustomAuthToken, ValidateToken
 from users.views import SignupView, SuccessView, LoginView, LogoutView
 from .routers import GrubRouter
 from .sitemap import sitemap
+from wagtail.contrib.sitemaps.views import sitemap as wagtail_sitemap
 
 router = GrubRouter()
 
@@ -35,6 +36,7 @@ urlpatterns = [
 
                   # robots.txt
                   path('robots.txt/', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), ),
+                  path('blog_sitemap.xml', wagtail_sitemap),
 
                   # Account
                   path('accounts/', include('allauth.urls')),
