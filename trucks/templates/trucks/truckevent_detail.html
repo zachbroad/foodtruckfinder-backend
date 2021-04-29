@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block head %}
-    <link rel="canonical" href="{% url 'trucks:event-detail' truck.id event.id %}">
+    <link rel="canonical" href="{% url 'trucks:event-detail' event.truck.id event.id %}">
 {% endblock %}
 
 {% block content %}
