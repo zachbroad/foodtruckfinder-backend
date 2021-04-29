@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Count, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from model_utils.models import TimeStampedModel
 from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
@@ -73,6 +74,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def get_absolute_url(self):
+        return reverse('users:detail', args=[self.username])
 
     @property
     def full_name(self):

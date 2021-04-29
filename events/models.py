@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from phone_field import PhoneField
+from rest_framework.reverse import reverse
 
 from onthegrub.settings.settings import AUTH_USER_MODEL
 from trucks.models import Truck
@@ -27,6 +28,9 @@ class Event(ModelLocation):
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('events:detail', args=[self.id])
 
     @property
     def duration(self):
