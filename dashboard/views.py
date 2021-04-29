@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, QuerySet
 from django.http.response import HttpResponseForbidden
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, UpdateView, DetailView
+from django.views.generic import TemplateView, ListView, UpdateView, DetailView, CreateView, DeleteView
 
 # Create your views here.
 from catering.models import CaterRequest
@@ -94,6 +94,26 @@ class DashboardEditTruck(LoginRequiredMixin, UpdateView):
         return self.queryset.filter(owner=self.request.user)
 
 
+class DashboardCreateItem(LoginRequiredMixin, CreateView):
+    model = MenuItem
+    context_object_name = 'item'
+    fields = [
+        'type',
+        'name',
+        'description',
+        'price',
+        'image',
+        'featured',
+    ]
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:view-menu', args=[self.kwargs['pk']])
+
+    def form_valid(self, form):
+        form.instance.truck = Truck.objects.get(id=self.kwargs['pk'])
+        return super().form_valid(form)
+
+
 class DashboardViewTruckMenu(LoginRequiredMixin, ListView):
     model = MenuItem
     context_object_name = 'items'
@@ -113,10 +133,37 @@ class DashboardViewTruckMenu(LoginRequiredMixin, ListView):
         return MenuItem.objects.filter(truck_id=self.kwargs.get('pk'), truck__owner=self.request.user)
 
 
+class DashboardDeleteMenuItem(LoginRequiredMixin, DeleteView):
+    model = MenuItem
+    pk_url_kwarg = 'item_id'
+    context_object_name = 'item'
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:view-menu', args=[self.kwargs['pk']])
+
+
+class DashboardEditMenuItem(LoginRequiredMixin, UpdateView):
+    model = MenuItem
+    context_object_name = 'item'
+    pk_url_kwarg = 'item_id'
+    fields = [
+        'type',
+        'name',
+        'description',
+        'price',
+        'image',
+        'featured',
+    ]
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:view-menu', args=[self.kwargs['pk']])
+
+
 class DashboardViewTruckMenuItem(LoginRequiredMixin, DetailView):
     model = MenuItem
     context_object_name = 'item'
     template_name_suffix = '_detail_dashboard'
+    pk_url_kwarg = 'item_id'
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super(DashboardViewTruckMenuItem, self).get_context_data(**kwargs)

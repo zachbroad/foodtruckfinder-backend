@@ -10,18 +10,24 @@
 
 {% block content %}
     <div class="container my-3">
-        <div class="row">
-            <div class="col">
-                <a class="btn btn-secondary" href="{% url 'dashboard:view-menu' truck.id %}">
-                    Return to truck menu
-                </a>
-            </div>
+        <div class="row no-gutters justify-content-between">
+            <a class="btn btn-secondary" href="{% url 'dashboard:view-menu' truck.id %}">
+                Return to truck menu
+            </a>
+            <a class="btn btn-primary" href="{% url 'dashboard:add-item' truck.id %}">ADD ITEM</a>
         </div>
     </div>
 
     <div class="container">
         <div class="row">
             {% include 'trucks/widgets/dashboard_menu_item.html' with menu_item=item fullwidth=True %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row no-gutters">
+            <a href="{% url 'dashboard:edit-menu-item' truck.id item.id %}" class="btn btn-info">EDIT</a>
+            <a href="{% url 'dashboard:delete-menu-item' truck.id item.id %}" class="btn btn-danger">DELETE</a>
         </div>
     </div>
 {% endblock %}

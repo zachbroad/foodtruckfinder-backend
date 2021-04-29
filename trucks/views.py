@@ -50,7 +50,7 @@ class FavoriteThisTruck(View, LoginRequiredMixin):
         # FIXME make cleaner
         truck = Truck.objects.get(id=self.kwargs.get('pk'))
 
-        messages.info(request, f'{truck.title} removed from favorites.')
+        messages.info(request, f'{truck.title} added to favorites.')
 
         return HttpResponseRedirect(reverse_lazy('trucks:detail', args=[self.kwargs.get('pk')]))
 
@@ -111,6 +111,11 @@ class BookCatering(generic.CreateView, FormSuccessMessageMixin):
         'when',
         'duration',
     ]
+
+    def get_context_data(self, **kwargs):
+        context = super(BookCatering, self).get_context_data()
+        context['truck'] = Truck.objects.get(id=self.kwargs['pk'])
+        return context
 
     def form_valid(self, form):
         form.instance.truck = Truck.objects.get(id=self.kwargs['pk'])

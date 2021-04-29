@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-between">
             <div class="col">
                 {% include 'util/go_back.html' %}
             </div>
@@ -63,8 +63,8 @@
                     <div class="card-footer">
                         <div class="btn-group w-100">
                             <a href="{% url 'dashboard:edit' truck.id %}" class="btn btn-dark">EDIT TRUCK</a>
+                            <a href="{% url 'dashboard:catering-index'  %}" class="btn btn-dark">CATER REQUESTS</a>
                             <a href="{% url 'dashboard:view-menu' truck.id %}" class="btn btn-primary">VIEW MENU</a>
-                            <a href="{% url 'dashboard:edit-menu' truck.id %}" class="btn btn-info">EDIT MENU</a>
                         </div>
                     </div>
                 </div>

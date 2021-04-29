@@ -1,0 +1,26 @@
+{% extends 'dashboard_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Are you sure you'd like to delete {{ item.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Are you sure you'd like to delete <a
+                        href="{% url 'dashboard:view-menu-item' item.truck.id item.id %}">{{ item.name }}</a></h1>
+                <p>This action is irreversible.</p>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                    <button type="button" class="btn btn-info" onclick="window.history.back()">CANCEL</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
