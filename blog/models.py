@@ -1,9 +1,10 @@
 from django.db import models
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
-
-from wagtail.core import fields
-
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, StreamFieldPanel
+from wagtail.core import blocks
+from wagtail.core.blocks import RawHTMLBlock
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
@@ -20,7 +21,12 @@ class BlogIndex(Page):
 class ArticlePage(Page):
     template = 'blog/article_page.html'
 
-    body = fields.RichTextField()
+    body = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ('raw', RawHTMLBlock()),
+    ])
     date = models.DateTimeField("Post date")
     thumbnail = models.ForeignKey(
         'wagtailimages.Image',
@@ -37,7 +43,7 @@ class ArticlePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
-        FieldPanel('body', classname='full'),
+        StreamFieldPanel('body')
     ]
 
     promote_panels = [
@@ -47,8 +53,6 @@ class ArticlePage(Page):
 
     parent_page_types = ['blog.BlogIndex']
     subpage_types = []
-
-
 
     class Meta:
         verbose_name = 'Article Page'
