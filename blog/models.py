@@ -11,6 +11,7 @@ from wagtail.search import index
 
 class BlogIndex(Page):
     template = 'blog/index.html'
+    subpage_types = ['blog.ArticlePage', ]
 
     def get_context(self, request, *args, **kwargs):
         context = super(BlogIndex, self).get_context(request)

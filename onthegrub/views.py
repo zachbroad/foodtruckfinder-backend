@@ -27,6 +27,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = ArticlePage.objects.all().live()
+        context['posts'] = ArticlePage.objects.all().live().order_by("?")[:3]
         context["trucks"] = Truck.get_trending()
         return context
