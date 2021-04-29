@@ -167,6 +167,10 @@ class ReviewList(generic.ListView):
         context['truck'] = Truck.objects.filter(id=self.kwargs.get('pk')).first()
         return context
 
+    def get_queryset(self):
+        truck = Truck.objects.get(id=self.kwargs.get('pk'))
+        return truck.reviews.all()
+
 
 class ReviewCreate(generic.CreateView, LoginRequiredMixin):
     model = Review

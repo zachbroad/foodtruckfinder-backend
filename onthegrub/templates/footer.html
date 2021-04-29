@@ -24,9 +24,9 @@
                     <li>
                         <a class="text-white" href="{% url 'index' %}">Home</a>
                     </li>
-                    <li>
-                        <a class="text-white" href="{% url 'announcements:index' %}">News</a>
-                    </li>
+{#                    <li>#}
+{#                        <a class="text-white" href="{% url 'announcements:index' %}">News</a>#}
+{#                    </li>#}
                     <li>
                         <a class="text-white" href="{% url 'events:index' %}">Events</a>
                     </li>
@@ -66,7 +66,11 @@
 
         <div class="row">
             <div class="col">
-                <span class="upper text-white-50">© 2021 OnTheGrub LLC - All Rights Reserved.</span>
+                <span class="upper text-white-50">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script> New Age Software Solutions LLC
+                </span>
             </div>
         </div>
     </div>

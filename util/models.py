@@ -1,9 +1,9 @@
-import googlemaps
-from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django_google_maps import fields as map_fields
+
+from onthegrub.settings import settings
 
 
 class ModelLocation(models.Model):
@@ -46,9 +46,38 @@ class GenericImage(models.Model):
     image = models.ImageField(upload_to='images')
     caption = models.CharField(max_length=1024, blank=True, null=True)
 
-    content_object = GenericForeignKey()
+    content_object = GenericForeignKey('content_type', 'object_id')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
 
     def __str__(self):
         return self.image.name
+
+class Vote(models.Model):
+    upvote = models.BooleanField()
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    content_object = GenericForeignKey('content_type', 'object_id')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+
+
+class Comment(models.Model):
+    text = models.CharField(max_length=1000)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    object_id = models.PositiveIntegerField()
+
+    votes = GenericRelation(Vote, related_name='votes')
+
+    def __str__(self):
+        return f'[@{self.owner.username}]: {self.text}'
+
+    @property
+    def score(self):
+        #TODO: Rewrite this using some db django magic
+        upvotes = Vote.objects.filter(content_object=self.__class__, object_id=self.id, upvote=True).count()
+        downvotes = Vote.objects.filter(content_object=self.__class__, object_id=self.id, upvote=True).count()
+        return upvotes - downvotes

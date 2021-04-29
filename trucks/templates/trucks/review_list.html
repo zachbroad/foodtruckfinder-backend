@@ -3,7 +3,7 @@
 {% block title %}
     {{ truck.title }}'s Reviews | OnTheGrub
 {% endblock %}
-{% block description %}View reviews for {{ object.truck.title }}.{% endblock %}
+{% block description %}View reviews for {{ truck.title }}.{% endblock %}
 
 {% block head %}
     <link rel="canonical" href="{% url 'trucks:reviews' truck.id %}">
@@ -16,6 +16,7 @@
             <div class="col d-inline-flex justify-content-between align-items-center">
                 <section>
                     <h3>Reviews for <a href="{% url 'trucks:detail' truck.id %}">{{ truck.title }}</a></h3>
+                    <h4>Average rating: <span class="badge badge-pill badge-success">{{ truck.rating }} / 5</span></h4>
                     <p>{{ truck.description }}</p>
                 </section>
                 <a href="{% url 'trucks:new-review' truck.id %}" class="btn btn-outline-success">Leave review</a>
@@ -35,7 +36,7 @@
                                 </h4>
                             </a>
 
-                            <div class="badge badge-warning p-2 ml-2">
+                            <div class="badge badge-success p-2 ml-2">
                                 {{ review.rating }} / 5
                             </div>
                         </div>
@@ -45,7 +46,11 @@
                     </div>
 
                     <p class="card-body">
-                        {{ review.description|default_if_none:"No review" }}
+                        {% if review.description %}
+                            {{ review.description }}
+                        {% else %}
+                            <em>No review left</em>
+                        {% endif %}
                     </p>
                 </div>
             {% endfor %}

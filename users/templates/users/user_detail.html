@@ -10,12 +10,18 @@
 
 {% block content %}
     <div class="container">
-        <div class="row no-gutters justify-content-center">
+        <div class="row no-gutters">
             <div class="col-sm-12 col-md-6 col-lg-5 p-3 my-5 card bg-light shadow-sm align-self-center ">
                 <div class="d-flex flex-row justify-content-between">
                     <div class="card-title">
-                        <h2 class="p-0 m-0">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h2>
-                        <h4 class="text-muted">@{{ user.username }}</h4>
+                        <div class="d-flex">
+                            <img width="88" height="88" class="img-fluid border" src="{{ user.profile_picture.url }}"
+                                 alt="{{ user.username }}'s profile OnTheGrub.">
+                            <div class="ml-2">
+                                <h2 class="p-0 m-0">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h2>
+                                <h4 class="text-muted">@{{ user.username }}</h4>
+                            </div>
+                        </div>
                         <p class="m-0 p-0">member for {{ user.date_joined|timesince }} days</p>
                         <p class="m-0 p-0">last active {{ user.last_login|date }}</p>
                     </div>
@@ -32,8 +38,21 @@
                     </div>
                 </div>
 
-                <hr>
+                <div class="btn-group w-100 mb-3">
+                    <a href="{% url 'users:user-reviews' user.username %}" class="btn btn-outline-dark">
+                        <div>
+                            <span class="fa fa-comment"></span>
+                            REVIEWS
+                        </div>
+                    </a>
 
+                    <a href="{% url 'users:user-trucks' user.username %}" class="btn btn-outline-dark">
+                        <div>
+                            <span class="fa fa-truck"></span>
+                            TRUCKS
+                        </div>
+                    </a>
+                </div>
                 <div class="btn-group">
                     {% if request.user == user %}
                         <a href="{% url 'users:edit-profile' user.username %}" class="btn btn-outline-dark">EDIT
@@ -51,9 +70,14 @@
     {% if user.is_truck_owner %}
         <div class="container">
             <hr/>
-            <div class="row">
-                <div class="col">
-                    <h3>{{ user.first_name|capfirst }}'s trucks</h3>
+            <div class="row justify-content-between no-gutters">
+                <div class="">
+                    <a href="{% url 'users:user-trucks' user.username %}">
+                        <h3>{{ user.first_name|capfirst }}'s trucks</h3>
+                    </a>
+                </div>
+                <div class="">
+                    <a href="{% url 'users:user-trucks' user.username %}" class="btn btn-outline-info">VIEW ALL</a>
                 </div>
             </div>
             <div class="row my-3">

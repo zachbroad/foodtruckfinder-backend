@@ -24,11 +24,9 @@
         </div>
         <div class="row">
             <div class="col">
-                <a href="{% url 'trucks:detail' object.truck.id %}">
-                    <button class="btn btn-primary">
-                        Go back
-                    </button>
-                </a>
+                <button onclick="window.history.back();" class="btn btn-primary">
+                    Go back
+                </button>
             </div>
         </div>
     </div>

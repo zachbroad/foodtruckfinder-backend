@@ -1,0 +1,12 @@
+<a href="{% url 'trucks:review-detail' truck.id review.id %}"
+   class="list-group-item list-group-item-action flex-column align-items-start ">
+    <div class="d-flex justify-content-between">
+        <h5 class="mb-1">@{{ review.reviewer.username }}</h5>
+        <span>
+                                    <i class="fa fa-clock-o"></i>
+                                    <small>{{ review.post_created|timesince }} ago</small>
+                                    </span>
+    </div>
+    <p class="mb-1">{{ review.description }}</p>
+    {#                                        <small>{{ review.posted_on }}</small>#}
+</a>

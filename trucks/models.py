@@ -2,6 +2,7 @@ import math
 import time
 
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core import validators
 from django.db import models
 from django.db.models import Q, Avg, Count, F
@@ -13,7 +14,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.reverse import reverse
 
 from notifications.models import Notification
-from util.models import ModelLocation
+from util.models import ModelLocation, Comment
 
 WEEKDAYS = [
     (1, "Monday"),
@@ -138,6 +139,8 @@ class Truck(ModelLocation):
     reviewed = models.BooleanField(default=False)
     objects = TruckManager()
 
+    comments = GenericRelation(Comment)
+
     def get_absolute_url(self):
         return reverse("trucks:detail", args=[self.id])
 
@@ -146,11 +149,8 @@ class Truck(ModelLocation):
 
     @property
     def rating(self):
-        rating = Review.objects.filter(truck=self).all().aggregate(Avg('rating'))['rating__avg']
-        if rating is not None:
-            return rating
-        else:
-            return None
+        rating = Review.objects.filter(truck=self).aggregate(Avg('rating'))['rating__avg']
+        return rating
 
     @property
     def num_favorites(self):
@@ -325,13 +325,13 @@ class Menu(models.Model):
 
 class Review(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField(verbose_name='truck_rating',
+    rating = models.IntegerField(verbose_name='Truck rating', help_text='What do you rate this food truck?',
                                  validators=[validators.MinValueValidator(0), validators.MaxValueValidator(5)])
-    description = models.TextField(max_length=2500, blank=True, null=True)
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by')
+    description = models.TextField(max_length=2500, blank=True, null=True, help_text='Leave a description of your experience (optional)')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewed_by', verbose_name='Reviewed by')
 
-    post_created = models.DateTimeField(auto_now_add=True)
-    post_edited = models.DateTimeField(auto_now=True)
+    post_created = models.DateTimeField(auto_now_add=True, verbose_name='Review created on')
+    post_edited = models.DateTimeField(auto_now=True, verbose_name='Review edited on')
 
     class Meta:
         unique_together = ('reviewer', 'truck',)

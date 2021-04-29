@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'util/go_back.html' %}
+    <div class="container mb-2">
+        <div class="row">
+            <div class="col">
+                <h1>{{ user.username }}'s Reviews</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for review in reviews %}
+                {% include 'trucks/widgets/review_card.html' with reviews=reviews truck=review.truck %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

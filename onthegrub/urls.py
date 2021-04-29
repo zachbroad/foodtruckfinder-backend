@@ -53,7 +53,7 @@ urlpatterns = [
                   path('trucks/', include('trucks.urls')),
                   path('events/', include('events.urls')),
                   path('catering/', include('catering.urls')),
-                  path('news/', include('announcements.urls')),
+                  # path('news/', include('announcements.urls')),
                   path('blog/', include(wagtail_urls)),
                   path('documents/', include(wagtaildocs_urls)),
                   path('cms/', include(wagtailadmin_urls)),

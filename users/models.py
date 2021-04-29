@@ -9,7 +9,7 @@ from phone_field import PhoneField
 from rest_framework.authtoken.models import Token
 
 from catering.models import CaterRequest
-from trucks.models import Truck, Visit
+from trucks.models import Truck, Visit, Review
 
 
 class MyUserManager(BaseUserManager):
@@ -114,6 +114,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def trucks(self):
         return Truck.objects.filter(owner=self).all()
+
+    @property
+    def reviews(self):
+        return Review.objects.filter(reviewer=self).all()
 
     @property
     def cater_requests(self) -> [CaterRequest]:

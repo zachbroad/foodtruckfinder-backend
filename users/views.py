@@ -1,12 +1,11 @@
 from allauth.account import views as allauth_views
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView
 
-from trucks.models import Truck
+from trucks.models import Truck, Review
 from users.models import User, UserReportModel
 
 
@@ -22,7 +21,7 @@ class UserList(ListView, LoginRequiredMixin):
 
 class UserTrucks(ListView, LoginRequiredMixin):
     model = Truck
-    template_name = "user_truck_list.html"
+    template_name = "users/user_truck_list.html"
 
     def get_queryset(self):
         user = User.objects.filter(username=self.kwargs['username']).first()
@@ -33,6 +32,26 @@ class UserTrucks(ListView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         context['user'] = user
         return context
+
+
+class UserReviews(ListView):
+    model = Review
+    context_object_name = 'reviews'
+    template_name = 'users/user_reviews.html'
+
+    def get_queryset(self):
+        user = User.objects.get(username=self.kwargs.get('username'))
+        if not user:
+            return None
+
+        return user.reviews
+
+    def dispatch(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.kwargs.get('username'))
+        if not user:
+            return HttpResponseNotFound('No user found with that name.')
+
+        return super(UserReviews, self).dispatch(request)
 
 
 class UserEditProfile(UpdateView):
@@ -55,7 +74,6 @@ class UserEditProfile(UpdateView):
     # def dispatch(self, request, *args, **kwargs):
     #     messages.success(self.request, self.get_success_message(self))
     #     return super().dispatch(request, *args, **kwargs)
-
 
     def get_success_url(self):
         return reverse_lazy('users:detail', args=[self.request.user])

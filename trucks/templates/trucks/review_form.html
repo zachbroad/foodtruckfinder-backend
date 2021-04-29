@@ -16,13 +16,13 @@
     <div class="container my-3">
         <div class="row">
             <div class="col">
-                <h3>
-                    New review for <a href="{% url 'trucks:detail' truck.pk %}">{{ truck.title }}</a>
-                </h3>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-4 m-2 p-3 card">
+            <div class="col-sm-12 col-md-6 col-lg-5 m-2 p-3 card">
+                <h3>
+                    New review for <a href="{% url 'trucks:detail' truck.pk %}">{{ truck.title }}</a>
+                </h3>
                 <form method="POST">
                     {% csrf_token %}
                     {#                    <input type="hidden" name="truck" value="{{ truck.id }}">#}

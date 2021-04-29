@@ -19,7 +19,7 @@
                     {% if not request.user.is_authenticated %}
                         {% include 'users/widgets/register_or_login.html' %}
                     {% else %}
-                        {% include 'users/widgets/profile_overview.html' %}
+                        {% include 'users/widgets/profile_overview.html' with user=request.user %}
                     {% endif %}
                 </div>
 
