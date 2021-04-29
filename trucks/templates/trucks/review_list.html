@@ -16,44 +16,33 @@
             <div class="col d-inline-flex justify-content-between align-items-center">
                 <section>
                     <h3>Reviews for <a href="{% url 'trucks:detail' truck.id %}">{{ truck.title }}</a></h3>
-                    <h4>Average rating: <span class="badge badge-pill badge-success">{{ truck.rating }} / 5</span></h4>
+                    <h4>Average rating: <span class="badge badge-pill badge-warning"><span
+                            class="fa fa-star mr-2"></span>{{ truck.rating }} / 5</span></h4>
                     <p>{{ truck.description }}</p>
                 </section>
-                <a href="{% url 'trucks:new-review' truck.id %}" class="btn btn-outline-success">Leave review</a>
+                <a href="{% url 'trucks:new-review' truck.id %}" class="btn btn-outline-success">LEAVE REVIEW</a>
             </div>
         </div>
     </div>
 
     <div class="container pt-1">
-        <div class="row justify-content-between no-gutters">
-            {% for review in review_list %}
-                <div class="col-12 card shadow-sm mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a class="text-decoration-none" href="{% url 'users:detail' review.reviewer.username %}">
-                                <h4 class="card-title">{{ review.reviewer.full_name }} <span
-                                        class="text-muted small">({{ review.reviewer.username }})</span>
-                                </h4>
-                            </a>
+        {% if review_list.count > 0 %}
+            <div class="row justify-content-between no-gutters">
+                {% for review in review_list %}
+                    {% include 'trucks/widgets/review_card.html' with review=review %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="row no-gutters justify-content-center">
+                <div class="align-items-center align-self-center text-center border p-4 rounded">
+                    <h3>There are no reviews for {{ truck.title }}.</h3>
 
-                            <div class="badge badge-success p-2 ml-2">
-                                {{ review.rating }} / 5
-                            </div>
-                        </div>
-                        <span class="badge badge-pill badge-primary shadow-sm">
-                            {{ review.post_created|timesince }} ago
-                        </span>
-                    </div>
-
-                    <p class="card-body">
-                        {% if review.description %}
-                            {{ review.description }}
-                        {% else %}
-                            <em>No review left</em>
-                        {% endif %}
-                    </p>
+                    <a class="btn btn-sm btn-outline-dark mt-4" href="{% url 'trucks:new-review' truck.id %}">
+                        Be the first one
+                    </a>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endif %}
+    </div>
     </div>
 {% endblock %}

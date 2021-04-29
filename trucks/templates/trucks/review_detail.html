@@ -12,22 +12,13 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-8 col-sm-12 my-3">
-                <div class="card">
-                    <h2 class="card-header">Review by {{ review.reviewer.username }} on {{ review.truck.title }}</h2>
-                    <p class="card-body">
-                        {{ review.description }}
-                    </p>
-                </div>
-            </div>
+        <div class="row my-3 no-gutters">
+            {% include 'trucks/widgets/review_card.html' with review=review %}
         </div>
-        <div class="row">
-            <div class="col">
-                <button onclick="window.history.back();" class="btn btn-primary">
-                    Go back
-                </button>
-            </div>
+        <div class="row no-gutters">
+            <button onclick="window.history.back();" class="btn btn-primary">
+                Go back
+            </button>
         </div>
     </div>
 {% endblock %}

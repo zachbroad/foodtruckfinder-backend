@@ -34,6 +34,21 @@ class UserTrucks(ListView, LoginRequiredMixin):
         return context
 
 
+class UserFavorites(ListView, LoginRequiredMixin):
+    model = Truck
+    template_name = "users/user_truck_list_favorite.html"
+
+    def get_queryset(self):
+        user = User.objects.filter(username=self.kwargs['username']).first()
+        return Truck.objects.filter(owner=user, favorites__in=user.my_favorite_trucks)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        user = User.objects.filter(username=self.kwargs['username']).first()
+        context = super().get_context_data(**kwargs)
+        context['user'] = user
+        return context
+
+
 class UserReviews(ListView):
     model = Review
     context_object_name = 'reviews'

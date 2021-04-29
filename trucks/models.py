@@ -59,7 +59,7 @@ class Tag(models.Model):
 
 class TruckFavorite(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorite_trucks')
-    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='favorites')
+    truck = models.ForeignKey("Truck", on_delete=models.CASCADE, related_name='favorites', related_query_name='favorites')
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -135,11 +135,15 @@ class Truck(ModelLocation):
     tags = models.ManyToManyField('Tag', blank=True)
     available_for_catering = models.BooleanField(default=False)
 
+    created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     reviewed = models.BooleanField(default=False)
     objects = TruckManager()
 
     comments = GenericRelation(Comment)
+
+    class Meta:
+        get_latest_by = 'last_updated'
 
     def get_absolute_url(self):
         return reverse("trucks:detail", args=[self.id])

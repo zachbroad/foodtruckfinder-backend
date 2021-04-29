@@ -1,47 +1,76 @@
 <div class="card shadow">
     <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <a href="{% url 'users:detail' user %}" class="text-decoration-none">
-                <h4>
-                    {{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:"" }}
+        <div class="d-flex align-items-center">
+            <img width="88" height="88" class="img-fluid border mr-2" src="{{ user.profile_picture.url }}"
+                 alt="{{ user.username }}'s profile OnTheGrub.">
+            <div class="align-self-start">
+                <a href="{% url 'users:detail' user %}" class="text-decoration-none">
+                    <h4>
+                        {{ user.first_name|default_if_none:"" }} {{ user.last_name|default_if_none:"" }}
 
-                    <span class="text-muted font-weight-light">
+                        <span class="text-muted font-weight-light">
                 @{{ user.username }}
                 </span>
-                </h4>
-            </a>
+                    </h4>
+                </a>
+                <h6 class="font-weight-normal">
+                    {% if user.is_truck_owner %}
+                        Truck Owner
+                    {% else %}
+                        Foodie
+                    {% endif %}
+                </h6>
+            </div>
 
-            <a href="{% url 'users:edit-profile' user.username %}">
+            <a class="ml-auto" href="{% url 'users:edit-profile' user.username %}">
                 <span class="fa fa-edit"></span>
             </a>
         </div>
-        <h6 class="font-weight-normal">
-            {% if user.is_truck_owner %}
-                Truck Owner
-            {% else %}
-                Foodie
-            {% endif %}
-        </h6>
+        <div class="btn-group btn-group mt-2 w-100 p-0">
+            <a href="{% url 'users:user-reviews' user.username %}" class="btn btn-outline-dark">
+                <div>
+                    <span class="fa fa-comment"></span>
+                    REVIEWS
+                </div>
+            </a>
+
+            <a href="{% url 'users:user-trucks' user.username %}" class="btn btn-outline-dark">
+                <div>
+                    <span class="fa fa-truck"></span>
+                    TRUCKS
+                </div>
+            </a>
+
+            <a href="{% url 'users:user-favorites' user.username %}" class="btn btn-outline-dark">
+                <div>
+                    <span class="fa fa-heart"></span>
+                    FAVORITES
+                </div>
+            </a>
+        </div>
         {% if user.biography %}
-            <hr>
+            <hr class="mt-2">
             <h6 class="font-weight-normal">
                 {{ user.biography }}
             </h6>
         {% endif %}
     </div>
 
-    {% if request.user == user %}
-        <div class="card-body p-0 m-2 btn-group btn-group-sm">
-            <a href="{% url 'users:detail' user %}" class="btn btn-sm btn-outline-primary">
-                PROFILE
-            </a>
-            {% if user.is_truck_owner %}
-                <a href="{% url 'dashboard:catering-index' %}" class="btn btn-sm btn-outline-dark">
-                    CATER REQUESTS
+
+    <div class="card-body p-2">
+        {% if request.user == user %}
+            <div class="w-100 p-0 btn-group btn-group-sm">
+                <a href="{% url 'users:detail' user %}" class="btn btn-sm btn-outline-primary">
+                    PROFILE
                 </a>
-                <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-dark">DASHBOARD</a>
-            {% else %}
-            {% endif %}
-        </div>
-    {% endif %}
+                {% if user.is_truck_owner %}
+                    <a href="{% url 'dashboard:catering-index' %}" class="btn btn-sm btn-outline-dark">
+                        CATER REQUESTS
+                    </a>
+                    <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-dark">DASHBOARD</a>
+                {% else %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
 </div>

@@ -43,26 +43,24 @@
         <div class="container text-white">
             <div class="row py-2">
                 <div class="col">
-                    <h2>Trending Grub</h2>
+                    <h2>Food Trucks Near You</h2>
                 </div>
             </div>
 
-            {% if trucks != None %}
+            {% if random_trucks != None %}
                 <div class="row">
-                    {% for truck in trucks|slice:":3" %}
-                        <div class="col-md-4 col-sm-6 py-2">
+                    {% for truck in random_trucks %}
+                        <div class="col">
                             {% include 'trucks/widgets/truck_card.html' with truck=truck %}
                         </div>
                     {% endfor %}
                 </div>
-                <div class="row">
-                    <div class="col ml-auto">
-                        <a href="{% url 'trucks:index' %}">
+                <div class="row no-gutters align-items-end mt-2">
+                        <a class="ml-auto" href="{% url 'trucks:index' %}">
                             <button class="btn btn-primary">
                                 View all trucks
                             </button>
                         </a>
-                    </div>
                 </div>
             {% else %}
                 <div class="row">
@@ -72,6 +70,36 @@
                 </div>
             {% endif %}
 
+            <hr class="bg-light">
+
+            <div class="row py-2">
+                <div class="col">
+                    <h2>Newest OnTheGrub</h2>
+                </div>
+            </div>
+
+            {% if random_trucks != None %}
+                <div class="row">
+                    {% for truck in latest_trucks %}
+                        <div class="col">
+                            {% include 'trucks/widgets/truck_card.html' with truck=truck %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row no-gutters align-items-end mt-2">
+                    <a class="ml-auto" href="{% url 'trucks:index' %}">
+                        <button class="btn btn-primary">
+                            View all trucks
+                        </button>
+                    </a>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col">
+                        <h3>No trucks available</h3>
+                    </div>
+                </div>
+            {% endif %}
 
         </div>
     </div>
