@@ -25,7 +25,8 @@ class TruckList(ListView):
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super(TruckList, self).get_context_data(**kwargs)
-        los = [{'id': truck.id, 'title': truck.title, 'pos': [truck.lat, truck.lng]} for truck in Truck.objects.all()]
+        los = [{'id': truck.id, 'title': truck.title, 'address': truck.address, 'pos': [truck.lat, truck.lng]} for truck in
+               Truck.objects.all()]
         context['truck_json'] = json.dumps(los)
         return context
 

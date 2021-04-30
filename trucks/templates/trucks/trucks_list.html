@@ -78,23 +78,23 @@
             };
             var map = new google.maps.Map(document.getElementById('map'), options);
 
-
             var data = {{ truck_json|safe }};
 
-            console.dir(data);
-
             function addMark(d) {
-                console.dir(d);
                 var pos = new google.maps.LatLng(d['pos'][0], d['pos'][1]);
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: map,
-                    title: d['title']
+                });
+
+                const infowindow = new google.maps.InfoWindow({
+                    content: `<div><h5>${d['title']}</h3><p>${d['address']}</p><a class="btn btn-block btn-outline-dark" href="/trucks/${d['id']}/">VIEW</a></div>`,
                 });
 
                 var m = marker.addListener("click", function () {
                     map.setZoom(12);
                     map.setCenter(pos);
+                    infowindow.open(map, marker);
                 });
             }
 

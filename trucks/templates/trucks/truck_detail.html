@@ -29,7 +29,10 @@
 
                     <div class="card-footer ">
                         {% if truck.phone != None %}
-                            <a href="tel:{{ truck.phone }}" class="btn btn-info">CALL</a>
+                            <a href="tel:{{ truck.phone }}" class="btn btn-outline-dark">
+                                <span class="fa fa-phone"></span>
+                                CALL
+                            </a>
                         {% endif %}
 
                         {% if truck.address != None %}
