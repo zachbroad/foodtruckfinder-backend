@@ -78,20 +78,30 @@
             };
             var map = new google.maps.Map(document.getElementById('map'), options);
 
-            {% for truck in trucks %}
-                var pos = new google.maps.LatLng({{ truck.lat }}, {{ truck.lng }});
+
+            var data = {{ truck_json|safe }};
+
+            console.dir(data);
+
+            function addMark(d) {
+                console.dir(d);
+                var pos = new google.maps.LatLng(d['pos'][0], d['pos'][1]);
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: map,
-                    title: "{{ truck.title }}"
+                    title: d['title']
                 });
-                var m = marker.addListener("click",  function (marker) {
+
+                var m = marker.addListener("click", function () {
                     map.setZoom(12);
-                    map.setCenter(marker.getPosition());
+                    map.setCenter(pos);
                 });
-                console.dir(marker);
-                console.dir(m);
-            {% endfor %}
+            }
+
+            data.forEach(function (p) {
+                addMark(p);
+            });
         }
+
     </script>
 {% endblock %}
