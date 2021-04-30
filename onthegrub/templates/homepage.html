@@ -15,7 +15,7 @@
     <div class="container-fluid bg-light py-3">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-5">
+                <div class="col-sm-12 col-md-6 col-lg-5 p-0">
                     {% if not request.user.is_authenticated %}
                         {% include 'users/widgets/register_or_login.html' %}
                     {% else %}
@@ -29,10 +29,8 @@
                             {% include 'blog/widgets/blog_card.html' with post=post %}
                         {% endfor %}
                     </div>
-                    <div class="row justify-content-end w-100">
-                        <div class="col">
-                            <a href="/blog/" class="btn btn-primary">VIEW ALL</a>
-                        </div>
+                    <div class="row no-gutters justify-content-end">
+                        <a href="/blog/" class="btn btn-primary shadow-sm">VIEW ALL</a>
                     </div>
                 </div>
             </div>
@@ -42,25 +40,27 @@
     <div class="container-fluid bg-dark py-3">
         <div class="container text-white">
             <div class="row py-2">
-                <div class="col">
+                <div>
+
                     <h2>Food Trucks Near You</h2>
+                    <p class="font-weight-light">The hottest food trucks in the Orlando area.</p>
                 </div>
             </div>
+
+            {# TODO: Make code below cleaner #}
 
             {% if random_trucks != None %}
                 <div class="row">
                     {% for truck in random_trucks %}
-                        <div class="col">
+                        <div class="col-12 col-md-6 col-lg-3 mb-2 p-1">
                             {% include 'trucks/widgets/truck_card.html' with truck=truck %}
                         </div>
                     {% endfor %}
                 </div>
-                <div class="row no-gutters align-items-end mt-2">
-                        <a class="ml-auto" href="{% url 'trucks:index' %}">
-                            <button class="btn btn-primary">
-                                View all trucks
-                            </button>
-                        </a>
+                <div class="row justify-content-end my-2">
+                    <a class="btn btn-primary shadow-sm" href="{% url 'trucks:index' %}">
+                        VIEW ALL TRUCKS
+                    </a>
                 </div>
             {% else %}
                 <div class="row">
@@ -70,27 +70,25 @@
                 </div>
             {% endif %}
 
-            <hr class="bg-light">
-
             <div class="row py-2">
-                <div class="col">
-                    <h2>Newest OnTheGrub</h2>
+                <div>
+
+                    <h2>Newest Food Trucks</h2>
+                    <p class="font-weight-light">Check out these trucks that just joined OnTheGrub!</p>
                 </div>
             </div>
 
             {% if random_trucks != None %}
                 <div class="row">
                     {% for truck in latest_trucks %}
-                        <div class="col">
+                        <div class="col-12 col-md-6 col-lg-3 mb-2 p-1">
                             {% include 'trucks/widgets/truck_card.html' with truck=truck %}
                         </div>
                     {% endfor %}
                 </div>
-                <div class="row no-gutters align-items-end mt-2">
-                    <a class="ml-auto" href="{% url 'trucks:index' %}">
-                        <button class="btn btn-primary">
-                            View all trucks
-                        </button>
+                <div class="row align-items-end my-2">
+                    <a class="btn btn-primary shadow-sm ml-auto" href="{% url 'trucks:index' %}">
+                        VIEW ALL TRUCKS
                     </a>
                 </div>
             {% else %}
@@ -145,7 +143,7 @@
                 </ul>
             </div>
             <div class="col-sm-12 col-md-6">
-                <h4>Foodies</h4>
+                <h4>Grubbers</h4>
                 <p class="lead m-0 p-0 pb-2">
                     Find food trucks near you and stay connected.
                 </p>

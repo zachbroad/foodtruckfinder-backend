@@ -13,14 +13,13 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row py-3">
             <div class="col-md-8 col-sm-12">
-                <div class="card my-3">
+                <div class="card">
                     <div class="d-flex justify-content-between align-items-center m-3">
                         <h2>{{ truck.title }}</h2>
-                        <div class="rounded-pill">
-                            <p>{{ truck.rating }}/5.0</p>
-                        </div>
+                        <span class="badge badge-pill badge-warning border"><span
+                                class="fa fa-star mr-2"></span>{{ truck.rating }} / 5</span>
                     </div>
 
                     {% if truck.image.file != None %}
@@ -28,47 +27,76 @@
                              src="{{ truck.image.url }}"/>
                     {% endif %}
 
-                    <div class="card-footer btn-group btn-group-sm">
+                    <div class="card-footer ">
                         {% if truck.phone != None %}
                             <a href="tel:{{ truck.phone }}" class="btn btn-info">CALL</a>
                         {% endif %}
 
                         {% if truck.address != None %}
                             <a href="https://www.google.com/maps?q={{ truck.address }}"
-                               class="btn btn-success" target="_blank">DIRECTIONS</a>
+                               class="btn btn-outline-dark" target="_blank">
+                                <span class="fa fa-map-marker"></span>
+                                DIRECTIONS
+                            </a>
                         {% elif truck.geolocation != None %}
                             <a href="https://www.google.com/maps?q={{ truck.geolocation }}"
-                               class="btn btn-success" target="_blank">DIRECTIONS</a>
+                               class="btn btn-outline-dark" target="_blank">
+                                <span class="fa fa-map-marker"></span>
+                                DIRECTIONS
+                            </a>
                         {% else %}
-                            <button class="btn btn-success disabled" disabled>DIRECTIONS UNAVAILABLE</button>
+                            <button class="btn btn-success disabled" disabled>
+                                <span class="fa fa-xing"></span>
+                                DIRECTIONS UNAVAILABLE
+                            </button>
                             {#                                                        directions unavailable#}
                         {% endif %}
 
-                        <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-info">SCHEDULE</a>
-
-                        {% if user|has_favorited_truck:truck.id %}
-                            <form action="{% url 'trucks:unfavorite' truck.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger">UNFAVORITE</button>
-                            </form>
-                        {% else %}
-                            <form action="{% url 'trucks:favorite' truck.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">FAVORITE</button>
-                            </form>
-                        {% endif %}
+                        <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-outline-dark">
+                            <span class="fa fa-calendar-o"></span>
+                            SCHEDULE
+                        </a>
 
                         {% if truck.available_for_catering %}
-                            <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-primary">BOOK
-                                CATERING</a>
+                            <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-outline-dark">
+                                <span class="fa fa-home"></span>
+                                BOOK CATERING
+                            </a>
+                        {% endif %}
+
+                        {% if user|has_favorited_truck:truck.id %}
+                            <form class="d-inline" action="{% url 'trucks:unfavorite' truck.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="fa fa-heart"></span>
+                                    UNFAVORITE
+                                </button>
+                            </form>
+                        {% else %}
+                            <form class="d-inline" action="{% url 'trucks:favorite' truck.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <span class="fa fa-heart-o"></span>
+                                    FAVORITE
+                                </button>
+                            </form>
                         {% endif %}
                     </div>
-
                 </div>
             </div>
 
-            <div class="col">
-                {% include 'trucks/widgets/truck_info.html' with truck=truck %}
+            <div class="col p-0 m-0">
+                <div class="col-12">
+                    {% include 'trucks/widgets/truck_info.html' with truck=truck %}
+                </div>
+                <div class="col-12">
+                    <iframe id="map"
+                            class="border rounded"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q={{ truck.address|default_if_none:truck.geolocation|default_if_none:"Florida" }}"
+                            width="100%" height="280" frameborder="0" style="border:0"
+                            allowfullscreen>
+                    </iframe>
+                </div>
             </div>
         </div>
     </div>

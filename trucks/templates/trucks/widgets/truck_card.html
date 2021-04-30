@@ -5,22 +5,38 @@
 {% endblock %}
 
 <div class="card shadow-sm truck-card" onclick="window.location.href='{% url 'trucks:detail' truck.id %}'">
-    <div class="card-body">
-        <h5 class="card-title text-dark">{{ truck.title }}</h5>
+    <div class="card-body p-2 py-3">
+        <h5 class="card-title text-dark p-0 m-0">{{ truck.title }}</h5>
         <small class="text-black-50 font-weight-bold">{{ truck.address|default_if_none:"" }}</small>
     </div>
     {% if truck.image.file != None %}
-        <img src="{{ truck.image.url }}" height="120" alt="Photo of {{ truck.title }}." class="card-img-top"
+        <img src="{{ truck.image.url }}" height="105" alt="Photo of {{ truck.title }}." class="card-img-top"
              style="object-fit: cover"/>
     {% endif %}
 
-    <div class="d-flex card-footer justify-content-end">
-        <div class="btn-group flex-wrap">
-            {% if truck.available_for_catering %}
-                <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-outline-info">CATER</a>
-            {% endif %}
-            <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>
-            <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-primary">SCHEDULES</a>
-        </div>
+
+    <div class="d-flex flex-wrap card-footer justify-content-end p-1">
+            <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-outline-dark btn-sm mr-1 my-1">
+                <span class="fa fa-home"></span>
+                CATER ME
+            </a>
+            <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-outline-dark btn-sm mr-1 my-1">
+                <span class="fa fa-comments-o"></span>
+                REVIEWS
+            </a>
+            <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-outline-dark btn-sm mr-1 my-1">
+                <span class="fa fa-calendar-o"></span>
+                SCHEDULE
+            </a>
     </div>
+
+    {#    <div class="d-flex card-footer justify-content-end">#}
+    {#        <div class="btn-group flex-wrap">#}
+    {#            {% if truck.available_for_catering %}#}
+    {#                <a href="{% url 'trucks:book-catering' truck.id %}" class="btn btn-sm btn-outline-info">CATER</a>#}
+    {#            {% endif %}#}
+    {#            <a href="{% url 'trucks:reviews' truck.id %}" class="btn btn-sm btn-outline-success">REVIEWS</a>#}
+    {#            <a href="{% url 'trucks:schedule' truck.id %}" class="btn btn-sm btn-outline-primary">SCHEDULES</a>#}
+    {#        </div>#}
+    {#    </div>#}
 </div>

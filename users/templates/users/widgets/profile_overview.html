@@ -1,7 +1,7 @@
-<div class="card shadow">
-    <div class="card-header">
+<div class="card shadow w-100 p-0">
+    <div class="card-header p-2 p-sm-3">
         <div class="d-flex align-items-center">
-            <img width="88" height="88" class="img-fluid border mr-2" src="{{ user.profile_picture.url }}"
+            <img width="72" height="72" class="img-fluid border mr-2" src="{{ user.profile_picture.url }}"
                  alt="{{ user.username }}'s profile OnTheGrub.">
             <div class="align-self-start">
                 <a href="{% url 'users:detail' user %}" class="text-decoration-none">
@@ -22,55 +22,55 @@
                 </h6>
             </div>
 
-            <a class="ml-auto" href="{% url 'users:edit-profile' user.username %}">
+            <a class="ml-auto border p-2 rounded-circle shadow-sm" href="{% url 'users:edit-profile' user.username %}">
                 <span class="fa fa-edit"></span>
             </a>
         </div>
         <div class="btn-group btn-group mt-2 w-100 p-0">
-            <a href="{% url 'users:user-reviews' user.username %}" class="btn btn-outline-dark">
-                <div>
-                    <span class="fa fa-comment"></span>
+            <a href="{% url 'users:user-reviews' user.username %}" class="btn btn-outline-dark d-flex justify-content-center align-items-center">
+                <span class="fa fa-comment mr-1"></span>
+                <span style="font-size:x-small">
                     REVIEWS
-                </div>
+                    </span>
             </a>
 
-            <a href="{% url 'users:user-trucks' user.username %}" class="btn btn-outline-dark">
-                <div>
-                    <span class="fa fa-truck"></span>
+            <a href="{% url 'users:user-trucks' user.username %}" class="btn btn-outline-dark d-flex justify-content-center align-items-center">
+                <span class="fa fa-truck mr-1"></span>
+                <span style="font-size:x-small">
                     TRUCKS
-                </div>
+                    </span>
             </a>
 
-            <a href="{% url 'users:user-favorites' user.username %}" class="btn btn-outline-dark">
-                <div>
-                    <span class="fa fa-heart"></span>
+            <a href="{% url 'users:user-favorites' user.username %}" class="btn btn-outline-dark d-flex justify-content-center align-items-center">
+                    <span class="fa fa-heart mr-1"></span>
+                    <span style="font-size:x-small">
                     FAVORITES
-                </div>
+                    </span>
             </a>
         </div>
         {% if user.biography %}
-            <hr class="mt-2">
-            <h6 class="font-weight-normal">
+            {#            <hr class="mt-2">#}
+            <h6 class="font-weight-normal mt-3">
                 {{ user.biography }}
             </h6>
         {% endif %}
     </div>
 
 
-    <div class="card-body p-2">
-        {% if request.user == user %}
-            <div class="w-100 p-0 btn-group btn-group-sm">
-                <a href="{% url 'users:detail' user %}" class="btn btn-sm btn-outline-primary">
-                    PROFILE
-                </a>
-                {% if user.is_truck_owner %}
-                    <a href="{% url 'dashboard:catering-index' %}" class="btn btn-sm btn-outline-dark">
-                        CATER REQUESTS
-                    </a>
-                    <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-dark">DASHBOARD</a>
-                {% else %}
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
+    {#    <div class="card-body p-2">#}
+    {#        {% if request.user == user %}#}
+    {#            <div class="w-100 p-0 btn-group btn-group-sm">#}
+    {#                <a href="{% url 'users:detail' user %}" class="btn btn-sm btn-outline-primary">#}
+    {#                    PROFILE#}
+    {#                </a>#}
+    {#                {% if user.is_truck_owner %}#}
+    {#                    <a href="{% url 'dashboard:catering-index' %}" class="btn btn-sm btn-outline-dark">#}
+    {#                        CATER REQUESTS#}
+    {#                    </a>#}
+    {#                    <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-dark">DASHBOARD</a>#}
+    {#                {% else %}#}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#        {% endif %}#}
+    {#    </div>#}
 </div>

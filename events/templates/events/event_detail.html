@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </main>
-            <aside class="col-sm-12 col-md-4">
+            <aside class="col-sm-12 col-md-4 mt-2 mt-md-0">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Event Details</h3>
@@ -55,6 +55,8 @@
 
 
 
+
+
                                         {% if event.address %}{{ event.address }}{% else %}{{ event.geolocation }}{% endif %}"
                                    target="_blank">
                                     {{ event.address|default_if_none:event.geolocation }}
@@ -70,6 +72,11 @@
 
                         <section>
                             <h4>Location</h4>
+                            <iframe id="map"
+                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKbNYPfSNFspfOpY762AeXkZtfGYPxBjo&q={{ event.address }}"
+                                    width="100%" height="280" frameborder="0" style="border:0"
+                                    allowfullscreen>
+                            </iframe>
                         </section>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,10 +21,19 @@ class TruckList(ListView):
     queryset = Truck.objects.all()
     paginate_by = 12
     template_name = 'trucks/trucks_list.html'
+    context_object_name = 'trucks'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(TruckList, self).get_context_data(**kwargs)
+        los = [[truck.id, truck.title, [truck.lat, truck.lng]] for truck in Truck.objects.all()]
+        context['truck_json'] = json.dumps(los)
+        return context
 
     def get_queryset(self):
         if query := self.request.GET.get('query'):
-            search_match_trucks = Truck.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
+            search_match_trucks = Truck.objects.filter(
+                Q(title__icontains=query) | Q(description__icontains=query) | Q(address__icontains=query)
+            )
             return search_match_trucks
 
         return self.queryset

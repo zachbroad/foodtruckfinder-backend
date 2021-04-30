@@ -18,6 +18,8 @@
             </div>
         </div>
 
+        <div id="map" style="height: 280px;"></div>
+
         <div class="row mb-3">
             <div class="col">
                 <form method="GET" class="d-flex flex-row">
@@ -36,7 +38,7 @@
             </div>
         {% endif %}
 
-        {% if object_list|length > 0 %}
+        {% if trucks|length > 0 %}
             <div class="row">
                 {% for truck in page_obj %}
                     <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
@@ -64,4 +66,32 @@
             {% endif %}
         {% endif %}
     </div>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHX-SHtIOkmTMLLKIcFHpL0YSiVojWVm8&callback=initMap&libraries=&v=weekly"
+            async
+    ></script>
+    <script type="text/javascript">
+        function initMap() {
+            var options = {
+                zoom: 6,
+                center: {lat: 27.6648, lng: -81.5158},
+            };
+            var map = new google.maps.Map(document.getElementById('map'), options);
+
+            {% for truck in trucks %}
+                var pos = new google.maps.LatLng({{ truck.lat }}, {{ truck.lng }});
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: "{{ truck.title }}"
+                });
+                var m = marker.addListener("click",  function (marker) {
+                    map.setZoom(12);
+                    map.setCenter(marker.getPosition());
+                });
+                console.dir(marker);
+                console.dir(m);
+            {% endfor %}
+        }
+    </script>
 {% endblock %}
